@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/site_icon.jpg">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          ECC 算法原理&amp;JAVA 实现 - Charlie | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://charliewong001.github.io/article/algorithm/ECC/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/article.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#安全算法" title="安全算法">安全算法</a>
+                            
+                        </div>
+                        <h1>ECC 算法原理&amp;JAVA 实现</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Charlie on
+                            2019-05-22
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Charlie</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<!--
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="遗留问题">遗留问题</h2>
+<ol>
+<li>ECCurve.Fp与ECCurve.F2m区别？</li>
+</ol>
+<h2 id="概述">概述</h2>
+<p>椭圆曲线算法依赖于椭圆曲线，只有椭圆曲线确定之后，才能基于此曲线去做加密、解密，加签、验签。</p>
+<p>椭圆曲线算法同样有多种密钥长度，常用的有160bit、192bit、224bit、256bit、320bit、384bit、512bit。</p>
+<p>常用的曲线有：secp192r1、secp192k1、secp224r1、secp256r1、secp256k1等</p>
+<p>具体椭圆曲线参数名称可见：<a href="https://docs.microsoft.com/en-us/uwp/api/windows.security.cryptography.core.ecccurvenames" target="_blank" rel="noopener">椭圆曲线名称</a></p>
+<h2 id="数学原理简述">数学原理简述</h2>
+<p>ECC算法基于离散对数数学难题</p>
+<h3 id="算法具体过程">算法具体过程</h3>
+<p>① 用户A选定一条椭圆曲线Ep(a , b)，并取椭圆曲线上一点，作为基点G。</p>
+<p>② 用户A选择一个私有密钥k，并生成公开密钥K=kG。</p>
+<p>③ 用户A将Ep(a , b)和点K，G传给用户B。</p>
+<p>④ 用户B接到信息后 ，将待传输的明文编码到Ep(a , b)上一点M（编码方法很多，这里不作讨论），并产生一个随机整数r（r&lt;n）。</p>
+<p>⑤ 用户B计算点C1=M+rK；C2=rG。</p>
+<p>⑥ 用户B将C1、C2传给用户A。</p>
+<p>⑦ 用户A接到信息后，计算C1 - kC2，结果就是点M。C1-kC2=M+rK-k(rG)=M+rK-r(rG)=M</p>
+<p>⑧ 再对点M进行解码就可以得到明文。</p>
+<h3 id="椭圆曲线相关参数及含义">椭圆曲线相关参数及含义</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p</td>
+<td>椭圆曲线从连续变为离散，使其适合用于加密。所以将曲线限制在有限域Fp上，其中p为素数，Fp上只有p个元素</td>
+</tr>
+<tr>
+<td>a</td>
+<td>a、b与p共同确定一条曲线。在Fp上，选择小于P的两个素数a、b，使其满足方程 4a^3+27b^2≠0 (mod p)    则满足方程 y^2=x^3+ax^2+b (mod p) 的所有点(x , y)，再加上无穷远点O∞ ，构成一条椭圆曲线我们记为：Ep(a , b)</td>
+</tr>
+<tr>
+<td>b</td>
+<td></td>
+</tr>
+<tr>
+<td>G</td>
+<td>用户选择Ep(a,b)上的一个G点，作为基点，用于生成公钥、私钥<table><tr><td bgcolor="#F6FFEE"><strong><em>具体生成公私钥的原理</em></strong><br>考虑如下等式：K=kG  [其中 K,G为Ep(a,b)上的点，k为小于n（n是点G的阶）的整数]不难发现，给定k和G，根据加法法则，计算K很容易；但给定K和G，求k就相对困难了。这就是椭圆曲线加密算法采用的难题。我们把点G称为基点，k（k&lt;n，n为基点G的阶）称为私钥，K称为公钥</td></tr></table></td>
+</tr>
+<tr>
+<td>n</td>
+<td>n为基点G的阶，并且为素数<table><tr><td bgcolor="#F6FFEE"><strong><em>椭圆曲线上点的阶</em></strong><br>如果椭圆曲线上一点P，存在最小的正整数n，使得数乘nP=O∞，则将n称为P的 阶，若n不存在，我们说P是无限阶的。 事实上，在有限域上定义的椭圆曲线上所有的点的阶n都是存在的（证明，请参考近世代数方面的书）</td></tr></table></td>
+</tr>
+<tr>
+<td>h</td>
+<td>椭圆曲线上所有点的个数m与n相除的整数部分，h&lt;=4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="密钥格式">密钥格式</h3>
+<table>
+<thead>
+<tr>
+<th>密钥类型</th>
+<th>格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>公钥</td>
+<td>公钥是椭圆曲线上的一个点，由 x轴坐标 和 y轴坐标组成。<br>02/03 + x轴坐标：压缩法表示的公钥，02表示y轴坐标为偶数，03表示y轴坐标为奇数<br>04 + x轴坐标 + y轴坐标：完整公钥表示法</td>
+</tr>
+<tr>
+<td>私钥</td>
+<td>公式：K=kG，其中k为私钥，G为基点<br>用户选择的私钥k&lt;n（n为点G的阶）<br>曲线选择为多少位，则私钥长度也是多少位</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sm2">SM2</h2>
+<p>sm2 曲线名称为：sm2p256v1</p>
+<h2 id="java实现">JAVA实现</h2>
+<h3 id="ecc-java示例">ECC JAVA示例</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.google.common.collect.Maps;</span><br><span class="line"><span class="keyword">import</span> com.sankuai.cx.etcp.code.util.HexUtil;</span><br><span class="line"><span class="keyword">import</span> org.bouncycastle.math.ec.ECCurve;</span><br><span class="line"><span class="keyword">import</span> sun.security.ec.ECPublicKeyImpl;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.math.BigInteger;</span><br><span class="line"><span class="keyword">import</span> java.security.*;</span><br><span class="line"><span class="keyword">import</span> java.security.interfaces.ECPrivateKey;</span><br><span class="line"><span class="keyword">import</span> java.security.interfaces.ECPublicKey;</span><br><span class="line"><span class="keyword">import</span> java.security.spec.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Ecc</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 算法名称</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ALGORITHM = <span class="string">"EC"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> KeyPair <span class="title">initKeyPair</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"><span class="comment">//        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER); //using the SunEC cryptographic engine</span></span><br><span class="line">        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM); <span class="comment">//using the SunEC cryptographic engine</span></span><br><span class="line">        <span class="comment">//指定曲线名称</span></span><br><span class="line">        ECGenParameterSpec ecGenParameterSpec = <span class="keyword">new</span> ECGenParameterSpec(<span class="string">"secp192r1"</span>); <span class="comment">//secp192r1 curve</span></span><br><span class="line">        <span class="comment">//不指定曲线-不建议使用</span></span><br><span class="line">        <span class="comment">//keyPairGenerator.initialize(KEY_SIZE);</span></span><br><span class="line">        keyPairGenerator.initialize(ecGenParameterSpec);</span><br><span class="line">        KeyPair keyPair = keyPairGenerator.genKeyPair();</span><br><span class="line">        <span class="keyword">return</span> keyPair;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ECPublicKey <span class="title">getPublicKey</span><span class="params">(KeyPair keyPair)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (ECPublicKey)keyPair.getPublic();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ECPrivateKey <span class="title">getPrivateKey</span><span class="params">(KeyPair keyPair)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (ECPrivateKey)keyPair.getPrivate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.junit.Test</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ecdsa</span><span class="params">()</span></span>&#123;</span><br><span class="line">        String src = <span class="string">"3E00323038383031323737353835333530355CC02F6F02580BB800000003000000000000000003F0DDC425966D37BEFF2B82FE12963FD9CCA152174406E16047304502203E329A28591170570D15E34D8CA5DBD2C76D43430A4E71F3EEBBA16E9BCE5770022100E100BB85CD88094473420BF3CA4A16A724C67E1ECC3AB207F2DBB23EB6D93B77045CB6F4EF37"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//生成密钥</span></span><br><span class="line">            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);</span><br><span class="line">            <span class="comment">//指定曲线名称</span></span><br><span class="line">            ECGenParameterSpec ecGenParameterSpec = <span class="keyword">new</span> ECGenParameterSpec(<span class="string">"secp192k1"</span>);</span><br><span class="line">            <span class="comment">//从具体曲线参数生成曲线</span></span><br><span class="line"><span class="comment">//            AlgorithmParameterSpec ecGenParameterSpec = createECParameterSpec(EccParamConstant.secp192k1);</span></span><br><span class="line">            keyPairGenerator.initialize(ecGenParameterSpec);</span><br><span class="line">            KeyPair keyPair = keyPairGenerator.generateKeyPair();</span><br><span class="line">            ECPublicKey ecPublicKey = (ECPublicKey) keyPair.getPublic();</span><br><span class="line">            ECPrivateKey ecPrivateKey = (ECPrivateKey) keyPair.getPrivate();</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">"privateKeyLength : "</span> + ecPrivateKey.getS().toString(<span class="number">16</span>).length()/<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">"encoded pubkey : "</span> + HexUtil.byteToHex(ecPublicKey.getEncoded()));</span><br><span class="line"></span><br><span class="line">            <span class="comment">//获取椭圆曲线参数</span></span><br><span class="line">            java.security.spec.ECParameterSpec ecParams = ecPrivateKey.getParams();</span><br><span class="line"></span><br><span class="line">            <span class="comment">//获取此椭圆有限字段的素数 p</span></span><br><span class="line">            ECFieldFp fieldFp = (ECFieldFp) ecParams.getCurve().getField();</span><br><span class="line">            BigInteger p = fieldFp.getP();</span><br><span class="line">            System.out.println(<span class="string">"p:"</span> + p.toString(<span class="number">16</span>).toUpperCase());</span><br><span class="line"></span><br><span class="line">            <span class="comment">//获取此椭圆a、b值</span></span><br><span class="line">            BigInteger a = ecParams.getCurve().getA();</span><br><span class="line">            BigInteger b = ecParams.getCurve().getB();</span><br><span class="line">            System.out.println(<span class="string">"a:"</span> + a.toString(<span class="number">16</span>).toUpperCase());</span><br><span class="line">            System.out.println(<span class="string">"b:"</span> + b.toString(<span class="number">16</span>).toUpperCase());</span><br><span class="line"></span><br><span class="line">            <span class="comment">//获取椭圆的基点:G、G的X、Y坐标</span></span><br><span class="line">            ECPoint G = ecParams.getGenerator();</span><br><span class="line">            BigInteger coordinatesX = G.getAffineX();</span><br><span class="line">            BigInteger coordinatesY =  G.getAffineY();</span><br><span class="line">            System.out.println(<span class="string">"G-x:"</span> + coordinatesX.toString(<span class="number">16</span>).toUpperCase());</span><br><span class="line">            System.out.println(<span class="string">"G-y:"</span> + coordinatesY.toString(<span class="number">16</span>).toUpperCase());</span><br><span class="line"></span><br><span class="line">            <span class="comment">//获取基点G的阶:N</span></span><br><span class="line">            BigInteger coordinatesG = ecParams.getOrder();</span><br><span class="line">            System.out.println(<span class="string">"N:"</span> + coordinatesG.toString(<span class="number">16</span>).toUpperCase());</span><br><span class="line"></span><br><span class="line">            <span class="comment">//获取余因子:H</span></span><br><span class="line">            <span class="keyword">int</span> h = ecParams.getCofactor();</span><br><span class="line">            System.out.println(<span class="string">"H:"</span> + Integer.toString(h,<span class="number">16</span>).toUpperCase());</span><br><span class="line"></span><br><span class="line">            <span class="comment">//获取公钥的X、Y坐标</span></span><br><span class="line">            String x = ecPublicKey.getW().getAffineX().toString(<span class="number">16</span>).toUpperCase();</span><br><span class="line">            String y = ecPublicKey.getW().getAffineY().toString(<span class="number">16</span>).toUpperCase();</span><br><span class="line">            System.out.println(<span class="string">"pub-x:"</span> + x);</span><br><span class="line">            System.out.println(<span class="string">"pub-y:"</span> + y);</span><br><span class="line">            System.out.println(x.length()/<span class="number">2</span>);</span><br><span class="line">            System.out.println(y.length()/<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//执行签名</span></span><br><span class="line">            KeyFactory keyFactory = KeyFactory.getInstance(<span class="string">"EC"</span>);</span><br><span class="line">            PKCS8EncodedKeySpec pkcs8EncodedKeySpec = <span class="keyword">new</span> PKCS8EncodedKeySpec(ecPrivateKey.getEncoded());</span><br><span class="line">            PrivateKey privateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec);</span><br><span class="line">            Signature signature = Signature.getInstance(<span class="string">"sha1withECDSA"</span>);</span><br><span class="line">            signature.initSign(privateKey);</span><br><span class="line">            signature.update(HexUtil.hexStringToBytes(src));</span><br><span class="line">            <span class="keyword">byte</span>[] result = signature.sign();</span><br><span class="line">            String s = HexUtil.byteToHex(result);</span><br><span class="line">            System.out.println(<span class="string">"jdk ECDSA 签名："</span> + s);</span><br><span class="line">            System.out.println(result.length);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//验证签名</span></span><br><span class="line">            X509EncodedKeySpec x509EncodedKeySpec = <span class="keyword">new</span> X509EncodedKeySpec(ecPublicKey.getEncoded());</span><br><span class="line"></span><br><span class="line">            PublicKey publicKey = keyFactory.generatePublic(x509EncodedKeySpec);</span><br><span class="line">            signature = Signature.getInstance(<span class="string">"sha1withECDSA"</span>);</span><br><span class="line">            signature.initVerify(publicKey);</span><br><span class="line">            signature.update(HexUtil.hexStringToBytes(src));</span><br><span class="line">            <span class="keyword">boolean</span> bool = signature.verify(result);</span><br><span class="line">            System.out.println(<span class="string">"jdk ECDSA 签名："</span> + bool);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@org</span>.junit.Test</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">verifyEcdsa</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        Object[] eccParam = EccParamConstant.secp192k1;</span><br><span class="line">        <span class="comment">//签名源</span></span><br><span class="line">        String source = <span class="string">"0201005B323038383031323737353835333530355CC12C88025807D000000000000000000000000003DD73B9A6D588CB813C62F4E1A5FD5C71F95EE050BF94896A543034313034303014343130343030303130313030303031383338333100473045022100C80496A7B2500772849C733251FA92364C3825E717034F8079E58869C38E517202207E915CA8AE6F22AD2BF62FC627FC79CC322A16F655557C68F9291F808E209C38045CB7F209"</span>;</span><br><span class="line">        <span class="comment">//签名值</span></span><br><span class="line">        String sign = <span class="string">"3035021900F7E5654CD62E8D8394915F86610055FC5E8070376788E15D02186766970D5EEE656778AEC63FFB6B2F96FC347932AC15BE0F"</span>;</span><br><span class="line">        <span class="comment">//压缩公钥</span></span><br><span class="line">        String compressedPubKey = <span class="string">"03DD73B9A6D588CB813C62F4E1A5FD5C71F95EE050BF94896A"</span>;</span><br><span class="line">        <span class="comment">//从压缩公钥中还原出完整公钥</span></span><br><span class="line">        Map&lt;String,BigInteger&gt; m = uncompressPubkey(compressedPubKey,eccParam);</span><br><span class="line"></span><br><span class="line">        BigInteger PUBKEY_X = m.get(<span class="string">"X"</span>);</span><br><span class="line">        BigInteger PUBKEY_Y = m.get(<span class="string">"Y"</span>);</span><br><span class="line">        System.out.println(<span class="string">"PUBKEY_X : "</span> + PUBKEY_X.toString(<span class="number">16</span>).toUpperCase());</span><br><span class="line">        System.out.println(<span class="string">"PUBKEY_Y : "</span> + PUBKEY_Y.toString(<span class="number">16</span>).toUpperCase());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//从曲线参数中创建曲线</span></span><br><span class="line">        ECParameterSpec ecParameterSpec = createECParameterSpec(eccParam);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//根据公钥值、曲线创建公钥</span></span><br><span class="line">        ECPublicKey ecPublicKey = <span class="keyword">new</span> ECPublicKeyImpl(<span class="keyword">new</span> ECPoint(PUBKEY_X,PUBKEY_Y),ecParameterSpec);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//执行验签</span></span><br><span class="line">        String[] algorithm = <span class="keyword">new</span> String[]&#123;<span class="string">"SHA1withECDSA"</span>,<span class="string">"SHA224withECDSA"</span>,<span class="string">"SHA256withECDSA"</span>,<span class="string">"SHA384withECDSA"</span>,<span class="string">"SHA512withECDSA"</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; algorithm.length; i++)&#123;</span><br><span class="line">            Signature signature = Signature.getInstance(algorithm[i]);</span><br><span class="line">            signature.initVerify(ecPublicKey);</span><br><span class="line">            signature.update(HexUtil.hexStringToBytes(source));</span><br><span class="line">            <span class="keyword">boolean</span> b = signature.verify(HexUtil.hexStringToBytes(sign));</span><br><span class="line">            System.out.println(algorithm[i] + <span class="string">":"</span> + b);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 解压缩公钥</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> compressedPubkey</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> obj</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,BigInteger&gt; <span class="title">uncompressPubkey</span><span class="params">(String compressedPubkey,Object[] obj)</span></span>&#123;</span><br><span class="line">        Map&lt;String,BigInteger&gt; m = Maps.newHashMap();</span><br><span class="line">        BigInteger P = <span class="keyword">new</span> BigInteger(obj[<span class="number">0</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        BigInteger A = <span class="keyword">new</span> BigInteger(obj[<span class="number">1</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        BigInteger B = <span class="keyword">new</span> BigInteger(obj[<span class="number">2</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        ECCurve ecc_curve = <span class="keyword">new</span> ECCurve.Fp(P, A, B);</span><br><span class="line">        <span class="comment">// 根据X恢复点Y，</span></span><br><span class="line">        org.bouncycastle.math.ec.ECPoint point = ecc_curve.decodePoint(</span><br><span class="line">                HexUtil.hexStringToBytes(compressedPubkey));</span><br><span class="line">        m.put(<span class="string">"X"</span>,point.getX().toBigInteger());</span><br><span class="line">        m.put(<span class="string">"Y"</span>,point.getY().toBigInteger());</span><br><span class="line">        <span class="keyword">return</span> m;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据P A B G N H创建椭圆曲线参数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> obj</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ECParameterSpec <span class="title">createECParameterSpec</span><span class="params">(Object[] obj)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        BigInteger P = <span class="keyword">new</span> BigInteger(obj[<span class="number">0</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        BigInteger A = <span class="keyword">new</span> BigInteger(obj[<span class="number">1</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        BigInteger B = <span class="keyword">new</span> BigInteger(obj[<span class="number">2</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        BigInteger X = <span class="keyword">new</span> BigInteger(obj[<span class="number">3</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        BigInteger Y = <span class="keyword">new</span> BigInteger(obj[<span class="number">4</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        BigInteger N = <span class="keyword">new</span> BigInteger(obj[<span class="number">5</span>].toString(),<span class="number">16</span>);</span><br><span class="line">        <span class="keyword">int</span> H = Integer.parseInt(obj[<span class="number">6</span>].toString());</span><br><span class="line">        ECParameterSpec ecParameterSpec = <span class="keyword">new</span> ECParameterSpec(<span class="keyword">new</span> EllipticCurve(<span class="keyword">new</span> ECFieldFp(P),A,B),<span class="keyword">new</span> ECPoint(X,Y),N,H);</span><br><span class="line">        <span class="keyword">return</span> ecParameterSpec;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ECC曲线参数</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EccParamConstant</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object[] secp192r1 = &#123;</span><br><span class="line">            <span class="string">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFF"</span>, <span class="comment">//P</span></span><br><span class="line">            <span class="string">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFC"</span>, <span class="comment">//A</span></span><br><span class="line">            <span class="string">"64210519E59C80E70FA7E9AB72243049FEB8DEECC146B9B1"</span>, <span class="comment">//B</span></span><br><span class="line">            <span class="string">"188DA80EB03090F67CBF20EB43A18800F4FF0AFD82FF1012"</span>, <span class="comment">//G-X</span></span><br><span class="line">            <span class="string">"7192B95FFC8DA78631011ED6B24CDD573F977A11E794811"</span>,<span class="comment">//G-Y</span></span><br><span class="line">            <span class="string">"FFFFFFFFFFFFFFFFFFFFFFFF99DEF836146BC9B1B4D22831"</span>,<span class="comment">//N</span></span><br><span class="line">            <span class="number">1</span>&#125;;<span class="comment">//H</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object[] secp192k1 = &#123;</span><br><span class="line">            <span class="string">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFEE37"</span>, <span class="comment">//P</span></span><br><span class="line">            <span class="string">"0"</span>, <span class="comment">//A</span></span><br><span class="line">            <span class="string">"3"</span>, <span class="comment">//B</span></span><br><span class="line">            <span class="string">"DB4FF10EC057E9AE26B07D0280B7F4341DA5D1B1EAE06C7D"</span>, <span class="comment">//G-X</span></span><br><span class="line">            <span class="string">"9B2F2F6D9C5628A7844163D015BE86344082AA88D95E2F9D"</span>,<span class="comment">//G-Y</span></span><br><span class="line">            <span class="string">"FFFFFFFFFFFFFFFFFFFFFFFE26F2FC170F69466A74DEFD8D"</span>,<span class="comment">//N</span></span><br><span class="line">            <span class="number">1</span>&#125;;<span class="comment">//H</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>公钥压缩还原</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.bouncycastle.math.ec.ECCurve;</span><br><span class="line"><span class="keyword">import</span> org.bouncycastle.math.ec.ECFieldElement;</span><br><span class="line"><span class="keyword">import</span> org.bouncycastle.math.ec.ECPoint;</span><br><span class="line"><span class="keyword">import</span> java.math.BigInteger;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 依赖 bouncycastle</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EccCompress</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String[] ecc_param = &#123; <span class="string">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFF"</span>, <span class="comment">//p</span></span><br><span class="line">            <span class="string">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFC"</span>, <span class="comment">//a</span></span><br><span class="line">            <span class="string">"64210519E59C80E70FA7E9AB72243049FEB8DEECC146B9B1"</span>, <span class="comment">//b</span></span><br><span class="line">            <span class="string">"FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFF7203DF6B21C6052B53BBF40939D54123"</span>,</span><br><span class="line">            <span class="string">"32C4AE2C1F1981195F9904466A39C9948FE30BBFF2660BE1715A4589334C74C7"</span>,</span><br><span class="line">            <span class="string">"BC3736A2F4F6779C59BDCEE36B692153D0A9877CC62A474002DF32E52139F0A0"</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//压缩公钥还原</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">uncompress</span><span class="params">()</span></span>&#123;</span><br><span class="line">        BigInteger ecc_p = <span class="keyword">new</span> BigInteger(ecc_param[<span class="number">0</span>], <span class="number">16</span>);<span class="comment">// p</span></span><br><span class="line">        BigInteger ecc_a = <span class="keyword">new</span> BigInteger(ecc_param[<span class="number">1</span>], <span class="number">16</span>);<span class="comment">// a</span></span><br><span class="line">        BigInteger ecc_b = <span class="keyword">new</span> BigInteger(ecc_param[<span class="number">2</span>], <span class="number">16</span>);<span class="comment">// b</span></span><br><span class="line">        ECCurve ecc_curve = <span class="keyword">new</span> ECCurve.Fp(ecc_p, ecc_a, ecc_b);</span><br><span class="line">        <span class="comment">// 压缩后的公钥</span></span><br><span class="line">        String key = <span class="string">"03F0DDC425966D37BEFF2B82FE12963FD9CCA152174406E160"</span>;</span><br><span class="line">        <span class="comment">// 根据X恢复点Y，</span></span><br><span class="line">        ECPoint point = ecc_curve.decodePoint(HexUtil.hexStringToBytes(key));</span><br><span class="line">        String y = point.getY().toBigInteger().toString(<span class="number">16</span>).toUpperCase();</span><br><span class="line">        <span class="comment">// 原始公钥</span></span><br><span class="line">        System.out.println(<span class="string">"原始公钥："</span> + key.substring(<span class="number">2</span>, key.length()) + y);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//完整公钥压缩</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">compress</span><span class="params">(String x,String y)</span></span>&#123;</span><br><span class="line">        BigInteger ecc_p = <span class="keyword">new</span> BigInteger(ecc_param[<span class="number">0</span>], <span class="number">16</span>);</span><br><span class="line">        BigInteger ecc_a = <span class="keyword">new</span> BigInteger(ecc_param[<span class="number">1</span>], <span class="number">16</span>);</span><br><span class="line">        BigInteger ecc_b = <span class="keyword">new</span> BigInteger(ecc_param[<span class="number">2</span>], <span class="number">16</span>);</span><br><span class="line">        ECCurve ecc_curve = <span class="keyword">new</span> ECCurve.Fp(ecc_p, ecc_a, ecc_b);</span><br><span class="line">        <span class="comment">// 构造点</span></span><br><span class="line">        BigInteger ecc_p1 = <span class="keyword">new</span> BigInteger(x, <span class="number">16</span>);</span><br><span class="line">        BigInteger ecc_p2 = <span class="keyword">new</span> BigInteger(y, <span class="number">16</span>);</span><br><span class="line">        ECFieldElement aaaecc_gx_fieldelement = <span class="keyword">new</span> ECFieldElement.Fp(ecc_p, ecc_p1);</span><br><span class="line">        ECFieldElement aaaecc_gy_fieldelement = <span class="keyword">new</span> ECFieldElement.Fp(ecc_p, ecc_p2);</span><br><span class="line">        ECPoint ecPK64 = <span class="keyword">new</span> ECPoint.Fp(ecc_curve, aaaecc_gx_fieldelement, aaaecc_gy_fieldelement);</span><br><span class="line">        <span class="comment">// 得到压缩后的公钥</span></span><br><span class="line">        <span class="keyword">byte</span>[] key33 = ecPK64.getEncoded(<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">return</span> HexUtil.byteToHex(key33);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="https://blog.csdn.net/qq_30866297/article/details/51175305" target="_blank" rel="noopener">https://blog.csdn.net/qq_30866297/article/details/51175305</a></p>
+<p><a href="https://blog.csdn.net/qq_35612816/article/details/78904225" target="_blank" rel="noopener">https://blog.csdn.net/qq_35612816/article/details/78904225</a></p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/algorithm/ECDH/" data-toggle="tooltip" data-placement="top" title="ECDH密钥协商算法">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/hexo/huweihuang-them-problem/" data-toggle="tooltip" data-placement="top" title="huweihuang theme 问题&解决">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#遗留问题"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x9057;&#x7559;&#x95EE;&#x9898;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#概述"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x6982;&#x8FF0;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#数学原理简述"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x6570;&#x5B66;&#x539F;&#x7406;&#x7B80;&#x8FF0;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#算法具体过程"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x7B97;&#x6CD5;&#x5177;&#x4F53;&#x8FC7;&#x7A0B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#椭圆曲线相关参数及含义"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">&#x692D;&#x5706;&#x66F2;&#x7EBF;&#x76F8;&#x5173;&#x53C2;&#x6570;&#x53CA;&#x542B;&#x4E49;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#密钥格式"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">&#x5BC6;&#x94A5;&#x683C;&#x5F0F;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#sm2"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">SM2</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java实现"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">JAVA&#x5B9E;&#x73B0;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#ecc-java示例"><span class="toc-nav-number">5.1.</span> <span class="toc-nav-text">ECC JAVA&#x793A;&#x4F8B;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#安全算法" title="安全算法">安全算法</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/charliewong001">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Charlie 2019 
+                    <br>
+                    <!--
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true" >
+                    </iframe>
+                    -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://charliewong001.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://charliewong001.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
