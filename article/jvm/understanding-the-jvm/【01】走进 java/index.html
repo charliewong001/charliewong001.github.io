@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          etcp-account 分层 - Charlie | Blog
+          【深入理解 Java 虚拟机】【01】走进 java - Charlie | Blog
         
     </title>
 
-    <link rel="canonical" href="http://charliewong001.github.io/article/framework/etcp-account-分层/">
+    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/understanding-the-jvm/【01】走进 java/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#framework" title="framework">framework</a>
+                              <a class="tag" href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
                             
                         </div>
-                        <h1>etcp-account 分层</h1>
+                        <h1>【深入理解 Java 虚拟机】【01】走进 java</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
-                            2019-05-25
+                            2019-05-26
                         </span>
                     </div>
                 
@@ -213,31 +213,55 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>代码分层 (横向功能 &amp; 纵向业务)</p>
-<ol>
-<li>横向: 需要提取协议层和标准流程层, 制定标准请求响应, 避免协议转换侵入到业务逻辑代码中</li>
-<li>纵向: 业务流程需要聚合, 避免 xxxService 调用下游一大批 xxxDao 完成一个事情的情况</li>
-</ol>
-<p>总的思路就是是：总结、抽象出纵向请求的过程中需要横向扩展的点，发展成独立的一层，总体思想还是聚合、解耦。例如：将业务操作聚合，将业务操作与参数转换解耦。</p>
-<p>业务操作层应该有自己标准的入参、出参，业务操作上层在接收外部调用参数后，需要经过参数转换层，将外部参数转换成业务层标准参数进行请求。</p>
-<p>现代码结构</p>
-<p><img src="/postImg/1558796975702.jpg" alt="img"></p>
-<p>分层思路</p>
-<p><img src="/postImg/1558796995727.jpg" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">common (公共组件)</span><br><span class="line">  lock, aspect, cat, log, config, util, exception, cache, etc</span><br><span class="line"></span><br><span class="line">facade (接口封装,协议转换)</span><br><span class="line">    http</span><br><span class="line">    thrift</span><br><span class="line">    xxx</span><br><span class="line"></span><br><span class="line">process (标准流程组装)</span><br><span class="line">    开通</span><br><span class="line">    重置</span><br><span class="line">    退款</span><br><span class="line">    扣款</span><br><span class="line"></span><br><span class="line">modules (核心模块)</span><br><span class="line">    user</span><br><span class="line">        用户信息,用户资料,审核</span><br><span class="line">    card</span><br><span class="line">        卡种类/规则</span><br><span class="line">        卡管理 (开通,注销)</span><br><span class="line">    asset</span><br><span class="line">        资产配置</span><br><span class="line">        资产记录</span><br><span class="line">        资产变更流水</span><br><span class="line">    order</span><br><span class="line">        充</span><br><span class="line">        扣</span><br><span class="line">        退</span><br><span class="line">    support(支持相关)</span><br><span class="line">        event (关键事件记录, 事件驱动支持)</span><br></pre></td></tr></table></figure>
+                <h3 id=""></h3>
+<h3 id="1-jcp-是什么">1. JCP 是什么</h3>
+<p>百度百科：<a href="https://baike.baidu.com/item/jcp/2679009" target="_blank" rel="noopener">https://baike.baidu.com/item/jcp/2679009</a></p>
+<p>官方网站：<a href="https://jcp.org/" target="_blank" rel="noopener">https://jcp.org</a></p>
+<p>JCP（Java Community Process) 是一个开放的国际组织，主要由<a href="https://baike.baidu.com/item/Java/85979" target="_blank" rel="noopener">Java</a>开发者以及被授权者组成，职能是发展和更新。</p>
+<p>Java技术和JCP两者的原创者都是SUN计算机公司。然而，JCP已经由SUN于1995年创造Java的非正式过程，演进到如今有数百名来自世界各地Java代表成员一同监督Java发展的正式程序</p>
+<h3 id="2-jsr是什么">2. JSR是什么</h3>
+<p>百度百科：<a href="https://baike.baidu.com/item/jsr/4388424?fr=aladdin" target="_blank" rel="noopener">https://baike.baidu.com/item/jsr/4388424?fr=aladdin</a></p>
+<p>jsr是Java Specification Requests的缩写，意思是Java 规范提案。</p>
+<p>JSR是Java Specification Requests的缩写，意思是Java 规范提案。是指向<a href="https://baike.baidu.com/item/JCP" target="_blank" rel="noopener">JCP</a>(Java Community Process)提出新增一个标准化技术规范的正式请求。任何人都可以提交JSR，以向Java平台增添新的API和服务。JSR已成为Java界的一个重要标准。</p>
+<p>查看完整的JSRs请访问JCP官方网站</p>
+<h3 id="3-open-jdk-sun-jdk-oracle-jdk">3. open-jdk、sun-jdk、oracle-jdk</h3>
+<p>sun 公司对 java 源码开源之后，形成了 open-jdk，open-jdk 几乎包括了 sun-jdk 的全部代码</p>
+<p>oracle 将 sun 公司收购之后，sun-jdk 也叫做 oracle-jdk</p>
+<h3 id="4-jdk-jre">4. jdk、jre</h3>
+<p><img src="/postImg/1558879182563.jpg" alt="img"></p>
+<p><strong>JDK（Java Development Kit）</strong></p>
+<p>是针对Java开发员的产品，是整个Java的核心，包括了Java运行环境JRE、Java工具和Java基础类库。Java Runtime Environment（JRE）是运行JAVA程序所必须的环境的集合，包含JVM标准实现及Java核心类库。JVM是Java Virtual Machine（Java虚拟机）的缩写，是整个java实现跨平台的最核心的部分，能够运行以Java语言写作的软件程序。</p>
+<p>JDK是Java开发工具包，是Sun Microsystems针对Java开发员的产品。</p>
+<p>JDK中包含JRE，在JDK的安装目录下有一个名为jre的目录，里面有两个文件夹bin和lib，在这里可以认为bin里的就是jvm，lib中则是jvm工作所需要的类库，而jvm和 lib和起来就称为jre。</p>
+<p>JDK是整个JAVA的核心，包括了Java运行环境JRE（Java Runtime Envirnment）、一堆Java工具（javac/java/jdb等）和Java基础的类库（即Java API 包括rt.jar）。</p>
+<p><strong>JRE（Java Runtime Environment）</strong></p>
+<p>是运行基于Java语言编写的程序所不可缺少的运行环境。也是通过它，Java的开发者才得以将自己开发的程序发布到用户手中，让用户使用。</p>
+<p>JRE中包含了Java virtual machine（JVM），runtime class libraries和Java application launcher，这些是运行Java程序的必要组件。</p>
+<p>与大家熟知的JDK不同，JRE是Java运行环境，并不是一个开发环境，所以没有包含任何开发工具（如编译器和调试器），只是针对于使用Java程序的用户。</p>
+<h3 id="5-javase-javame-javaee">5. javase、javame、javaee</h3>
+<p>①JAVASE(J2SE)，standard edition，标准版，是我们通常用的一个版本，从JDK 5.0开始，改名为Java SE。</p>
+<p>② JAVAEE(J2EE)，enterprise edition，企业版，使用这种JDK开发J2EE应用程序，从JDK 5.0开始，改名为Java EE。</p>
+<p>③ JAVAME(J2ME)，micro edition，主要用于移动设备、嵌入式设备上的java应用程序，从JDK 5.0开始，改名为Java ME。</p>
+<p>Java SE(Java Platform,Standard Edition)。JavaSE以前称为J2SE.它允许开发和部署在桌面、服务器、嵌入式环境和实施环境中使用的Java应用程序。JavaSE 包括支持Java　Ｗeb服务开发的类，并为Java Platform,Enterprise Edition(Java EE)提供基础。</p>
+<p>Java EE(Java Platform.Enterprise Edition)。这个版本以前被称为J2EE.企业版本帮助开发和部署可移植、健壮、可伸缩切安全的服务端Java应用。Java EE是在JavaSE的基础上构建的他提供Web 服务、组建模型、管理和通信API.可以用来实现企业级的面向服务体系结构(service-oriented architecture,SOA)和web2.0应用程序。</p>
+<p>Java ME(Java Platform,Micro Edition)。Java ME为在移动设备和嵌入式设备（比如手机、PDA、电视机顶盒和打印机）上运行的应用程序提供一个健壮且灵活的环境。Java ME包括灵活的用户界面、健壮的安全模式、许多内置的网络协议以及对于动态下载的连网和离线应用程序的丰富支持。基于Java ME规范的应用程序只需要编写一次，就可以用于许多设备，而且可以利用每个设备的本级功能。</p>
+<h3 id="6-解释器-编译器">6. 解释器、编译器</h3>
+<p>Java编译器：将Java源文件（.java文件）编译成字节码文件（.class文件，是特殊的二进制文件，二进制字节码文件），这种字节码就是JVM的“机器语言”。javac.exe可以简单看成是Java编译器。</p>
+<p>Java解释器：是JVM的一部分。Java解释器用来解释执行Java编译器编译后的程序。java.exe可以简单看成是Java解释器。</p>
+<h3 id="7-jit-编译器just-in-time">7. JIT 编译器(Just In Time)</h3>
+<p>即时编译(Just-in-time compilation: JIT)：又叫实时编译、及时编译。是指一种在运行时期把字节码编译成原生机器码的技术，一句一句翻译源代码，但是会将翻译过的代码缓存起来以降低性能耗损。这项技术是被用来改善虚拟机的性能的。</p>
+<p>JIT编译器是JRE的一部分。原本的Java程序都是要经过解释执行的，其执行速度肯定比可执行的二进制字节码程序慢。为了提高执行速度，引入了JIT。在运行时，JIT会把翻译过来的机器码保存起来，以备下次使用。而如果JIT对每条字节码都进行编译，则会负担过重，所以，JIT只会对经常执行的字节码进行编译，如循环，高频度使用的方法等。它会以整个方法为单位，一次性将整个方法的字节码编译为本地机器码，然后直接运行编译后的机器码。</p>
+<h3 id=""></h3>
+
                 
 
                 <hr>
                 <!-- Pager -->
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/article/memo/" data-toggle="tooltip" data-placement="top" title="无名">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/article/reading/《靠谱》/" data-toggle="tooltip" data-placement="top" title="《靠谱》">Next Post &rarr;</a>
+                            <a href="/article/memo/" data-toggle="tooltip" data-placement="top" title="无名">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -293,7 +317,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="nav">none</ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-jcp-是什么"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">1. JCP &#x662F;&#x4EC0;&#x4E48;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-jsr是什么"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">2. JSR&#x662F;&#x4EC0;&#x4E48;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-open-jdk-sun-jdk-oracle-jdk"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">3. open-jdk&#x3001;sun-jdk&#x3001;oracle-jdk</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-jdk-jre"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">4. jdk&#x3001;jre</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-javase-javame-javaee"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">5. javase&#x3001;javame&#x3001;javaee</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#6-解释器-编译器"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">6. &#x89E3;&#x91CA;&#x5668;&#x3001;&#x7F16;&#x8BD1;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#7-jit-编译器just-in-time"><span class="toc-nav-number">8.</span> <span class="toc-nav-text">7. JIT &#x7F16;&#x8BD1;&#x5668;(Just In Time)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#"><span class="toc-nav-number">9.</span> <span class="toc-nav-text"></span></a></li></ol>
         
         </div>
       </aside>
@@ -313,7 +337,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#framework" title="framework">framework</a>
+                          <a class="tag" href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
                         
                     </div>
                 </section>

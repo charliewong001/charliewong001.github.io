@@ -2,20 +2,6 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>http://charliewong001.github.io/tags/hexo/</loc>
-        <lastmod>2019-05-22T03:35:57.059Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/tags/%E6%89%8B%E5%86%8C/</loc>
-        <lastmod>2019-05-22T05:14:54.517Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/tools/</loc>
         <lastmod>2019-05-22T05:58:57.471Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -51,13 +37,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/java/</loc>
-        <lastmod>2019-05-25T10:43:47.149Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/no-name/</loc>
         <lastmod>2019-05-25T14:29:01.716Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -65,8 +44,36 @@
     </url>
 
     <url>
+        <loc>http://charliewong001.github.io/tags/%E6%89%8B%E5%86%8C/</loc>
+        <lastmod>2019-05-25T14:58:44.223Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>http://charliewong001.github.io/tags/framework/</loc>
-        <lastmod>2019-05-25T14:29:30.250Z</lastmod>
+        <lastmod>2019-05-25T15:14:38.563Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/hexo/</loc>
+        <lastmod>2019-05-26T08:07:36.126Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/java/</loc>
+        <lastmod>2019-05-26T14:25:13.106Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/understanding-the-jvm/</loc>
+        <lastmod>2019-05-26T14:25:35.560Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

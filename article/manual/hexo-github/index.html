@@ -269,7 +269,21 @@
 <li>全局配置文件（用户主目录下），优先级次之</li>
 <li>统级配置文件（/etc目录下），优先级最低</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 单独设置每个repo 用户名/邮箱</span><br><span class="line">git config user.email “xxxx@xx.com”</span><br><span class="line">git config user.name “xxxx”</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 单独设置每个repo 用户名/邮箱</span><br><span class="line">git config user.email “xxxx@xx.com”</span><br><span class="line">git config user.name “xxxx”</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="32deploy-git-仓库设置">3.2.deploy git 仓库设置</h2>
+<p>hexo 仓库目录下会有一个 .deploy_git 目录，此目录下就是会提交到 “<a href="http://xn--eqr924avxo.github.io" target="_blank" rel="noopener">用户名.github.io</a>” 仓库中的内容。</p>
+<p>.deploy_git 即是远程博客仓库的本地仓库，所以需要到.deploy_git 仓库中设置 github 的 <a href="http://user.name" target="_blank" rel="noopener">user.name</a> 和 user.email</p>
+<h1 id="4保存主题-博客源文件">4.保存主题、博客源文件</h1>
+<p>至此为止，已经可以在本地创建 hexo 站点，并提交发布到 github 远端站点。</p>
+<p>但是假如自己换了电脑，那么自己的博客源文件还需要从旧电脑 copy 到新电脑，</p>
+<p>所以最好将自己的源文件及主题等也保存到远端。</p>
+<ol>
+<li>github 上创建 blog 仓库，保存博客源文件</li>
+<li>git clone 仓库到本地</li>
+<li>将 hexo 站点中的内容 copy 到 blog 仓库中</li>
+<li>设置.gitignore，将.deploy_git 、public忽略，不提交</li>
 </ol>
 
                 
@@ -336,7 +350,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1github-准备"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.github &#x51C6;&#x5907;</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2hexo-准备"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.hexo &#x51C6;&#x5907;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#21部署到-github-的配置"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">2.1.&#x90E8;&#x7F72;&#x5230; github &#x7684;&#x914D;&#x7F6E;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3提交到-github"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x63D0;&#x4EA4;&#x5230; github</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#31ssh-key-配置"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">3.1.SSH KEY &#x914D;&#x7F6E;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1github-准备"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.github &#x51C6;&#x5907;</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2hexo-准备"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.hexo &#x51C6;&#x5907;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#21部署到-github-的配置"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">2.1.&#x90E8;&#x7F72;&#x5230; github &#x7684;&#x914D;&#x7F6E;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3提交到-github"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x63D0;&#x4EA4;&#x5230; github</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#31ssh-key-配置"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">3.1.SSH KEY &#x914D;&#x7F6E;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#32deploy-git-仓库设置"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">3.2.deploy git &#x4ED3;&#x5E93;&#x8BBE;&#x7F6E;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#4保存主题-博客源文件"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x4FDD;&#x5B58;&#x4E3B;&#x9898;&#x3001;&#x535A;&#x5BA2;&#x6E90;&#x6587;&#x4EF6;</span></a></li></ol>
         
         </div>
       </aside>
