@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          无名 - Charlie | Blog
+          【深入理解 Java 虚拟机】【02】java 内存 - Charlie | Blog
         
     </title>
 
-    <link rel="canonical" href="http://charliewong001.github.io/article/memo/">
+    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/understanding-the-jvm/【02】java 内存/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#no-name" title="no-name">no-name</a>
+                              <a class="tag" href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
                             
                         </div>
-                        <h1>无名</h1>
+                        <h1>【深入理解 Java 虚拟机】【02】java 内存</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
-                            2019-05-25
+                            2019-05-26
                         </span>
                     </div>
                 
@@ -213,8 +213,62 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>业务代码架构如何设计</p>
-<p>学习 NFC 账户架构设计</p>
+                <h2 id="1-运行时数据区域">1. 运行时数据区域</h2>
+<p><img src="/postImg/665375-20160126212928129-1855187537.png" alt="img"></p>
+<h2 id="2程序计数器">2.程序计数器</h2>
+<ul>
+<li>
+<p><strong>作用</strong><br>
+记录当前线程所执行到的字节码的行号。字节码解释器工作的时候就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。</p>
+</li>
+<li>
+<p><strong>意义</strong><br>
+JVM的多线程是通过线程轮流切换并分配处理器来实现的，对于我们来说的并行事实上一个处理器也只会执行一条线程中的指令。所以，为了保证各线程指令的安全顺利执行，<font color="EF0023">每条线程都有独立的私有的程序计数器</font>。</p>
+</li>
+<li>
+<p><strong>存储内容</strong><br>
+当线程中执行的是一个Java方法时，程序计数器中记录的是正在执行的线程的虚拟机字节码指令的地址。<br>
+当线程中执行的是一个本地方法时，程序计数器中的值为空。</p>
+</li>
+<li>
+<p><strong>可能出现异常</strong><br>
+此内存区域是唯一一个在JVM上不会发生内存溢出异常（OutOfMemoryError）的区域。</p>
+</li>
+<li>
+<p><strong>疑问</strong></p>
+<p><font color="EF0023">Q：执行本地方法，为什么程序器中的值为空？我们知道，程序计数器用来存放字节码指令地址；通过这个地址，虚拟机就能知道执行到哪里，以及怎么往下执行，可调用native方法，值就变成空了，那么机器不就直接崩溃了吗？</font></p>
+<table><tr><td bgcolor="#F6FFEE">A：参考C++理解是：当线程中调用native方法的时候，则重新启动一个新的线程，那么新的线程的计数器为空则不会影响当前线程的计数器，相互独立。</td></tr></table>
+<p><font color="EF0023">Q：如果是新启动的一个线程，那么不会因为线程异步问题，无法控制执行顺序吗？</font></p>
+<table><tr><td bgcolor="#F6FFEE">A：当前线程应当会被阻塞，直到另外一个线程执行结束。例如：通过死循环来控制阻塞（当然死循环效率太低，这里只是一个例子）</td></tr></table>
+</li>
+</ul>
+<h2 id="3虚拟机栈">3.虚拟机栈</h2>
+<ul>
+<li>
+<p><strong>什么是虚拟机栈</strong></p>
+<p>线程私有，每个线程都有一个虚拟机栈，生命周期与线程相同</p>
+<p>虚拟机栈的栈元素是栈帧，一个方法开始被调用，这个方法的栈帧入虚拟机栈，这个方法执行完毕返回时，其栈帧出虚拟机栈，因此，虚拟机栈中栈帧的入栈顺序就是方法调用顺序</p>
+</li>
+</ul>
+<ul>
+<li>
+<p><strong>可能出现的异常</strong></p>
+<p>线程请求的栈深度大于虚拟机允许的深度时（栈帧过多），抛出 StackOverFlow 异常</p>
+<p>大部分虚拟机都可以动态扩展栈深度</p>
+<p>如果栈扩展时，无法申请到足够的内存，则抛出 OutOfMemoryError 异常</p>
+</li>
+<li>
+<p>疑问</p>
+<p><font color="EF0023">Q：什么是句柄</font></p>
+<p>句柄就是引用。在java中我们在实例化完对象后，在对其进行操作时，用来去操作对象的就叫做句柄。他代表了当前对象的唯一一个标识，并不能代表当前对象的内存地址。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tree t1 = <span class="keyword">new</span> Tree();</span><br></pre></td></tr></table></figure>
+<p>上边例子中，t1就属于当前新建对象的句柄，它指向新建对象的实例，我们通过他去操作对象。</p>
+<p><font color="EF0023">Q：虚拟机默认的栈深度是？</font></p>
+<p><font color="EF0023">Q：如何动态扩展栈深度，含义是，单个栈的内存大小增加，还是整体栈内存增加？</font></p>
+</li>
+</ul>
+<h2 id="4栈帧">4.栈帧</h2>
+<p><img src="/postImg/SouthEast.jpeg" alt="img"></p>
 
                 
 
@@ -222,13 +276,9 @@
                 <!-- Pager -->
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/article/jvm/understanding-the-jvm/【01】走进 java/" data-toggle="tooltip" data-placement="top" title="【深入理解 Java 虚拟机】【01】走进 java">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/article/framework/etcp-account-分层/" data-toggle="tooltip" data-placement="top" title="etcp-account 分层">Next Post &rarr;</a>
+                            <a href="/article/jvm/understanding-the-jvm/【01】走进 java/" data-toggle="tooltip" data-placement="top" title="【深入理解 Java 虚拟机】【01】走进 java">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -284,7 +334,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="nav">none</ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-运行时数据区域"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1. &#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2程序计数器"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3虚拟机栈"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x865A;&#x62DF;&#x673A;&#x6808;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4栈帧"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x6808;&#x5E27;</span></a></li></ol>
         
         </div>
       </aside>
@@ -304,7 +354,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#no-name" title="no-name">no-name</a>
+                          <a class="tag" href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
                         
                     </div>
                 </section>

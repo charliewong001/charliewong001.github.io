@@ -88,7 +88,7 @@
                     <div class="site-heading">
                         <h1>Charlie</h1>
                         <!--<hr class="small">-->
-                        <span class="subheading">个人博客</span>
+                        <span class="subheading">日拱一卒，功不唐捐</span>
                     </div>
                 
 
@@ -211,6 +211,48 @@
 
 <div class="post-preview">
 
+    <a href="/article/jvm/understanding-the-jvm/【02】java 内存/">
+        <h2 class="post-title">
+            【深入理解 Java 虚拟机】【02】java 内存
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1. 运行时数据区域
+
+2.程序计数器
+
+
+作用
+记录当前线程所执行到的字节码的行号。字节码解释器工作的时候就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。
+
+
+意义
+JVM的多线程是通过线程轮流切换并分配处理器来实现的，对于我们来说的并行事实上一个处理器也只会执行一条线程中的指令。所以，为了保证各线程指令的安全顺利执行，每条线程都有独立的私有的程序计数器。
+
+
+存储内容
+当线程......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-26
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/jvm/understanding-the-jvm/【01】走进 java/">
         <h2 class="post-title">
             【深入理解 Java 虚拟机】【01】走进 java
@@ -244,7 +286,7 @@ Java技术和JCP两者的原创者都是SUN计算机公司。然而，JCP已经�
 
 <div class="post-preview">
 
-    <a href="/article/memo/">
+    <a href="/article/noname/">
         <h2 class="post-title">
             无名
         </h2>
@@ -254,6 +296,8 @@ Java技术和JCP两者的原创者都是SUN计算机公司。然而，JCP已经�
         <div class="post-content-preview">
             业务代码架构如何设计
 学习 NFC 账户架构设计
+GITHUB
+KM 学城
 ...
         </div>
     </a>
@@ -411,21 +455,23 @@ Java技术和JCP两者的原创者都是SUN计算机公司。然而，JCP已经�
 
 <div class="post-preview">
 
-    <a href="/article/tools/常用网站/">
+    <a href="/article/tools/常用颜色/">
         <h2 class="post-title">
-            常用网站
+            常用颜色
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            PPT 模板
-http://www.officeplus.cn/Template/Home.shtml
-http://www.tretars.com/
-https://www.pptstore.net/
-高清图片网站
-摄图网 http://699pic.com/tupian/jibengong.html
-包图网 https://ibaotu.com/index.php?m=tags&amp;......
+            背景常用颜色
+淡绿
+淡红
+淡蓝
+淡黄
+字体常用颜色
+红色
+配色网：http://www.peise.net/color/
+...
         </div>
     </a>
     
@@ -445,23 +491,21 @@ https://www.pptstore.net/
 
 <div class="post-preview">
 
-    <a href="/article/tools/常用颜色/">
+    <a href="/article/tools/常用网站/">
         <h2 class="post-title">
-            常用颜色
+            常用网站
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            背景常用颜色
-淡绿
-淡红
-淡蓝
-淡黄
-字体常用颜色
-红色
-配色网：http://www.peise.net/color/
-...
+            PPT 模板
+http://www.officeplus.cn/Template/Home.shtml
+http://www.tretars.com/
+https://www.pptstore.net/
+高清图片网站
+摄图网 http://699pic.com/tupian/jibengong.html
+包图网 https://ibaotu.com/index.php?m=tags&amp;......
         </div>
     </a>
     
@@ -528,37 +572,6 @@ info
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/linux/linux 常用命令/linux-awk/">
-        <h2 class="post-title">
-            linux-awk
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            截取字符串
-awk -F “query account result=” ‘{print $1}’
-截取 query account result= 之后的字符串输出
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#linux" title="linux">linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -604,15 +617,15 @@ awk -F “query account result=” ‘{print $1}’
             
         
             
+            <a href="/tags/#hexo" title="hexo" rel="1">hexo</a>
+            
+        
+            
             <a href="/tags/#安全算法" title="安全算法" rel="4">安全算法</a>
             
         
             
             <a href="/tags/#framework" title="framework" rel="1">framework</a>
-            
-        
-            
-            <a href="/tags/#hexo" title="hexo" rel="1">hexo</a>
             
         
             
@@ -640,7 +653,7 @@ awk -F “query account result=” ‘{print $1}’
             
         
             
-            <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm" rel="1">understanding-the-jvm</a>
+            <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm" rel="2">understanding-the-jvm</a>
             
         
     </div>
@@ -696,11 +709,15 @@ awk -F “query account result=” ‘{print $1}’
     <ul>
       
         <li>
+          <a href="/article/jvm/understanding-the-jvm/【02】java 内存/">【深入理解 Java 虚拟机】【02】java 内存</a>
+        </li>
+      
+        <li>
           <a href="/article/jvm/understanding-the-jvm/【01】走进 java/">【深入理解 Java 虚拟机】【01】走进 java</a>
         </li>
       
         <li>
-          <a href="/article/memo/">无名</a>
+          <a href="/article/noname/">无名</a>
         </li>
       
         <li>
@@ -709,10 +726,6 @@ awk -F “query account result=” ‘{print $1}’
       
         <li>
           <a href="/article/reading/《靠谱》/">《靠谱》</a>
-        </li>
-      
-        <li>
-          <a href="/article/java/AOP-同一方法配置多个AOP切面/">AOP-同一方法配置多个AOP切面</a>
         </li>
       
     </ul>
@@ -727,7 +740,7 @@ awk -F “query account result=” ‘{print $1}’
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">17</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>

@@ -2,13 +2,6 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>http://charliewong001.github.io/tags/tools/</loc>
-        <lastmod>2019-05-22T05:58:57.471Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E8%81%8C%E5%9C%BA/</loc>
         <lastmod>2019-05-23T06:46:01.700Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -23,13 +16,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/%E5%AE%89%E5%85%A8%E7%AE%97%E6%B3%95/</loc>
-        <lastmod>2019-05-23T07:08:16.224Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/linux/</loc>
         <lastmod>2019-05-23T07:21:32.693Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -37,22 +23,8 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/no-name/</loc>
-        <lastmod>2019-05-25T14:29:01.716Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/%E6%89%8B%E5%86%8C/</loc>
         <lastmod>2019-05-25T14:58:44.223Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/tags/framework/</loc>
-        <lastmod>2019-05-25T15:14:38.563Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -72,8 +44,36 @@
     </url>
 
     <url>
+        <loc>http://charliewong001.github.io/tags/no-name/</loc>
+        <lastmod>2019-05-27T13:45:36.890Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/framework/</loc>
+        <lastmod>2019-05-28T09:47:05.865Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/%E5%AE%89%E5%85%A8%E7%AE%97%E6%B3%95/</loc>
+        <lastmod>2019-05-28T14:24:41.782Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/tools/</loc>
+        <lastmod>2019-05-30T05:11:40.186Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>http://charliewong001.github.io/tags/understanding-the-jvm/</loc>
-        <lastmod>2019-05-26T14:25:35.560Z</lastmod>
+        <lastmod>2019-05-31T09:43:42.015Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
