@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          linux-awk - Charlie | Blog
+          【深入理解 Java 虚拟机】【03】垃圾收集器 - Charlie | Blog
         
     </title>
 
-    <link rel="canonical" href="http://charliewong001.github.io/article/linux/linux 常用命令/linux-awk/">
+    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/understanding-the-jvm/【03】垃圾收集器/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#linux" title="linux">linux</a>
+                              <a class="tag" href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
                             
                         </div>
-                        <h1>linux-awk</h1>
+                        <h1>【深入理解 Java 虚拟机】【03】垃圾收集器</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
-                            2019-05-22
+                            2019-06-14
                         </span>
                     </div>
                 
@@ -213,9 +213,35 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="截取字符串">截取字符串</h3>
-<p>awk -F “query account result=” ‘{print $1}’</p>
-<p>截取 query account result= 之后的字符串输出</p>
+                <h2 id="对象是否可回收判断方法">对象是否可回收判断方法</h2>
+<h3 id="引用计数算法主流虚拟机未采用">引用计数算法<font color="red">(主流虚拟机未采用)</font></h3>
+<ul>
+<li>
+<p>实现思想</p>
+<p>在对象中添加引用计数器，引用它时，计数器加 1，对它的引用失效，计数器减 1。计数器为 0 的对象就是不可能再被引用的</p>
+</li>
+<li>
+<p>问题</p>
+<p>无法解决对象之间循环引用的问题</p>
+</li>
+</ul>
+<h3 id="可达性分析算法">可达性分析算法</h3>
+<ul>
+<li>
+<p>实现思想</p>
+<p>从 GC Roots 对象作为起始点，向下搜索，当一个对象到 GC Roots 没有任何引用链，则此对象是不可用的。</p>
+</li>
+<li>
+<p>GCRoots</p>
+<p>引用链搜索的起始点，包括</p>
+<ul>
+<li>虚拟机栈(栈帧中的本地变量表)中引用的对象</li>
+<li>方法区中类静态属性引用的对象(?)</li>
+<li>方法区中常量引用的对象(?)</li>
+<li>本地方法栈中 JNI(Native 方法)引用的对象</li>
+</ul>
+</li>
+</ul>
 
                 
 
@@ -224,12 +250,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/linux/linux 常用命令/linux-sed/" data-toggle="tooltip" data-placement="top" title="linux-sed">&larr; Previous Post</a>
+                            <a href="/article/framework/设计原则/" data-toggle="tooltip" data-placement="top" title="设计原则">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/algorithm/AsymmetricSign/" data-toggle="tooltip" data-placement="top" title="非对称密钥签名算法流程">Next Post &rarr;</a>
+                            <a href="/article/qrcode/zxing/" data-toggle="tooltip" data-placement="top" title="zxing">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -285,7 +311,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#截取字符串"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x622A;&#x53D6;&#x5B57;&#x7B26;&#x4E32;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#对象是否可回收判断方法"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x53EF;&#x56DE;&#x6536;&#x5224;&#x65AD;&#x65B9;&#x6CD5;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#引用计数算法主流虚拟机未采用"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x5F15;&#x7528;&#x8BA1;&#x6570;&#x7B97;&#x6CD5;<font color="red">(&#x4E3B;&#x6D41;&#x865A;&#x62DF;&#x673A;&#x672A;&#x91C7;&#x7528;)</font></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#可达性分析算法"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x53EF;&#x8FBE;&#x6027;&#x5206;&#x6790;&#x7B97;&#x6CD5;</span></a></li></ol></li></ol>
         
         </div>
       </aside>
@@ -305,7 +331,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#linux" title="linux">linux</a>
+                          <a class="tag" href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
                         
                     </div>
                 </section>

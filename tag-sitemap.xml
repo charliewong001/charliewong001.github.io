@@ -16,13 +16,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/linux/</loc>
-        <lastmod>2019-05-23T07:21:32.693Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/%E6%89%8B%E5%86%8C/</loc>
         <lastmod>2019-05-25T14:58:44.223Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -44,36 +37,50 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/no-name/</loc>
-        <lastmod>2019-05-27T13:45:36.890Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/tags/framework/</loc>
-        <lastmod>2019-05-28T09:47:05.865Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/tags/%E5%AE%89%E5%85%A8%E7%AE%97%E6%B3%95/</loc>
-        <lastmod>2019-05-28T14:24:41.782Z</lastmod>
+        <loc>http://charliewong001.github.io/tags/qrcode/</loc>
+        <lastmod>2019-06-06T05:09:46.065Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://charliewong001.github.io/tags/tools/</loc>
-        <lastmod>2019-05-30T05:11:40.186Z</lastmod>
+        <lastmod>2019-06-11T06:01:16.202Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/linux/</loc>
+        <lastmod>2019-06-12T12:27:08.852Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/%E5%AE%89%E5%85%A8%E7%AE%97%E6%B3%95/</loc>
+        <lastmod>2019-06-17T12:25:03.948Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/no-name/</loc>
+        <lastmod>2019-06-21T13:57:20.064Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/framework/</loc>
+        <lastmod>2019-06-22T03:13:44.150Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://charliewong001.github.io/tags/understanding-the-jvm/</loc>
-        <lastmod>2019-05-31T09:43:42.015Z</lastmod>
+        <lastmod>2019-06-22T11:09:40.763Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

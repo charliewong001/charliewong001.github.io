@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          linux-awk - Charlie | Blog
+          工作模式和填充 - Charlie | Blog
         
     </title>
 
-    <link rel="canonical" href="http://charliewong001.github.io/article/linux/linux 常用命令/linux-awk/">
+    <link rel="canonical" href="http://charliewong001.github.io/article/algorithm/workMode&amp;Padding/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#linux" title="linux">linux</a>
+                              <a class="tag" href="/tags/#安全算法" title="安全算法">安全算法</a>
                             
                         </div>
-                        <h1>linux-awk</h1>
+                        <h1>工作模式和填充</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
-                            2019-05-22
+                            2019-06-03
                         </span>
                     </div>
                 
@@ -213,9 +213,61 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="截取字符串">截取字符串</h3>
-<p>awk -F “query account result=” ‘{print $1}’</p>
-<p>截取 query account result= 之后的字符串输出</p>
+                <h2 id="1分组加密">1.分组加密</h2>
+<p>块加密，英文Block Cyper，又称分组加密，是一种常见的对称加密，具有代表性的块加密有DES，AES，3DES等。块加密的工作模式允许使用同一个分组密码密钥对多于一块的数据进行加密，并保证其安全性。</p>
+<h2 id="2工作模式">2.工作模式</h2>
+<p>主要用于 AES、DES 算法</p>
+<h3 id="ecb">ECB</h3>
+<p>又称电子密码本模式：Electronic codebook，是最简单的块密码加密模式，加密前根据加密块大小（如AES为128位）分成若干块，之后将每块使用相同的密钥单独加密，解密同理。</p>
+<p><strong><em>缺点</em></strong> :在于同样的明文块会被加密成相同的密文块；因此，它不能很好的隐藏数据模式。在某些场合，这种方法不能提供严格的数据保密性，因此并不推荐用于密码协议中。</p>
+<p><img src="/postImg/Center.png" alt="img"></p>
+<h3 id="cbc">CBC</h3>
+<p>密码分组链接（CBC，Cipher-block chaining）模式，由IBM于1976年发明，每个明文块先与前一个密文块进行异或后，再进行加密。在这种方法中，每个密文块都依赖于它前面的所有明文块。同时，为了保证每条消息的唯一性，在第一个块中需要使用初始化向量IV。</p>
+<p>CBC是最为常用的工作模式。</p>
+<p><strong><em>主要缺点</em></strong>: 在于加密过程是串行的，无法被并行化，而且消息必须被填充到块大小的整数倍。在加密时，明文中的微小改变会导致其后的全部密文块发生改变，而在解密时，从两个邻接的密文块中即可得到一个明文块。因此，<strong><em>解密过程可以被并行化</em></strong>，而解密时，密文中一位的改变只会导致其对应的明文块完全改变和下一个明文块中对应位发生改变，不会影响到其它明文的内容。</p>
+<p><img src="/postImg/Center-20190617171514739.png" alt="img"></p>
+<h3 id="其他模式">其他模式</h3>
+<p>其他模式，如：PCBC、CTR、CTS、CFB、CFB8-CFB128、OFB、OFB8</p>
+<p>并不常用，所以此文并不摘录，若想了解可从参考资料中自行查看</p>
+<h3 id="参考资料">参考资料</h3>
+<p><a href="https://www.cnblogs.com/starwolf/p/3365834.html" target="_blank" rel="noopener">https://www.cnblogs.com/starwolf/p/3365834.html</a></p>
+<p><a href="https://www.cnblogs.com/baihuitestsoftware/articles/7090134.html" target="_blank" rel="noopener">https://www.cnblogs.com/baihuitestsoftware/articles/7090134.html</a></p>
+<p><a href="https://blog.csdn.net/jerry81333/article/details/78336616" target="_blank" rel="noopener">https://blog.csdn.net/jerry81333/article/details/78336616</a></p>
+<h2 id="3填充方式">3.填充方式</h2>
+<p>在分组加密算法中（例如AES），我们首先要将原文进行分组，然后每个分组进行加密，然后组装密文。</p>
+<p>其中有一步是分组</p>
+<h3 id="pkcs5">PKCS#5</h3>
+<p>PKCS5Padding</p>
+<h3 id="pkcs7">PKCS#7</h3>
+<p>pkcs7padding、pkcs5padding</p>
+<h3 id="参考资料">参考资料</h3>
+<p><a href="https://blog.csdn.net/test1280/article/details/75268255" target="_blank" rel="noopener">https://blog.csdn.net/test1280/article/details/75268255</a></p>
+<p><a href="https://blog.csdn.net/xiongya8888/article/details/84947232" target="_blank" rel="noopener">https://blog.csdn.net/xiongya8888/article/details/84947232</a></p>
+<p><a href="https://blog.csdn.net/u013399759/article/details/40780883" target="_blank" rel="noopener">https://blog.csdn.net/u013399759/article/details/40780883</a></p>
+<p><a href="https://blog.csdn.net/jiuxiaoyunwu/article/details/50054215" target="_blank" rel="noopener">https://blog.csdn.net/jiuxiaoyunwu/article/details/50054215</a></p>
+<p><font color="EF0023"><a href="https://blog.csdn.net/chary8088/article/details/21185187" target="_blank" rel="noopener">https://blog.csdn.net/chary8088/article/details/21185187</a></font></p>
+<h2 id="4aes-工作模式与填充方式">4.AES 工作模式与填充方式</h2>
+<p>算法/模式/填充                        16字节加密后数据长度         不满16字节加密后长度<br>
+AES/CBC/NoPadding                               16                                       不支持<br>
+AES/CBC/PKCS5Padding                        32                                          16<br>
+AES/CBC/ISO10126Padding                  32                                           16</p>
+<p>AES/CFB/NoPadding                               16                                  原始数据长度<br>
+AES/CFB/PKCS5Padding                        32                                           16<br>
+AES/CFB/ISO10126Padding                  32                                            16</p>
+<p>AES/ECB/NoPadding                               16                                         不支持<br>
+AES/ECB/PKCS5Padding                        32                                            16<br>
+AES/ECB/ISO10126Padding                   32                                           16</p>
+<p>AES/OFB/NoPadding                               16                                   原始数据长度<br>
+AES/OFB/PKCS5Padding                        32                                            16<br>
+AES/OFB/ISO10126Padding                  32                                             16</p>
+<p>AES/PCBC/NoPadding                             16                                        不支持<br>
+AES/PCBC/PKCS5Padding                      32                                             16<br>
+AES/PCBC/ISO10126Padding                32                                             16</p>
+<p>可以看到，在原始数据长度为16的整数倍时，假如原始数据长度等于16<em>n，则使用NoPadding时加密后数据长度等于16</em>n，其它情况下加密数据长度等于16*(n+1)。在不足16的整数倍的情况下，假如原始数据长度等于16<em>n+m[其中m小于16]，除了NoPadding填充之外的任何方式，加密数据长度都等于16</em>(n+1)；NoPadding填充情况下，CBC、ECB和PCBC三种模式是不支持的，CFB、OFB两种模式下则加密数据长度等于原始数据长度。</p>
+<p>说到填充在这里也要说明下，不能被网络上复制来复制去的文章忽悠了。</p>
+<p>1、如果输入的数据不足16个字节，需要补齐（填充）到16个字节，比如：10个字节就补齐6个6,11个字节就补齐5个5，以此类推；<br>
+2、如果输入的数据是16的整数倍个字节，需要在数据后面填充16个0×10（也可以是10进制的16）；<br>
+3、如果输入的数据大于16且不是16的倍数，你需要把字符串补齐到16位，比如：如果少4位，就补充4个4， 如果少5位就补充5个5，少n位，补充n个n。</p>
 
                 
 
@@ -224,12 +276,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/linux/linux 常用命令/linux-sed/" data-toggle="tooltip" data-placement="top" title="linux-sed">&larr; Previous Post</a>
+                            <a href="/article/qrcode/zxing/" data-toggle="tooltip" data-placement="top" title="zxing">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/algorithm/AsymmetricSign/" data-toggle="tooltip" data-placement="top" title="非对称密钥签名算法流程">Next Post &rarr;</a>
+                            <a href="/article/jvm/understanding-the-jvm/【01】走进 java/" data-toggle="tooltip" data-placement="top" title="【深入理解 Java 虚拟机】【01】走进 java">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -285,7 +337,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#截取字符串"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x622A;&#x53D6;&#x5B57;&#x7B26;&#x4E32;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1分组加密"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.&#x5206;&#x7EC4;&#x52A0;&#x5BC6;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2工作模式"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x5DE5;&#x4F5C;&#x6A21;&#x5F0F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#ecb"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">ECB</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#cbc"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">CBC</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#其他模式"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x5176;&#x4ED6;&#x6A21;&#x5F0F;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3填充方式"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x586B;&#x5145;&#x65B9;&#x5F0F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#pkcs5"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">PKCS#5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#pkcs7"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">PKCS#7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4aes-工作模式与填充方式"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.AES &#x5DE5;&#x4F5C;&#x6A21;&#x5F0F;&#x4E0E;&#x586B;&#x5145;&#x65B9;&#x5F0F;</span></a></li></ol>
         
         </div>
       </aside>
@@ -305,7 +357,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#linux" title="linux">linux</a>
+                          <a class="tag" href="/tags/#安全算法" title="安全算法">安全算法</a>
                         
                     </div>
                 </section>
