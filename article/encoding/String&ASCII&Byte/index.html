@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/site_icon.jpg">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          String、ASCII、Byte - Charlie | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://charliewong001.github.io/article/encoding/String&amp;ASCII&amp;Byte/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/article.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#encoding" title="encoding">encoding</a>
+                            
+                        </div>
+                        <h1>String、ASCII、Byte</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Charlie on
+                            2019-07-11
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Charlie</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<!--
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="下面讨论的一些问题共同的前提是string字符串中的内容是ascii码表示范围内的符号">下面讨论的一些问题，共同的前提是String字符串中的内容是ASCII码表示范围内的符号。</h2>
+<h3 id="什么是string">什么是String?</h3>
+<p>字面意思：字符串。其实内部使用char数组存储</p>
+<h3 id="什么是ascii码">什么是ASCII码</h3>
+<p>ASCII是美国<a href="https://www.baidu.com/s?wd=%E4%BF%A1%E6%81%AF%E4%BA%A4%E6%8D%A2&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">信息交换</a>标准代码，是现在通用的单字节编码系统，使用指定的7 位或8 位二进制数组合来表示128 或256 种可能的字符，全称是American Standard Code for Information Interchange。</p>
+<p>ASCII用来制订计算机中每个符号对应的代码，这也叫做计算机的内码(code)。<br>
+1、ASCII码于1968年提出，用于在不同<a href="https://www.baidu.com/s?wd=%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">计算机硬件</a>和软件系统中实现数据传输标准化，在大多数的<a href="https://www.baidu.com/s?wd=%E5%B0%8F%E5%9E%8B%E6%9C%BA&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">小型机</a>和全部的<a href="https://www.baidu.com/s?wd=%E4%B8%AA%E4%BA%BA%E8%AE%A1%E7%AE%97%E6%9C%BA&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">个人计算机</a>都使用此码。<br>
+2、ASCII码划分为两个集合：128个字符的标准ASCII码和附加的128个字符的扩充和ASCII码。<br>
+3、每个ASCII码以1个字节(Byte)储存，从0到数字127代表不同的常用符号，例如大写A的ASCII码是65，小写a则是97。<br>
+4、由于ASCII字节的七个位，最高位并不使用，所以后来又将最高的一个位也编入这套内码中，成为八个位的延伸ASCII(ExtendedASCII)码，这套内码加上了许多外文和表格等特殊符号，成为目前常用的内码。</p>
+<p><a href="https://km.sankuai.com/page/93241867" target="_blank" rel="noopener">ASCII码对照表</a></p>
+<h3 id="什么是byte">什么是Byte</h3>
+<p>byte在java里面是一个字节</p>
+<h3 id="string-ascii-byte之间的关系">String、ASCII、Byte之间的关系</h3>
+<p>String.getBytes()方法返回的是一个byte数组，byte数组中的每一个值是十进制的ASCII码值。（前提为String字符串符号是ASCII码表示范围内的值）。</p>
+<h3 id="stringgetbytes返回什么">String.getBytes()返回什么</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">  String s = <span class="string">"a"</span>;</span><br><span class="line">  System.out.println(Arrays.toString(s.getBytes()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这段代码的返回值是：[97]，97是字母a的ASCII十进制码值。</p>
+<p>所以我们知道了，String.getBytes()返回的字节数组，其实是字符串中每个char的十进制ASCII码数组。</p>
+<p>String.getBytes()源码分析（后续补上）</p>
+<h3 id="bytes转为hex">bytes[]转为Hex</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">byteToHex</span><span class="params">(<span class="keyword">byte</span> b[])</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (b == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">      <span class="string">"Argument b ( byte array ) is null! "</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  String hs = <span class="string">""</span>;</span><br><span class="line">  String stmp = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> n = <span class="number">0</span>; n &lt; b.length; n++) &#123;</span><br><span class="line">    stmp = Integer.toHexString(b[n] &amp; <span class="number">0xff</span>);</span><br><span class="line">    <span class="keyword">if</span> (stmp.length() == <span class="number">1</span>) &#123;</span><br><span class="line">      hs = hs + <span class="string">"0"</span> + stmp;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      hs = hs + stmp;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> hs.toUpperCase();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这段代码的作用是，将一个byte数组转为一个Hex字符串。就是将十进制ASCII码转为16进制ASCII码。</p>
+<h3 id="string-byte-hex转换时长度变化">String、byte[]、Hex转换时长度变化</h3>
+<p>String转为byte数组时，长度是不变化的。举例：“123abc” 长度为6,getBytes()后，byte数组的长度同样为6，因为String内部是使用char数组来存储的，一个char会转为其对应的ASCII码。</p>
+<p>byte数组转为Hex字符串时，长度相比原String长度会加倍，因为一个byte转为ASCII码需要占用1个字节，而1个字节需要用2个16进制数字表示。举例：“a” 转为Hex为 &quot;61&quot;长度加倍。</p>
+<p>相反，Hex转为byte[]和原String时，长度会减半。Hex（即16进制的ASCII码值）的两个数字表示一个ASCII码，即一个byte，一个byte也就是一个char，一个字符。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/jvm/jdk命令行工具/" data-toggle="tooltip" data-placement="top" title="jdk命令行工具">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/encoding/编码格式/" data-toggle="tooltip" data-placement="top" title="编码格式">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#下面讨论的一些问题共同的前提是string字符串中的内容是ascii码表示范围内的符号"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x4E0B;&#x9762;&#x8BA8;&#x8BBA;&#x7684;&#x4E00;&#x4E9B;&#x95EE;&#x9898;&#xFF0C;&#x5171;&#x540C;&#x7684;&#x524D;&#x63D0;&#x662F;String&#x5B57;&#x7B26;&#x4E32;&#x4E2D;&#x7684;&#x5185;&#x5BB9;&#x662F;ASCII&#x7801;&#x8868;&#x793A;&#x8303;&#x56F4;&#x5185;&#x7684;&#x7B26;&#x53F7;&#x3002;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#什么是string"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x4EC0;&#x4E48;&#x662F;String?</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#什么是ascii码"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x4EC0;&#x4E48;&#x662F;ASCII&#x7801;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#什么是byte"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">&#x4EC0;&#x4E48;&#x662F;Byte</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#string-ascii-byte之间的关系"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">String&#x3001;ASCII&#x3001;Byte&#x4E4B;&#x95F4;&#x7684;&#x5173;&#x7CFB;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#stringgetbytes返回什么"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">String.getBytes()&#x8FD4;&#x56DE;&#x4EC0;&#x4E48;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#bytes转为hex"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">bytes[]&#x8F6C;&#x4E3A;Hex</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#string-byte-hex转换时长度变化"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">String&#x3001;byte[]&#x3001;Hex&#x8F6C;&#x6362;&#x65F6;&#x957F;&#x5EA6;&#x53D8;&#x5316;</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#encoding" title="encoding">encoding</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/charliewong001">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Charlie 2019 
+                    <br>
+                    <!--
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true" >
+                    </iframe>
+                    -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://charliewong001.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://charliewong001.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

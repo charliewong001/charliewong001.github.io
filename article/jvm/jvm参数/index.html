@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          工作模式和填充 - Charlie | Blog
+          JVM参数 - Charlie | Blog
         
     </title>
 
-    <link rel="canonical" href="http://charliewong001.github.io/article/algorithm/workMode&amp;Padding/">
+    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/jvm参数/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#安全算法" title="安全算法">安全算法</a>
+                              <a class="tag" href="/tags/#jvm" title="jvm">jvm</a>
                             
                         </div>
-                        <h1>工作模式和填充</h1>
+                        <h1>JVM参数</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
-                            2019-06-03
+                            2019-06-14
                         </span>
                     </div>
                 
@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -213,61 +213,204 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h2 id="1分组加密">1.分组加密</h2>
-<p>块加密，英文Block Cyper，又称分组加密，是一种常见的对称加密，具有代表性的块加密有DES，AES，3DES等。块加密的工作模式允许使用同一个分组密码密钥对多于一块的数据进行加密，并保证其安全性。</p>
-<h2 id="2工作模式">2.工作模式</h2>
-<p>主要用于 AES、DES 算法</p>
-<h3 id="ecb">ECB</h3>
-<p>又称电子密码本模式：Electronic codebook，是最简单的块密码加密模式，加密前根据加密块大小（如AES为128位）分成若干块，之后将每块使用相同的密钥单独加密，解密同理。</p>
-<p><strong><em>缺点</em></strong> :在于同样的明文块会被加密成相同的密文块；因此，它不能很好的隐藏数据模式。在某些场合，这种方法不能提供严格的数据保密性，因此并不推荐用于密码协议中。</p>
-<p><img src="/postImg/Center.png" alt="img"></p>
-<h3 id="cbc">CBC</h3>
-<p>密码分组链接（CBC，Cipher-block chaining）模式，由IBM于1976年发明，每个明文块先与前一个密文块进行异或后，再进行加密。在这种方法中，每个密文块都依赖于它前面的所有明文块。同时，为了保证每条消息的唯一性，在第一个块中需要使用初始化向量IV。</p>
-<p>CBC是最为常用的工作模式。</p>
-<p><strong><em>主要缺点</em></strong>: 在于加密过程是串行的，无法被并行化，而且消息必须被填充到块大小的整数倍。在加密时，明文中的微小改变会导致其后的全部密文块发生改变，而在解密时，从两个邻接的密文块中即可得到一个明文块。因此，<strong><em>解密过程可以被并行化</em></strong>，而解密时，密文中一位的改变只会导致其对应的明文块完全改变和下一个明文块中对应位发生改变，不会影响到其它明文的内容。</p>
-<p><img src="/postImg/Center-20190617171514739.png" alt="img"></p>
-<h3 id="其他模式">其他模式</h3>
-<p>其他模式，如：PCBC、CTR、CTS、CFB、CFB8-CFB128、OFB、OFB8</p>
-<p>并不常用，所以此文并不摘录，若想了解可从参考资料中自行查看</p>
-<h3 id="参考资料">参考资料</h3>
-<p><a href="https://www.cnblogs.com/starwolf/p/3365834.html" target="_blank" rel="noopener">https://www.cnblogs.com/starwolf/p/3365834.html</a></p>
-<p><a href="https://www.cnblogs.com/baihuitestsoftware/articles/7090134.html" target="_blank" rel="noopener">https://www.cnblogs.com/baihuitestsoftware/articles/7090134.html</a></p>
-<p><a href="https://blog.csdn.net/jerry81333/article/details/78336616" target="_blank" rel="noopener">https://blog.csdn.net/jerry81333/article/details/78336616</a></p>
-<h2 id="3填充方式">3.填充方式</h2>
-<p>在分组加密算法中（例如AES），我们首先要将原文进行分组，然后每个分组进行加密，然后组装密文。</p>
-<p>其中有一步是分组</p>
-<h3 id="pkcs5">PKCS#5</h3>
-<p>PKCS5Padding</p>
-<h3 id="pkcs7">PKCS#7</h3>
-<p>pkcs7padding、pkcs5padding</p>
-<h3 id="参考资料">参考资料</h3>
-<p><a href="https://blog.csdn.net/test1280/article/details/75268255" target="_blank" rel="noopener">https://blog.csdn.net/test1280/article/details/75268255</a></p>
-<p><a href="https://blog.csdn.net/xiongya8888/article/details/84947232" target="_blank" rel="noopener">https://blog.csdn.net/xiongya8888/article/details/84947232</a></p>
-<p><a href="https://blog.csdn.net/u013399759/article/details/40780883" target="_blank" rel="noopener">https://blog.csdn.net/u013399759/article/details/40780883</a></p>
-<p><a href="https://blog.csdn.net/jiuxiaoyunwu/article/details/50054215" target="_blank" rel="noopener">https://blog.csdn.net/jiuxiaoyunwu/article/details/50054215</a></p>
-<p><font color="EF0023"><a href="https://blog.csdn.net/chary8088/article/details/21185187" target="_blank" rel="noopener">https://blog.csdn.net/chary8088/article/details/21185187</a></font></p>
-<h2 id="4aes-工作模式与填充方式">4.AES 工作模式与填充方式</h2>
-<p>算法/模式/填充                        16字节加密后数据长度         不满16字节加密后长度<br>
-AES/CBC/NoPadding                               16                                       不支持<br>
-AES/CBC/PKCS5Padding                        32                                          16<br>
-AES/CBC/ISO10126Padding                  32                                           16</p>
-<p>AES/CFB/NoPadding                               16                                  原始数据长度<br>
-AES/CFB/PKCS5Padding                        32                                           16<br>
-AES/CFB/ISO10126Padding                  32                                            16</p>
-<p>AES/ECB/NoPadding                               16                                         不支持<br>
-AES/ECB/PKCS5Padding                        32                                            16<br>
-AES/ECB/ISO10126Padding                   32                                           16</p>
-<p>AES/OFB/NoPadding                               16                                   原始数据长度<br>
-AES/OFB/PKCS5Padding                        32                                            16<br>
-AES/OFB/ISO10126Padding                  32                                             16</p>
-<p>AES/PCBC/NoPadding                             16                                        不支持<br>
-AES/PCBC/PKCS5Padding                      32                                             16<br>
-AES/PCBC/ISO10126Padding                32                                             16</p>
-<p>可以看到，在原始数据长度为16的整数倍时，假如原始数据长度等于16<em>n，则使用NoPadding时加密后数据长度等于16</em>n，其它情况下加密数据长度等于16*(n+1)。在不足16的整数倍的情况下，假如原始数据长度等于16<em>n+m[其中m小于16]，除了NoPadding填充之外的任何方式，加密数据长度都等于16</em>(n+1)；NoPadding填充情况下，CBC、ECB和PCBC三种模式是不支持的，CFB、OFB两种模式下则加密数据长度等于原始数据长度。</p>
-<p>说到填充在这里也要说明下，不能被网络上复制来复制去的文章忽悠了。</p>
-<p>1、如果输入的数据不足16个字节，需要补齐（填充）到16个字节，比如：10个字节就补齐6个6,11个字节就补齐5个5，以此类推；<br>
-2、如果输入的数据是16的整数倍个字节，需要在数据后面填充16个0×10（也可以是10进制的16）；<br>
-3、如果输入的数据大于16且不是16的倍数，你需要把字符串补齐到16位，比如：如果少4位，就补充4个4， 如果少5位就补充5个5，少n位，补充n个n。</p>
+                <h2 id="选项的分类">选项的分类</h2>
+<p>Hotspot JVM提供以下三大类选项：</p>
+<ol>
+<li>标准选项：这类选项的功能是很稳定的，在后续版本中也不太会发生变化。运行java或者java -help可以看到所有的标准选项。所有的标准选项都是以-开头，比如-version， -server等。</li>
+<li>X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因它们被称为X选项。运行java -X命令可以看到所有的X选项。这类选项的功能还是很稳定，但官方的说法是它们的行为可能会在后续版本中改变，也有可能不在后续版本中提供了。</li>
+<li>XX选项：这类选项是属于实验性，主要是给JVM开发者用于开发和调试JVM的，在后续的版本中行为有可能会变化。</li>
+</ol>
+<h2 id="xx选项的语法">XX选项的语法</h2>
+<ul>
+<li>如果是布尔类型的选项，它的格式为-XX:+flag或者-XX:-flag，分别表示开启和关闭该选项。</li>
+<li>针对非布尔类型的选项，它的格式为-XX:flag=value</li>
+</ul>
+<h2 id="内存相关">内存相关</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-Xms</td>
+<td>最小堆内存</td>
+</tr>
+<tr>
+<td>-Xmx</td>
+<td>最大堆内存</td>
+</tr>
+<tr>
+<td>-Xss</td>
+<td>栈容量</td>
+</tr>
+<tr>
+<td>-XX:+HeapDumpOnOutOfMemoryError</td>
+<td>表示在内存出现OOM的时候，把Heap转存(Dump)到文件以便后续分析，文件名通常是java_pid<pid>.hprof，其中pid为该程序的进程号。</pid></td>
+</tr>
+<tr>
+<td>-XX:HeapDumpPath=<path></path>:</td>
+<td>用来指定heap转存文件的存储路径，需要指定的路径下有足够的空间来保存转存文件。-XX:HeapDumpPath=/tmp/heapdump.hprof</td>
+</tr>
+<tr>
+<td>-XX:OnOutOfMemoryError</td>
+<td>用来指定一个可行性程序或者脚本的路径，当发生OOM的时候，去执行这个脚本。-XX:OnOutOfMemoryError =“sh ~/cleanup.sh”</td>
+</tr>
+<tr>
+<td>-XX:NewSize</td>
+<td>新生代的最小值</td>
+</tr>
+<tr>
+<td>-XX:MaxNewSize</td>
+<td>新生代的最大值</td>
+</tr>
+<tr>
+<td>-XX:NewRatio</td>
+<td>用来设置老生代和新生代大小的比例，比如-XX:NewRatio=2表示1/3的Heap是新生代，2/3的Heap是老生代。使用这个选项的好处是新生代的大小也能随着Heap的变化而变化。</td>
+</tr>
+<tr>
+<td>MaxDirectMemorySizes</td>
+<td>本机直接内存最大值</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gc日志相关">GC日志相关</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:+PrintGC</td>
+<td>等同于-verbose:gc 表示打开简化的GC日志，相关输出如下：<br>[GC 425355K-&gt;351685K(506816K), 0.2175300 secs] <br>[Full GC 500561K-&gt;456058K(506816K), 0.6421920 secs]</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDetails</td>
+<td>这个选项会打印出更多的GC日志，不同的收集器产生的日志会不一样。</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCTimeStamps</td>
+<td>把GC的时间戳显示在GC的日志中,打印GC发生的时间相对于JVM启动的时间</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDateStamps</td>
+<td>把GC的时间戳显示在GC的日志中,打印出GC发生的具体时间。</td>
+</tr>
+<tr>
+<td>-Xloggc:<file></file></td>
+<td>表示把GC日志写入到一个文件中去，而不是打印到标准输出中。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="垃圾收集器相关">垃圾收集器相关</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-XX:+UseSerialGC</td>
+<td style="text-align:left">虚拟机运行在Client模式下的默认值，打开此开关，使用Serial+Serial Old收集器组合</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+UseParNewGC</td>
+<td style="text-align:left">打开此开关，使用ParNew+Serial Old 组合</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+UseConcMarkSweepGC</td>
+<td style="text-align:left">打开此开关，使用ParNew + CMS + Serial Old组合，Serial Old作为CMS出现 Concurrent Mode Failure 失败后的后背收集器</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+UseG1GC</td>
+<td style="text-align:left">打开此开关后，使用G1 收集器</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+UseParallelGC</td>
+<td style="text-align:left">虚拟机运行在Server模式下的默认值，打开此开关后，使用 Parallel Scavenge + Serial Old(PS MarkSweep)组合</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+UseParallelOldGC</td>
+<td style="text-align:left">打开此开关后，使用Parallel Scavenge + Parallel Old的组合</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+SuvivorRatio</td>
+<td style="text-align:left">新生代中，Eden区域与Survivor区域的容量比值，默认为8，代表Eden:Survivor=8:1</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+PretenureSizeThreshold</td>
+<td style="text-align:left">对象直接晋升到老年代的对象大小，设置此参数后，大于此参数的对象将直接分配在老年代</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+MaxTenuringThreshold</td>
+<td style="text-align:left">对象晋升到老年代的年龄（默认为15）。每个对象在坚持过一次Minor GC之后，年龄加1，当超过这个参数值时，就进入老年代</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+UseAdaptiveSizePolicy</td>
+<td style="text-align:left">对台调整Java堆中各个区域的大小以及进入老年代的年龄</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+HandlePromotionFailure</td>
+<td style="text-align:left">是否允许分配担保失败，即老年代的剩余空间不足以应付新生代的整个Eden和Survivor区的所有对象都存活的几段情况</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+ParallelGCThreads</td>
+<td style="text-align:left">设置并行GC时进行内存回收的线程数</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+GCTimeRatio</td>
+<td style="text-align:left">GC时间占总时间的比率，默认值为99，即允许1%的GC时间，仅在使用Parallel Scavenge收集器时生效</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+MaxGCPauseMillis</td>
+<td style="text-align:left">设置GC的最大停顿时间。仅在使用Parallel Scavenge收集器时生效</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+CMSInitiatingOccupancyFraction</td>
+<td style="text-align:left">设置CMS收集器在老年代空间被使用多少后触发垃圾收集。默认值为68%，仅在使用CMS收集器时生效</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+UseCMSCompactAtFullCollection</td>
+<td style="text-align:left">设置CMS收集器在完成垃圾收集后是否要进行一次内存碎片整理。仅在使用CMS收集器时生效</td>
+</tr>
+<tr>
+<td style="text-align:left">-XX:+CMSfullGCsBeforeCompaction</td>
+<td style="text-align:left">设置CMS收集器在进行若干次垃圾收集后再启动一次内存碎片整理。仅在使用CMS收集器时生效</td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他">其他</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:+PrintCommandLineFlags</td>
+<td>与-showversion类似<br>可以让在程序运行前打印出用户手动设置或者JVM自动设置的XX选项<br>建议加上这个选项以辅助问题诊断<br>java -XX:+PrintCommandLineFlags -version<br>不能指定具体的LVMID？</td>
+</tr>
+<tr>
+<td>-XX:+PrintFlagsInitial</td>
+<td>打印出所有XX选项的默认值</td>
+</tr>
+<tr>
+<td>-XX:+PrintFlagsFinal</td>
+<td>打印出XX选项在运行程序时生效的值</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考资料">参考资料</h2>
+<p>【Hotspot JVM的常用选项】<a href="https://www.zybuluo.com/jewes/note/57352" target="_blank" rel="noopener">https://www.zybuluo.com/jewes/note/57352</a></p>
 
                 
 
@@ -276,12 +419,12 @@ AES/PCBC/ISO10126Padding                32                                      
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/qrcode/zxing/" data-toggle="tooltip" data-placement="top" title="zxing">&larr; Previous Post</a>
+                            <a href="/article/framework/设计原则/" data-toggle="tooltip" data-placement="top" title="设计原则">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/jvm/understanding-the-jvm/【01】走进 java/" data-toggle="tooltip" data-placement="top" title="【深入理解 Java 虚拟机】【01】走进 java">Next Post &rarr;</a>
+                            <a href="/article/jvm/understanding-the-jvm/【03-01】垃圾收集算法原理/" data-toggle="tooltip" data-placement="top" title="【深入理解 Java 虚拟机】【03-01】垃圾收集器">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -337,7 +480,7 @@ AES/PCBC/ISO10126Padding                32                                      
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1分组加密"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.&#x5206;&#x7EC4;&#x52A0;&#x5BC6;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2工作模式"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x5DE5;&#x4F5C;&#x6A21;&#x5F0F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#ecb"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">ECB</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#cbc"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">CBC</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#其他模式"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x5176;&#x4ED6;&#x6A21;&#x5F0F;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3填充方式"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x586B;&#x5145;&#x65B9;&#x5F0F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#pkcs5"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">PKCS#5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#pkcs7"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">PKCS#7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4aes-工作模式与填充方式"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.AES &#x5DE5;&#x4F5C;&#x6A21;&#x5F0F;&#x4E0E;&#x586B;&#x5145;&#x65B9;&#x5F0F;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#选项的分类"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x9009;&#x9879;&#x7684;&#x5206;&#x7C7B;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#xx选项的语法"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">XX&#x9009;&#x9879;&#x7684;&#x8BED;&#x6CD5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#内存相关"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x5185;&#x5B58;&#x76F8;&#x5173;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#gc日志相关"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">GC&#x65E5;&#x5FD7;&#x76F8;&#x5173;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#垃圾收集器相关"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;&#x76F8;&#x5173;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#其他"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">&#x5176;&#x4ED6;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol>
         
         </div>
       </aside>
@@ -357,7 +500,7 @@ AES/PCBC/ISO10126Padding                32                                      
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#安全算法" title="安全算法">安全算法</a>
+                          <a class="tag" href="/tags/#jvm" title="jvm">jvm</a>
                         
                     </div>
                 </section>

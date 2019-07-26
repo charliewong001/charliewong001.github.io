@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,30 +211,35 @@
 
 <div class="post-preview">
 
-    <a href="/article/hexo/huweihuang-them-problem/">
+    <a href="/article/linux/从服务器上传下载文件/">
         <h2 class="post-title">
-            huweihuang theme 问题&解决
+            从服务器上传/下载文件
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.文章阅读页浏览器滚轮滚动问题
-将 layout 下 post.ejs 中的 article 标签整个注释掉就好了，我也不知道为什么…
-2.右侧导航栏顺序随机问题&amp;如何自定义导航栏
-3.怎么在文章中插入图片并正常显示
-hexo 中的相对路径，跟目录就是 public，插入图片时也要使用相对路径。
-在 source 下创建 postImg 目录，用于存放文章中的图片，例如有一张 te......
+            从服务器下载文件
+
+本地执行：nc -l 9999 &gt;&gt; 文件名.txt
+服务器执行：cat 文件名 | nc 服务器地址 9999
+
+向服务器上传文件
+
+服务器执行：nc -l 9999 &gt;&gt; 文件名.txt
+本地执行：cat 文件名 | nc 服务器地址 9999
+
+...
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Charlie on
-            2019-05-21
+            2019-05-22
         </p>
         <div class="tags">
             
-              <a href="/tags/#hexo" title="hexo">hexo</a>
+              <a href="/tags/#linux" title="linux">linux</a>
             
         </div>
     
@@ -244,32 +249,244 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
 
 <div class="post-preview">
 
-    <a href="/article/algorithm/RSA/">
+    <a href="/article/markdown/markdown-manual/">
         <h2 class="post-title">
-            RSA 算法原理&JAVA 实现
+            markdown 使用手册
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            数学原理简述
-RSA算法基于大整数因式分解的难题。
-给定两个素数p、q 很容易相乘得到n，而对n进行因式分解却相对困难。
-加密算法具体过程：
-
-
-随机选择两个质数p、q
-
-
-计算p、q的乘积n，将n转为二进制，n的位数即为密钥的位数，假如n为1024位，则密钥为1024位
-其实不是完全标准的1024位，计算机也是随机选择一个近似1024位的大整数
-（从实验来看，每次产生的确实都是1024位，......
+            1.如何更改某段文字的颜色
+直接使用 html 标签
+1&lt;font color="red"&gt; xxx &lt;/font&gt;
+举例： 这段文字是红色 
+2.如何更改某段文字的背景色
+使用 table、tr、td 标签中的 bgcolor 属性控制
+1&lt;table&gt;&lt;tr&gt;&lt;td bgcolor=gray&gt; 背景色是 灰色&lt;/td&gt......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Charlie on
-            2019-05-21
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#markdown" title="markdown">markdown</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/tools/常用网站/">
+        <h2 class="post-title">
+            常用网站
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            PPT 模板
+http://www.officeplus.cn/Template/Home.shtml
+http://www.tretars.com/
+https://www.pptstore.net/
+高清图片网站
+摄图网 http://699pic.com/tupian/jibengong.html
+包图网 https://ibaotu.com/index.php?m=tags&amp;......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#tools" title="tools">tools</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/tools/常用颜色/">
+        <h2 class="post-title">
+            常用颜色
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            背景常用颜色
+淡绿
+淡红
+淡蓝
+淡黄
+字体常用颜色
+红色
+配色网：http://www.peise.net/color/
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#tools" title="tools">tools</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/log/log4j2使用介绍/">
+        <h2 class="post-title">
+            log4j 使用介绍
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            log4j官方地址：http://logging.apache.org/log4j/2.x/manual/configuration.html
+日志级别
+从低到高
+
+
+
+级别
+说明
+
+
+
+
+trace
+追踪,是最低的日志级别,相当于追踪程序的执行,一般不怎么使用
+
+
+debug
+一般在开发中,都将其设置为最低的日志级别，一般程序调试时使用，日志打印的详细些，方便调试
+
+
+info
+输出感兴趣......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#markdown" title="markdown">markdown</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/linux/linux 常用命令/linux-awk/">
+        <h2 class="post-title">
+            linux-awk
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            截取字符串
+awk -F “query account result=” ‘{print $1}’
+截取 query account result= 之后的字符串输出
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#linux" title="linux">linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/linux/linux 常用命令/linux-sed/">
+        <h2 class="post-title">
+            linux-sed
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            取时间段
+sed -n ‘/2019-03-16 05:[0-9][0-9]:[0-9][0-9]/,/2019-03-16 07:4[0-9]:[0-9][0-9]/p’ info.log-2019-03-16-1.log
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#linux" title="linux">linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/algorithm/AsymmetricSign/">
+        <h2 class="post-title">
+            非对称密钥签名算法流程
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            疑问&amp;解答
+
+
+Q为什么 RSA 签名算法使用私钥对 hash 值做加密，而不是用公钥对 hash 做加密？
+A： 签名的目的是为了保证内容不被篡改，如果用公钥做加密，对方用私钥去解密验证，因为公钥是公开的，有泄漏风险，所以签名内容是会被伪造的。
+
+
+RSA 签名算法
+以 SHA1WITHRSA 算法为例
+https://baike.baidu.com/item/sha1withrs......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
         </p>
         <div class="tags">
             
@@ -283,38 +500,62 @@ RSA算法基于大整数因式分解的难题。
 
 <div class="post-preview">
 
-    <a href="/article/manual/hexo-github/">
+    <a href="/article/algorithm/ECDH/">
         <h2 class="post-title">
-            hexo+github 搭建个人博客手册
+            ECDH密钥协商算法
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.github 准备
-
-在 github 上创建一个名为 用户名.github.io  的仓库
-
-类型要选择为 public
-点选上创建 README
-
-
-通过仓库 settings开启 page 模式(默认是开启的)
-随便选择一个主题，配置完毕
-此时即可以访问 用户名.github.io 访问个人博客
-
-2.hexo 准备
-hexo 官网：https://hexo.io/zh-cn/do......
+            参考资料
+ECDH 密钥协商算法：http://www.orchome.com/1049
+...
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Charlie on
-            2019-05-20
+            2019-05-22
         </p>
         <div class="tags">
             
-              <a href="/tags/#手册" title="手册">手册</a>
+              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/algorithm/ECC/">
+        <h2 class="post-title">
+            ECC 算法原理&JAVA 实现
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            遗留问题
+
+ECCurve.Fp与ECCurve.F2m区别？
+
+概述
+椭圆曲线算法依赖于椭圆曲线，只有椭圆曲线确定之后，才能基于此曲线去做加密、解密，加签、验签。
+椭圆曲线算法同样有多种密钥长度，常用的有160bit、192bit、224bit、256bit、320bit、384bit、512bit。
+常用的曲线有：secp192r1、secp192k1、secp224r1、secp256......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
             
         </div>
     
@@ -332,6 +573,10 @@ hexo 官网：https://hexo.io/zh-cn/do......
             <a href="/archives/2/">&larr; Newer Posts</a>
         </li>
     
+    
+        <li class="next">
+            <a href="/archives/4/">Older Posts &rarr;</a>
+        </li>
     
 </ul>
 
@@ -367,7 +612,11 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#安全算法" title="安全算法" rel="5">安全算法</a>
+            <a href="/tags/#安全算法" title="安全算法" rel="8">安全算法</a>
+            
+        
+            
+            <a href="/tags/#encoding" title="encoding" rel="3">encoding</a>
             
         
             
@@ -380,6 +629,10 @@ hexo 官网：https://hexo.io/zh-cn/do......
         
             
             <a href="/tags/#java" title="java" rel="1">java</a>
+            
+        
+            
+            <a href="/tags/#jvm" title="jvm" rel="3">jvm</a>
             
         
             
@@ -407,7 +660,7 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm" rel="3">understanding-the-jvm</a>
+            <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm" rel="4">understanding-the-jvm</a>
             
         
     </div>
@@ -463,23 +716,23 @@ hexo 官网：https://hexo.io/zh-cn/do......
     <ul>
       
         <li>
-          <a href="/article/framework/设计原则/">设计原则</a>
+          <a href="/article/jvm/understanding-the-jvm/【03-02】垃圾收集器/">【深入理解 Java 虚拟机】【03-02】垃圾收集器</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【03】垃圾收集器/">【深入理解 Java 虚拟机】【03】垃圾收集器</a>
+          <a href="/article/jvm/jdk命令行工具/">jdk命令行工具</a>
         </li>
       
         <li>
-          <a href="/article/qrcode/zxing/">zxing</a>
+          <a href="/article/encoding/String&ASCII&Byte/">String、ASCII、Byte</a>
         </li>
       
         <li>
-          <a href="/article/algorithm/workMode&Padding/">工作模式和填充</a>
+          <a href="/article/encoding/编码格式/">编码格式</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【01】走进 java/">【深入理解 Java 虚拟机】【01】走进 java</a>
+          <a href="/article/encoding/ASCII码对照表/">ASCII码对照表</a>
         </li>
       
     </ul>
@@ -494,7 +747,7 @@ hexo 官网：https://hexo.io/zh-cn/do......
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">19</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">19</span></li></ul>
     </div>
 
         <hr>

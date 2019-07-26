@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,35 +211,44 @@
 
 <div class="post-preview">
 
-    <a href="/article/linux/从服务器上传下载文件/">
+    <a href="/article/jvm/understanding-the-jvm/【03-01】垃圾收集算法原理/">
         <h2 class="post-title">
-            从服务器上传/下载文件
+            【深入理解 Java 虚拟机】【03-01】垃圾收集器
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            从服务器下载文件
+            对象是否可回收判断方法
+引用计数算法(主流虚拟机未采用)
 
-本地执行：nc -l 9999 &gt;&gt; 文件名.txt
-服务器执行：cat 文件名 | nc 服务器地址 9999
 
-向服务器上传文件
+实现思想
+在对象中添加引用计数器，引用它时，计数器加 1，对它的引用失效，计数器减 1。计数器为 0 的对象就是不可能再被引用的
 
-服务器执行：nc -l 9999 &gt;&gt; 文件名.txt
-本地执行：cat 文件名 | nc 服务器地址 9999
 
-...
+问题
+无法解决对象之间循环引用的问题
+
+
+可达性分析算法
+
+
+实现思想
+从 GC Roots 对象作为起始点，向下搜索，当一个对象到 GC Roots 没有任何引用链，则此对象是不可用的。
+
+
+GC......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Charlie on
-            2019-05-22
+            2019-06-14
         </p>
         <div class="tags">
             
-              <a href="/tags/#linux" title="linux">linux</a>
+              <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
             
         </div>
     
@@ -249,31 +258,29 @@
 
 <div class="post-preview">
 
-    <a href="/article/markdown/markdown-manual/">
+    <a href="/article/qrcode/zxing/">
         <h2 class="post-title">
-            markdown 使用手册
+            zxing
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.如何更改某段文字的颜色
-直接使用 html 标签
-1&lt;font color="red"&gt; xxx &lt;/font&gt;
-举例： 这段文字是红色 
-2.如何更改某段文字的背景色
-使用 table、tr、td 标签中的 bgcolor 属性控制
-1&lt;table&gt;&lt;tr&gt;&lt;td bgcolor=gray&gt; 背景色是 灰色&lt;/td&gt......
+            zxing 相关网站
+https://zxing.github.io/zxing/apidocs/
+https://zxing.github.io/zxing/
+代码示例
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Charlie on
-            2019-05-22
+            2019-06-04
         </p>
         <div class="tags">
             
-              <a href="/tags/#markdown" title="markdown">markdown</a>
+              <a href="/tags/#qrcode" title="qrcode">qrcode</a>
             
         </div>
     
@@ -283,210 +290,24 @@
 
 <div class="post-preview">
 
-    <a href="/article/tools/常用网站/">
+    <a href="/article/algorithm/AES/">
         <h2 class="post-title">
-            常用网站
+            工作模式和填充
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            PPT 模板
-http://www.officeplus.cn/Template/Home.shtml
-http://www.tretars.com/
-https://www.pptstore.net/
-高清图片网站
-摄图网 http://699pic.com/tupian/jibengong.html
-包图网 https://ibaotu.com/index.php?m=tags&amp;......
+            1.AES 工作模式与填充方式
+算法/模式/填充                        16字节加密后数据长度         不满16字节加密后长度
+AES/CBC/NoPadding                               16                                       不支持
+AES/CBC/PKCS5Padding    ......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#tools" title="tools">tools</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/tools/常用颜色/">
-        <h2 class="post-title">
-            常用颜色
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            背景常用颜色
-淡绿
-淡红
-淡蓝
-淡黄
-字体常用颜色
-红色
-配色网：http://www.peise.net/color/
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#tools" title="tools">tools</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/log/log4j2使用介绍/">
-        <h2 class="post-title">
-            log4j 使用介绍
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            log4j官方地址：http://logging.apache.org/log4j/2.x/manual/configuration.html
-日志级别
-从低到高
-
-
-
-级别
-说明
-
-
-
-
-trace
-追踪,是最低的日志级别,相当于追踪程序的执行,一般不怎么使用
-
-
-debug
-一般在开发中,都将其设置为最低的日志级别，一般程序调试时使用，日志打印的详细些，方便调试
-
-
-info
-输出感兴趣......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#markdown" title="markdown">markdown</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux 常用命令/linux-sed/">
-        <h2 class="post-title">
-            linux-sed
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            取时间段
-sed -n ‘/2019-03-16 05:[0-9][0-9]:[0-9][0-9]/,/2019-03-16 07:4[0-9]:[0-9][0-9]/p’ info.log-2019-03-16-1.log
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#linux" title="linux">linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux 常用命令/linux-awk/">
-        <h2 class="post-title">
-            linux-awk
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            截取字符串
-awk -F “query account result=” ‘{print $1}’
-截取 query account result= 之后的字符串输出
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#linux" title="linux">linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/algorithm/AsymmetricSign/">
-        <h2 class="post-title">
-            非对称密钥签名算法流程
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            疑问&amp;解答
-
-
-Q为什么 RSA 签名算法使用私钥对 hash 值做加密，而不是用公钥对 hash 做加密？
-A： 签名的目的是为了保证内容不被篡改，如果用公钥做加密，对方用私钥去解密验证，因为公钥是公开的，有泄漏风险，所以签名内容是会被伪造的。
-
-
-RSA 签名算法
-以 SHA1WITHRSA 算法为例
-https://baike.baidu.com/item/sha1withrs......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
+            2019-06-03
         </p>
         <div class="tags">
             
@@ -500,23 +321,26 @@ https://baike.baidu.com/item/sha1withrs......
 
 <div class="post-preview">
 
-    <a href="/article/algorithm/ECDH/">
+    <a href="/article/algorithm/工作模式/">
         <h2 class="post-title">
-            ECDH密钥协商算法
+            工作模式和填充
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            参考资料
-ECDH 密钥协商算法：http://www.orchome.com/1049
-...
+            1.分组加密
+块加密，英文Block Cyper，又称分组加密，是一种常见的对称加密，具有代表性的块加密有DES，AES，3DES等。块加密的工作模式允许使用同一个分组密码密钥对多于一块的数据进行加密，并保证其安全性。
+2.工作模式
+主要用于 AES、DES 算法
+ECB-电子密码本模式
+又称电子密码本模式：Electronic codebook，是最简单的块密码加密模式，加密前根据加密块大......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Charlie on
-            2019-05-22
+            2019-06-03
         </p>
         <div class="tags">
             
@@ -530,22 +354,219 @@ ECDH 密钥协商算法：http://www.orchome.com/1049
 
 <div class="post-preview">
 
-    <a href="/article/algorithm/ECC/">
+    <a href="/article/jvm/understanding-the-jvm/【01】走进 java/">
         <h2 class="post-title">
-            ECC 算法原理&JAVA 实现
+            【深入理解 Java 虚拟机】【01】走进 java
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            遗留问题
+            
+1. JCP 是什么
+百度百科：https://baike.baidu.com/item/jcp/2679009
+官方网站：https://jcp.org
+JCP（Java Community Process) 是一个开放的国际组织，主要由Java开发者以及被授权者组成，职能是发展和更新。
+Java技术和JCP两者的原创者都是SUN计算机公司。然而，JCP已经由SUN于1995年创造Jav......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-26
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
+            
+        </div>
+    
 
-ECCurve.Fp与ECCurve.F2m区别？
+</div>
+<hr>
 
-概述
-椭圆曲线算法依赖于椭圆曲线，只有椭圆曲线确定之后，才能基于此曲线去做加密、解密，加签、验签。
-椭圆曲线算法同样有多种密钥长度，常用的有160bit、192bit、224bit、256bit、320bit、384bit、512bit。
-常用的曲线有：secp192r1、secp192k1、secp224r1、secp256......
+<div class="post-preview">
+
+    <a href="/article/jvm/understanding-the-jvm/【02】java 内存/">
+        <h2 class="post-title">
+            【深入理解 Java 虚拟机】【02】java 内存
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1. 运行时数据区域
+
+1.1.程序计数器
+
+
+作用
+记录当前线程所执行到的字节码的行号。字节码解释器工作的时候就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。
+
+
+意义
+JVM的多线程是通过线程轮流切换并分配处理器来实现的，对于我们来说的并行事实上一个处理器也只会执行一条线程中的指令。所以，为了保证各线程指令的安全顺利执行，每条线程都有独立的私有的程序计数器。
+
+
+存储内容
+当......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-26
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/noname/">
+        <h2 class="post-title">
+            无名
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            提升计划
+技术能力
+
+JVM
+业务、系统架构设计
+
+非技术能力
+
+产品、业务思考
+思考深度、广度
+职业素养
+画图的能力，系统架构的描述能力，展示成架构图等的能力
+
+策略
+读书、学城、
+读书清单
+hashmap源码
+hashset源码
+google 组件
+​	stopWatch
+业务代码架构如何设计
+学习 NFC 账户架构设计
+流程引擎、作业编排
+规则引擎
+GITHUB
+逛KM 学城
+GH 密......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-25
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#no-name" title="no-name">no-name</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/framework/etcp-account-分层/">
+        <h2 class="post-title">
+            etcp-account 分层
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            代码分层 (横向功能 &amp; 纵向业务)
+
+横向: 需要提取协议层和标准流程层, 制定标准请求响应, 避免协议转换侵入到业务逻辑代码中
+纵向: 业务流程需要聚合, 避免 xxxService 调用下游一大批 xxxDao 完成一个事情的情况
+
+总的思路就是是：总结、抽象出纵向请求的过程中需要横向扩展的点，发展成独立的一层，总体思想还是聚合、解耦。例如：将业务操作聚合，将业务操作与参数转换......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-25
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#framework" title="framework">framework</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/reading/《靠谱》/">
+        <h2 class="post-title">
+            《靠谱》
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1.沟通四步
+
+先说结论，后讲原因
+列举数据，支撑结论
+具体实例，生动理解
+重申结论，加强印象
+
+2.逻辑树法则
+将一个大问题拆分成各个小问题，有点类似于 OKR
+例如：公司要提高盈利能力，可以细分为：增加收入、节省成本，增加收入与节省成本又可以继续向下拆分。
+3.云-雨-伞法则
+云：是现状
+雨：是通过云推测未来可能出现的状况
+伞：是针对状况作出的对策
+大部分人工作都是得出云的结论就完了，更......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-23
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#读书笔记-职场" title="读书笔记-职场">读书笔记-职场</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/java/AOP-同一方法配置多个AOP切面/">
+        <h2 class="post-title">
+            AOP-同一方法配置多个AOP切面
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110......
         </div>
     </a>
     
@@ -555,7 +576,7 @@ ECCurve.Fp与ECCurve.F2m区别？
         </p>
         <div class="tags">
             
-              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
+              <a href="/tags/#java" title="java">java</a>
             
         </div>
     
@@ -612,7 +633,11 @@ ECCurve.Fp与ECCurve.F2m区别？
             
         
             
-            <a href="/tags/#安全算法" title="安全算法" rel="5">安全算法</a>
+            <a href="/tags/#安全算法" title="安全算法" rel="8">安全算法</a>
+            
+        
+            
+            <a href="/tags/#encoding" title="encoding" rel="3">encoding</a>
             
         
             
@@ -625,6 +650,10 @@ ECCurve.Fp与ECCurve.F2m区别？
         
             
             <a href="/tags/#java" title="java" rel="1">java</a>
+            
+        
+            
+            <a href="/tags/#jvm" title="jvm" rel="3">jvm</a>
             
         
             
@@ -652,7 +681,7 @@ ECCurve.Fp与ECCurve.F2m区别？
             
         
             
-            <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm" rel="3">understanding-the-jvm</a>
+            <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm" rel="4">understanding-the-jvm</a>
             
         
     </div>
@@ -708,23 +737,23 @@ ECCurve.Fp与ECCurve.F2m区别？
     <ul>
       
         <li>
-          <a href="/article/framework/设计原则/">设计原则</a>
+          <a href="/article/jvm/understanding-the-jvm/【03-02】垃圾收集器/">【深入理解 Java 虚拟机】【03-02】垃圾收集器</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【03】垃圾收集器/">【深入理解 Java 虚拟机】【03】垃圾收集器</a>
+          <a href="/article/jvm/jdk命令行工具/">jdk命令行工具</a>
         </li>
       
         <li>
-          <a href="/article/qrcode/zxing/">zxing</a>
+          <a href="/article/encoding/String&ASCII&Byte/">String、ASCII、Byte</a>
         </li>
       
         <li>
-          <a href="/article/algorithm/workMode&Padding/">工作模式和填充</a>
+          <a href="/article/encoding/编码格式/">编码格式</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【01】走进 java/">【深入理解 Java 虚拟机】【01】走进 java</a>
+          <a href="/article/encoding/ASCII码对照表/">ASCII码对照表</a>
         </li>
       
     </ul>
@@ -739,7 +768,7 @@ ECCurve.Fp与ECCurve.F2m区别？
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">19</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">19</span></li></ul>
     </div>
 
         <hr>

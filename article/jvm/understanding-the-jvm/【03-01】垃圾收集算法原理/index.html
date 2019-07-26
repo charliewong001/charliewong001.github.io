@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          【深入理解 Java 虚拟机】【03】垃圾收集器 - Charlie | Blog
+          【深入理解 Java 虚拟机】【03-01】垃圾收集器 - Charlie | Blog
         
     </title>
 
-    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/understanding-the-jvm/【03】垃圾收集器/">
+    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/understanding-the-jvm/【03-01】垃圾收集算法原理/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -91,7 +91,7 @@
                               <a class="tag" href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
                             
                         </div>
-                        <h1>【深入理解 Java 虚拟机】【03】垃圾收集器</h1>
+                        <h1>【深入理解 Java 虚拟机】【03-01】垃圾收集器</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -242,6 +242,17 @@
 </ul>
 </li>
 </ul>
+<h2 id="垃圾收集算法原理">垃圾收集算法原理</h2>
+<h3 id="标记-清除">标记-清除</h3>
+<h3 id="复制算法">复制算法</h3>
+<h3 id="标记-整理">标记-整理</h3>
+<h3 id="分代收集算法">分代收集算法</h3>
+<h2 id="问题">问题</h2>
+<ul>
+<li>OopMap(Ordinary Object Pointer Map)，详细解读</li>
+<li>安全点的设置规则</li>
+<li>安全区域的划分规则</li>
+</ul>
 
                 
 
@@ -250,7 +261,7 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/framework/设计原则/" data-toggle="tooltip" data-placement="top" title="设计原则">&larr; Previous Post</a>
+                            <a href="/article/jvm/jvm参数/" data-toggle="tooltip" data-placement="top" title="JVM参数">&larr; Previous Post</a>
                         </li>
                     
                     
@@ -311,7 +322,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#对象是否可回收判断方法"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x53EF;&#x56DE;&#x6536;&#x5224;&#x65AD;&#x65B9;&#x6CD5;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#引用计数算法主流虚拟机未采用"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x5F15;&#x7528;&#x8BA1;&#x6570;&#x7B97;&#x6CD5;<font color="red">(&#x4E3B;&#x6D41;&#x865A;&#x62DF;&#x673A;&#x672A;&#x91C7;&#x7528;)</font></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#可达性分析算法"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x53EF;&#x8FBE;&#x6027;&#x5206;&#x6790;&#x7B97;&#x6CD5;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#对象是否可回收判断方法"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x53EF;&#x56DE;&#x6536;&#x5224;&#x65AD;&#x65B9;&#x6CD5;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#引用计数算法主流虚拟机未采用"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x5F15;&#x7528;&#x8BA1;&#x6570;&#x7B97;&#x6CD5;<font color="red">(&#x4E3B;&#x6D41;&#x865A;&#x62DF;&#x673A;&#x672A;&#x91C7;&#x7528;)</font></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#可达性分析算法"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x53EF;&#x8FBE;&#x6027;&#x5206;&#x6790;&#x7B97;&#x6CD5;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#垃圾收集算法原理"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x5783;&#x573E;&#x6536;&#x96C6;&#x7B97;&#x6CD5;&#x539F;&#x7406;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#标记-清除"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x6807;&#x8BB0;-&#x6E05;&#x9664;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#复制算法"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x590D;&#x5236;&#x7B97;&#x6CD5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#标记-整理"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x6807;&#x8BB0;-&#x6574;&#x7406;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#分代收集算法"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x5206;&#x4EE3;&#x6536;&#x96C6;&#x7B97;&#x6CD5;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#问题"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x95EE;&#x9898;</span></a></li></ol>
         
         </div>
       </aside>

@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -244,10 +244,11 @@
 <p>加密时，即计算出下式中的c，其中m即为需要加密的内容</p>
 <ol>
 <li>
-<p>me ≡ c (mod n) ：m的e次方除以n的余数为c</p>
+<p>c = m^e % n   :m的e次方除以n的余数为c</p>
+<p>若使用私钥加密，则公式为 c = m^d % n</p>
 </li>
 <li>
-<p><strong><font color="EF0023">如果m&gt;n，由于me ≡ c (mod n)，c为密文，m为明文，e和n组成公钥，显然当m&gt;n时，m与m-n得出的密文一样，无法解密，运算就会出错。</font></strong></p>
+<p><strong><font color="EF0023">如果m&gt;n，由于c = m^e % n，c为密文，m为明文，e和n组成公钥，显然当m&gt;n时，m与m-n得出的密文一样，无法解密，运算就会出错。</font></strong></p>
 <table><tr><td bgcolor="#FFF1F0">这里怎么理解，没有搞懂</td></tr></table>
 </li>
 </ol>
@@ -255,7 +256,10 @@
 <li>
 <p>解密时，通过下面等式，反解出c即可解密</p>
 <ol>
-<li>cd ≡ m (mod n)</li>
+<li>
+<p>m = c^d % n : 明文m等于c的d次方除以n的余数</p>
+<p>若使用公钥解密，则公式为：m = c^e % n</p>
+</li>
 </ol>
 </li>
 </ol>
@@ -285,6 +289,14 @@
 <li>对 encrypted 使用 RSA publicKey 解密，得到明文 message1</li>
 <li>将 message 与 message1 比对，相同即验签成功</li>
 </ol>
+<h2 id="问题">问题</h2>
+<ul>
+<li>
+<p>RSA的加密算法、加签算法数学原理是否相同？</p>
+<p>加密时使用公钥加密，私钥解密；加签时使用私钥加密，公钥解密。</p>
+<p>公钥加密、私钥加密的数学原理是相同的</p>
+</li>
+</ul>
 <h2 id="java具体实现">JAVA具体实现</h2>
 <h3 id="生成密钥对"><strong>生成密钥对</strong></h3>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生成发送方密钥对</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> KeyPair <span class="title">initKey</span><span class="params">()</span> <span class="keyword">throws</span> NoSuchAlgorithmException</span>&#123;</span><br><span class="line">  KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(<span class="string">"RSA"</span>);<span class="comment">//密钥对生成器</span></span><br><span class="line">  keyPairGenerator.initialize(KEY_SIZE);<span class="comment">//指定密钥长度</span></span><br><span class="line">  KeyPair keyPair = keyPairGenerator.generateKeyPair();<span class="comment">//生成密钥对</span></span><br><span class="line">  <span class="keyword">return</span> keyPair;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -297,6 +309,7 @@
 <h3 id="还原私钥"><strong>还原私钥</strong></h3>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 从模数+指数中还原私钥</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> modulusAndExponent</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NoSuchAlgorithmException</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InvalidKeySpecException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> PrivateKey <span class="title">toPrivateKeyFromModules</span><span class="params">(String modulusAndExponent)</span></span></span><br><span class="line"><span class="function">  <span class="keyword">throws</span> NoSuchAlgorithmException, InvalidKeySpecException </span>&#123;</span><br><span class="line">  String[] ss = modulusAndExponent.split(<span class="string">"-"</span>);</span><br><span class="line">  BigInteger modulus = <span class="keyword">new</span> BigInteger(ss[<span class="number">0</span>],<span class="number">16</span>);</span><br><span class="line">  BigInteger privateExponent = <span class="keyword">new</span> BigInteger(ss[<span class="number">1</span>],<span class="number">16</span>);</span><br><span class="line">  RSAPrivateKeySpec keySpec = <span class="keyword">new</span> RSAPrivateKeySpec(modulus,privateExponent);</span><br><span class="line">  KeyFactory keyFactory = KeyFactory.getInstance(<span class="string">"RSA"</span>);</span><br><span class="line">  PrivateKey privateKey = keyFactory.generatePrivate(keySpec);</span><br><span class="line">  <span class="keyword">return</span> privateKey;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="参考资料">参考资料</h2>
+<p><a href="https://www.jianshu.com/p/288b3f3e91a5" target="_blank" rel="noopener">https://www.jianshu.com/p/288b3f3e91a5</a></p>
 <p><a href="http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html</a></p>
 <p><a href="http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</a></p>
 <p><a href="https://blog.csdn.net/taoxin52/article/details/53782470" target="_blank" rel="noopener">https://blog.csdn.net/taoxin52/article/details/53782470</a></p>
@@ -370,7 +383,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#数学原理简述"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6570;&#x5B66;&#x539F;&#x7406;&#x7B80;&#x8FF0;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#加密算法具体过程"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"><strong><font color="red">&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x5177;&#x4F53;&#x8FC7;&#x7A0B;&#xFF1A;</font></strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#由上述过程可知"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"><strong><font color="red">&#x7531;&#x4E0A;&#x8FF0;&#x8FC7;&#x7A0B;&#x53EF;&#x77E5;&#xFF1A;</font></strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#加签算法具体过程"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"><font color="red">&#x52A0;&#x7B7E;&#x7B97;&#x6CD5;&#x5177;&#x4F53;&#x8FC7;&#x7A0B;:</font></span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java具体实现"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">JAVA&#x5177;&#x4F53;&#x5B9E;&#x73B0;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#生成密钥对"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"><strong>&#x751F;&#x6210;&#x5BC6;&#x94A5;&#x5BF9;</strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#获取公钥"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"><strong>&#x83B7;&#x53D6;&#x516C;&#x94A5;</strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#获取私钥"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"><strong>&#x83B7;&#x53D6;&#x79C1;&#x94A5;</strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#还原公钥"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text"><strong>&#x8FD8;&#x539F;&#x516C;&#x94A5;</strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#还原私钥"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text"><strong>&#x8FD8;&#x539F;&#x79C1;&#x94A5;</strong></span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#数学原理简述"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6570;&#x5B66;&#x539F;&#x7406;&#x7B80;&#x8FF0;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#加密算法具体过程"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"><strong><font color="red">&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x5177;&#x4F53;&#x8FC7;&#x7A0B;&#xFF1A;</font></strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#由上述过程可知"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"><strong><font color="red">&#x7531;&#x4E0A;&#x8FF0;&#x8FC7;&#x7A0B;&#x53EF;&#x77E5;&#xFF1A;</font></strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#加签算法具体过程"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"><font color="red">&#x52A0;&#x7B7E;&#x7B97;&#x6CD5;&#x5177;&#x4F53;&#x8FC7;&#x7A0B;:</font></span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#问题"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x95EE;&#x9898;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java具体实现"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">JAVA&#x5177;&#x4F53;&#x5B9E;&#x73B0;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#生成密钥对"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"><strong>&#x751F;&#x6210;&#x5BC6;&#x94A5;&#x5BF9;</strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#获取公钥"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text"><strong>&#x83B7;&#x53D6;&#x516C;&#x94A5;</strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#获取私钥"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text"><strong>&#x83B7;&#x53D6;&#x79C1;&#x94A5;</strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#还原公钥"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text"><strong>&#x8FD8;&#x539F;&#x516C;&#x94A5;</strong></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#还原私钥"><span class="toc-nav-number">3.5.</span> <span class="toc-nav-text"><strong>&#x8FD8;&#x539F;&#x79C1;&#x94A5;</strong></span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol>
         
         </div>
       </aside>
