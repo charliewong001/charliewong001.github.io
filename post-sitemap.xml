@@ -7,6 +7,54 @@
     </url>
 
     <url>
+        <loc>http://charliewong001.github.io/article/jvm/class%E6%A0%87%E5%BF%97%E4%BD%8D/</loc>
+        <lastmod>2019-08-07T03:36:38.603Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9003-02%E3%80%91%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/</loc>
+        <lastmod>2019-08-07T03:30:08.660Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9001%E3%80%91%E8%B5%B0%E8%BF%9B%20java/</loc>
+        <lastmod>2019-08-06T01:33:44.659Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/jvm/jvm%E7%96%91%E9%97%AE%E6%94%B6%E9%9B%86/</loc>
+        <lastmod>2019-08-06T01:33:25.998Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/framework/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</loc>
+        <lastmod>2019-08-06T01:21:52.690Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/framework/etcp-account-%E5%88%86%E5%B1%82/</loc>
+        <lastmod>2019-07-30T09:32:27.477Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://charliewong001.github.io/article/jvm/jvm%E5%8F%82%E6%95%B0/</loc>
         <lastmod>2019-07-22T03:41:06.348Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -23,24 +71,8 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9003-02%E3%80%91%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/</loc>
-        <lastmod>2019-07-21T01:57:18.260Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9003-01%E3%80%91%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/</loc>
         <lastmod>2019-07-21T01:57:12.932Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/article/noname/</loc>
-        <lastmod>2019-07-20T14:31:04.885Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -143,24 +175,8 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/article/framework/etcp-account-%E5%88%86%E5%B1%82/</loc>
-        <lastmod>2019-06-23T13:10:20.287Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9002%E3%80%91java%20%E5%86%85%E5%AD%98/</loc>
         <lastmod>2019-06-22T03:48:20.594Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/article/framework/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</loc>
-        <lastmod>2019-06-22T03:13:44.150Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -185,14 +201,6 @@
     <url>
         <loc>http://charliewong001.github.io/article/qrcode/zxing/</loc>
         <lastmod>2019-06-06T05:09:46.065Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9001%E3%80%91%E8%B5%B0%E8%BF%9B%20java/</loc>
-        <lastmod>2019-05-28T09:49:20.561Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

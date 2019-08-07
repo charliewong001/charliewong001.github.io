@@ -211,6 +211,98 @@
 
 <div class="post-preview">
 
+    <a href="/article/jvm/class标志位/">
+        <h2 class="post-title">
+            class类文件访问标志
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            Class访问标志
+作用
+class的访问标志（access_flag），位置在常量池之后，长度为2字节。
+这个标志主要用于识别一些类或者接口层次的访问信息，主要包括：
+
+这个Class是类还是接口；
+是否定义为public类型；
+是否定义abstract类型；
+如果是类的话是否被声明为final；
+
+以上只是举的几个例子，具体的标志位以及标志的含义如下：
+组成
+
+如上所示，访问标志中一共有......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-06
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#jvm" title="jvm">jvm</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/jvm/jvm疑问收集/">
+        <h2 class="post-title">
+            JVM疑问收集
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+
+如何查看对象的年龄
+
+
+如何动态实时修改jvm参数（修改）
+
+
+逻辑CPU是什么意思
+
+
+安全点的设置规则
+
+
+安全区域的划分规则
+
+
+对象头中存储的内容、内容的格式定义
+不同状态下对象的对象头的格式是什么
+如何查看一个对象的对象头信息
+
+
+
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-06
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#jvm" title="jvm">jvm</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/jvm/understanding-the-jvm/【03-02】垃圾收集器/">
         <h2 class="post-title">
             【深入理解 Java 虚拟机】【03-02】垃圾收集器
@@ -348,55 +440,6 @@ ASCII是美国信息交换标准代码，是现在通用的单字节编码系统
 
 <div class="post-preview">
 
-    <a href="/article/encoding/编码格式/">
-        <h2 class="post-title">
-            编码格式
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            总述
-
-
-
-编码格式
-编码范围
-描述
-说明
-
-
-
-
-ASCII
-0x00-0x7F
-单字节编码
-https://baike.baidu.com/item/ASCII/309296?fr=aladdin
-
-
-ISO 8859-1
-0x00-0xFF
-单字节编码，向下兼容ASCII，0x00-0x7F是与ASCII一样的
-https://baike.baidu.com/item/ISO-8859......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-07-11
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#encoding" title="encoding">encoding</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
     <a href="/article/encoding/ASCII码对照表/">
         <h2 class="post-title">
             ASCII码对照表
@@ -444,6 +487,55 @@ STX (start of text)
 
 0000 0011
 0......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-07-11
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#encoding" title="encoding">encoding</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/encoding/编码格式/">
+        <h2 class="post-title">
+            编码格式
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            总述
+
+
+
+编码格式
+编码范围
+描述
+说明
+
+
+
+
+ASCII
+0x00-0x7F
+单字节编码
+https://baike.baidu.com/item/ASCII/309296?fr=aladdin
+
+
+ISO 8859-1
+0x00-0xFF
+单字节编码，向下兼容ASCII，0x00-0x7F是与ASCII一样的
+https://baike.baidu.com/item/ISO-8859......
         </div>
     </a>
     
@@ -565,70 +657,6 @@ https://blog.csdn.net/gc_gongchao/column/info/18763
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/framework/设计原则/">
-        <h2 class="post-title">
-            设计原则
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            Single Responsibility Principle　 : 单一职责原则
-Liskov Substitution Principle     : 里氏替换原则
-Dependence Inversion Principle ：依赖倒置原则
-Interface Segregation Principle  : 接口隔离原则
-Law of Demeter　　　　           : ......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-06-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#framework" title="framework">framework</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/jvm/jvm参数/">
-        <h2 class="post-title">
-            JVM参数
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            选项的分类
-Hotspot JVM提供以下三大类选项：
-
-标准选项：这类选项的功能是很稳定的，在后续版本中也不太会发生变化。运行java或者java -help可以看到所有的标准选项。所有的标准选项都是以-开头，比如-version， -server等。
-X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因它们被称为X选项。运行java -X命令可以看到所有的X选项。这类选项的功能......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-06-14
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#jvm" title="jvm">jvm</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -670,10 +698,6 @@ X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因�
     <div class="tags">
         
             
-            <a href="/tags/#no-name" title="no-name" rel="1">no-name</a>
-            
-        
-            
             <a href="/tags/#安全算法" title="安全算法" rel="8">安全算法</a>
             
         
@@ -686,15 +710,15 @@ X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因�
             
         
             
+            <a href="/tags/#jvm" title="jvm" rel="5">jvm</a>
+            
+        
+            
             <a href="/tags/#hexo" title="hexo" rel="1">hexo</a>
             
         
             
             <a href="/tags/#java" title="java" rel="1">java</a>
-            
-        
-            
-            <a href="/tags/#jvm" title="jvm" rel="3">jvm</a>
             
         
             
@@ -706,15 +730,15 @@ X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因�
             
         
             
-            <a href="/tags/#qrcode" title="qrcode" rel="1">qrcode</a>
-            
-        
-            
             <a href="/tags/#markdown" title="markdown" rel="2">markdown</a>
             
         
             
             <a href="/tags/#读书笔记-职场" title="读书笔记-职场" rel="1">读书笔记-职场</a>
+            
+        
+            
+            <a href="/tags/#qrcode" title="qrcode" rel="1">qrcode</a>
             
         
             
@@ -778,6 +802,14 @@ X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因�
     <ul>
       
         <li>
+          <a href="/article/jvm/class标志位/">class类文件访问标志</a>
+        </li>
+      
+        <li>
+          <a href="/article/jvm/jvm疑问收集/">JVM疑问收集</a>
+        </li>
+      
+        <li>
           <a href="/article/jvm/understanding-the-jvm/【03-02】垃圾收集器/">【深入理解 Java 虚拟机】【03-02】垃圾收集器</a>
         </li>
       
@@ -787,14 +819,6 @@ X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因�
       
         <li>
           <a href="/article/encoding/String&ASCII&Byte/">String、ASCII、Byte</a>
-        </li>
-      
-        <li>
-          <a href="/article/encoding/编码格式/">编码格式</a>
-        </li>
-      
-        <li>
-          <a href="/article/encoding/ASCII码对照表/">ASCII码对照表</a>
         </li>
       
     </ul>
@@ -809,7 +833,7 @@ X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因�
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">19</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>
