@@ -211,16 +211,17 @@
 
 <div class="post-preview">
 
-    <a href="/article/linux/linux 常用命令/linux-sed/">
+    <a href="/article/linux/linux 常用命令/linux-awk/">
         <h2 class="post-title">
-            linux-sed
+            linux-awk
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            取时间段
-sed -n ‘/2019-03-16 05:[0-9][0-9]:[0-9][0-9]/,/2019-03-16 07:4[0-9]:[0-9][0-9]/p’ info.log-2019-03-16-1.log
+            截取字符串
+awk -F “query account result=” ‘{print $1}’
+截取 query account result= 之后的字符串输出
 ...
         </div>
     </a>
@@ -241,17 +242,16 @@ sed -n ‘/2019-03-16 05:[0-9][0-9]:[0-9][0-9]/,/2019-03-16 07:4[0-9]:[0-9][0-9]
 
 <div class="post-preview">
 
-    <a href="/article/linux/linux 常用命令/linux-awk/">
+    <a href="/article/linux/linux 常用命令/linux-sed/">
         <h2 class="post-title">
-            linux-awk
+            linux-sed
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            截取字符串
-awk -F “query account result=” ‘{print $1}’
-截取 query account result= 之后的字符串输出
+            取时间段
+sed -n ‘/2019-03-16 05:[0-9][0-9]:[0-9][0-9]/,/2019-03-16 07:4[0-9]:[0-9][0-9]/p’ info.log-2019-03-16-1.log
 ...
         </div>
     </a>
@@ -538,10 +538,6 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#java" title="java" rel="1">java</a>
-            
-        
-            
             <a href="/tags/#hexo" title="hexo" rel="1">hexo</a>
             
         
@@ -550,7 +546,7 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#linux" title="linux" rel="3">linux</a>
+            <a href="/tags/#java" title="java" rel="1">java</a>
             
         
             
@@ -558,15 +554,19 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
+            <a href="/tags/#linux" title="linux" rel="3">linux</a>
+            
+        
+            
             <a href="/tags/#手册" title="手册" rel="1">手册</a>
             
         
             
-            <a href="/tags/#markdown" title="markdown" rel="2">markdown</a>
+            <a href="/tags/#qrcode" title="qrcode" rel="1">qrcode</a>
             
         
             
-            <a href="/tags/#qrcode" title="qrcode" rel="1">qrcode</a>
+            <a href="/tags/#markdown" title="markdown" rel="2">markdown</a>
             
         
             
