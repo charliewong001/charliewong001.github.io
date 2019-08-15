@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -214,7 +214,7 @@
                 post-container">
 
                 <h2 id="class访问标志">Class访问标志</h2>
-<h2 id="作用">作用</h2>
+<h3 id="作用">作用</h3>
 <p>class的访问标志（access_flag），位置在常量池之后，长度为2字节。</p>
 <p>这个标志主要用于识别一些类或者接口层次的访问信息，主要包括：</p>
 <ul>
@@ -224,10 +224,10 @@
 <li>如果是类的话是否被声明为final；</li>
 </ul>
 <p>以上只是举的几个例子，具体的标志位以及标志的含义如下：</p>
-<h2 id="组成">组成</h2>
+<h3 id="组成">组成</h3>
 <p><img src="/postImg/SouthEast.png" alt=""></p>
 <p>如上所示，访问标志中一共有16个标志位可以使用，当前只制定了8个。</p>
-<h2 id="标志位的设计思路">标志位的设计思路</h2>
+<h3 id="标志位的设计思路">标志位的设计思路</h3>
 <p>如上所述，标志位占用2个字节，即16 bit，每一个bit都可以作为一个标志位且只能表示一个标志位。</p>
 <table>
 <thead>
@@ -276,6 +276,10 @@
                 <hr>
                 <!-- Pager -->
                 <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/encoding/DER/" data-toggle="tooltip" data-placement="top" title="DER编码">&larr; Previous Post</a>
+                        </li>
                     
                     
                         <li class="next">
@@ -335,7 +339,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#class访问标志"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Class&#x8BBF;&#x95EE;&#x6807;&#x5FD7;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#作用"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x4F5C;&#x7528;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#组成"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x7EC4;&#x6210;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#标志位的设计思路"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x6807;&#x5FD7;&#x4F4D;&#x7684;&#x8BBE;&#x8BA1;&#x601D;&#x8DEF;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#class访问标志"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Class&#x8BBF;&#x95EE;&#x6807;&#x5FD7;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#作用"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x4F5C;&#x7528;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#组成"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x7EC4;&#x6210;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#标志位的设计思路"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">&#x6807;&#x5FD7;&#x4F4D;&#x7684;&#x8BBE;&#x8BA1;&#x601D;&#x8DEF;</span></a></li></ol></li></ol>
         
         </div>
       </aside>

@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -238,10 +238,10 @@ JVM的多线程是通过线程轮流切换并分配处理器来实现的，对�
 <p><strong>疑问</strong></p>
 <p><font color="EF0023">Q：执行本地方法，为什么程序器中的值为空？我们知道，程序计数器用来存放字节码指令地址；通过这个地址，虚拟机就能知道执行到哪里，以及怎么往下执行，可调用native方法，值就变成空了，那么机器不就直接崩溃了吗？</font></p>
 <table><tr><td bgcolor="#F6FFEE">A：参考C++理解是：当线程中调用native方法的时候，则重新启动一个新的线程，那么新的线程的计数器为空则不会影响当前线程的计数器，相互独立。</td></tr></table>
-<p><font color="EF0023">Q：如果是新启动的一个线程，那么不会因为线程异步问题，无法控制执行顺序吗？</font></p>
-<table><tr><td bgcolor="#F6FFEE">A：当前线程应当会被阻塞，直到另外一个线程执行结束。例如：通过死循环来控制阻塞（当然死循环效率太低，这里只是一个例子）</td></tr></table>
 </li>
 </ul>
+<p><font color="EF0023">Q：如果是新启动的一个线程，那么不会因为线程异步问题，无法控制执行顺序吗？</font></p>
+<table><tr><td bgcolor="#F6FFEE">A：当前线程应当会被阻塞，直到另外一个线程执行结束。例如：通过死循环来控制阻塞（当然死循环效率太低，这里只是一个例子）</td></tr></table>
 <h3 id="12虚拟机栈">1.2.虚拟机栈</h3>
 <ul>
 <li>

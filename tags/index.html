@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -200,25 +200,27 @@
                 
                     <a href="#安全算法" title="安全算法" rel="8">安全算法</a>
                 
-                    <a href="#encoding" title="encoding" rel="3">encoding</a>
+                    <a href="#编码" title="编码" rel="4">编码</a>
                 
-                    <a href="#framework" title="framework" rel="2">framework</a>
-                
-                    <a href="#jvm" title="jvm" rel="5">jvm</a>
-                
-                    <a href="#hexo" title="hexo" rel="1">hexo</a>
+                    <a href="#设计架构" title="设计架构" rel="2">设计架构</a>
                 
                     <a href="#java" title="java" rel="1">java</a>
                 
+                    <a href="#hexo" title="hexo" rel="1">hexo</a>
+                
+                    <a href="#jvm" title="jvm" rel="5">jvm</a>
+                
                     <a href="#linux" title="linux" rel="3">linux</a>
+                
+                    <a href="#网络" title="网络" rel="1">网络</a>
                 
                     <a href="#手册" title="手册" rel="1">手册</a>
                 
                     <a href="#markdown" title="markdown" rel="2">markdown</a>
                 
-                    <a href="#读书笔记-职场" title="读书笔记-职场" rel="1">读书笔记-职场</a>
-                
                     <a href="#qrcode" title="qrcode" rel="1">qrcode</a>
+                
+                    <a href="#读书" title="读书" rel="2">读书</a>
                 
                     <a href="#tools" title="tools" rel="2">tools</a>
                 
@@ -269,9 +271,9 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/article/algorithm/DES/">
+                     <a href="/article/algorithm/ECDH/">
                         <h2 class="post-title">
-                            DES加密
+                            ECDH密钥协商算法
                         </h2>
                         
                     </a>
@@ -284,9 +286,9 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/article/algorithm/ECDH/">
+                     <a href="/article/algorithm/DES/">
                         <h2 class="post-title">
-                            ECDH密钥协商算法
+                            DES加密
                         </h2>
                         
                     </a>
@@ -357,9 +359,24 @@
             </div>
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="encoding">
-                    <span class="tag-text">encoding</span>
+                <span class="fa fa-tag listing-seperator" id="编码">
+                    <span class="tag-text">编码</span>
                 </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/encoding/DER/">
+                        <h2 class="post-title">
+                            DER编码
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
                 
                   <!-- <li class="listing-item">
                   <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
@@ -409,8 +426,8 @@
             </div>
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="framework">
-                    <span class="tag-text">framework</span>
+                <span class="fa fa-tag listing-seperator" id="设计架构">
+                    <span class="tag-text">设计架构</span>
                 </span>
                 
                   <!-- <li class="listing-item">
@@ -436,6 +453,50 @@
                      <a href="/article/framework/设计原则/">
                         <h2 class="post-title">
                             设计原则
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="java">
+                    <span class="tag-text">java</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/java/AOP-同一方法配置多个AOP切面/">
+                        <h2 class="post-title">
+                            AOP-同一方法配置多个AOP切面
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="hexo">
+                    <span class="tag-text">hexo</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/hexo/huweihuang-them-problem/">
+                        <h2 class="post-title">
+                            huweihuang theme 问题&解决
                         </h2>
                         
                     </a>
@@ -528,50 +589,6 @@
             </div>
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="hexo">
-                    <span class="tag-text">hexo</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/article/hexo/huweihuang-them-problem/">
-                        <h2 class="post-title">
-                            huweihuang theme 问题&解决
-                        </h2>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="java">
-                    <span class="tag-text">java</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/article/java/AOP-同一方法配置多个AOP切面/">
-                        <h2 class="post-title">
-                            AOP-同一方法配置多个AOP切面
-                        </h2>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="linux">
                     <span class="tag-text">linux</span>
                 </span>
@@ -614,6 +631,28 @@
                      <a href="/article/linux/linux 常用命令/linux-awk/">
                         <h2 class="post-title">
                             linux-awk
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="网络">
+                    <span class="tag-text">网络</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/network/记一次NAT&NGINX转发的问题/">
+                        <h2 class="post-title">
+                            记一次NAT和nginx转发导致的请求404的问题
                         </h2>
                         
                     </a>
@@ -683,8 +722,30 @@
             </div>
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="读书笔记-职场">
-                    <span class="tag-text">读书笔记-职场</span>
+                <span class="fa fa-tag listing-seperator" id="qrcode">
+                    <span class="tag-text">qrcode</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/qrcode/zxing/">
+                        <h2 class="post-title">
+                            zxing
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="读书">
+                    <span class="tag-text">读书</span>
                 </span>
                 
                   <!-- <li class="listing-item">
@@ -702,21 +763,14 @@
                 </div>
                 <hr>
                 
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="qrcode">
-                    <span class="tag-text">qrcode</span>
-                </span>
-                
                   <!-- <li class="listing-item">
                   <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/article/qrcode/zxing/">
+                     <a href="/article/reading/书单/">
                         <h2 class="post-title">
-                            zxing
+                            书单
                         </h2>
                         
                     </a>

@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          linux-awk - Charlie | Blog
+          记一次NAT和nginx转发导致的请求404的问题 - Charlie | Blog
         
     </title>
 
-    <link rel="canonical" href="http://charliewong001.github.io/article/linux/linux 常用命令/linux-awk/">
+    <link rel="canonical" href="http://charliewong001.github.io/article/network/记一次NAT&amp;NGINX转发的问题/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#linux" title="linux">linux</a>
+                              <a class="tag" href="/tags/#网络" title="网络">网络</a>
                             
                         </div>
-                        <h1>linux-awk</h1>
+                        <h1>记一次NAT和nginx转发导致的请求404的问题</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
-                            2019-05-22
+                            2019-08-15
                         </span>
                     </div>
                 
@@ -213,9 +213,33 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="截取字符串">截取字符串</h3>
-<p>awk -F “query account result=” ‘{print $1}’</p>
-<p>截取 query account result= 之后的字符串输出</p>
+                <h2 id="首先介绍下专线">首先介绍下专线</h2>
+<h3 id="专线互联ip">专线互联IP</h3>
+<p>专线互联IP即设备IP，设备IP大部分是运营商分配的，是一个IP段</p>
+<p>设备：可能是网关、网桥、路由器、交换机之类的在网络链路中的设备</p>
+<h3 id="目标ip">目标IP</h3>
+<p>设备在收到TCP数据包之后，查看目标IP，根据目标IP来决定将请求转发到内部的哪台机器</p>
+<p>网络运维人员可以在设备上做配置，将对方访问的目标IP与转发到的IP做好映射等。</p>
+<h3 id="nat过程">NAT过程</h3>
+<p>NAT转换是对源IP和目标IP进行转换。</p>
+<blockquote>
+<p>注意，此处进行的转换是对三、四层进行的转换，上层地址并未做转换。</p>
+<p>例如：应用发送http请求：http:192.168.0.1:80/test，进行NAT转换，将目标地址转换为 10.0.0.1，接收请求的应用拿到的七层目标地址仍然是192.168.0.1</p>
+</blockquote>
+<p>因为一般来说，公司内网都会有防火墙，业务机器不会直接开放对外网的访问权限，访问外网时，业务机器先将请求打到防火墙，防火墙做NAT转换。</p>
+<p><img src="/postImg/image-20190815174301686.png" alt="image-20190815174301686"></p>
+<h2 id="碰到的问题">碰到的问题</h2>
+<h3 id="现象">现象</h3>
+<p>银行请求MT时，得到的返回是404，MT这边的业务机器并没有收到请求</p>
+<h3 id="请求过程">请求过程</h3>
+<p><img src="/postImg/image-20190815190832891.png" alt="image-20190815190832891"></p>
+<h3 id="问题分析">问题分析</h3>
+<p><strong>问题的关键在于两点</strong></p>
+<ol>
+<li>NAT转换时，转换的是三、四层的IP地址</li>
+<li>nginx进行服务转发时，获取的是七层的IP地址</li>
+</ol>
+<p>nginx配置根据20.0.0.1来进行请求的转发，但是nginx实际获取 到的七层地址是10.0.0.5，自然不能将请求成功转发至业务</p>
 
                 
 
@@ -223,13 +247,9 @@
                 <!-- Pager -->
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/article/linux/linux 常用命令/linux-sed/" data-toggle="tooltip" data-placement="top" title="linux-sed">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/article/algorithm/AsymmetricSign/" data-toggle="tooltip" data-placement="top" title="非对称密钥签名算法流程">Next Post &rarr;</a>
+                            <a href="/article/encoding/ASN1/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -285,7 +305,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#截取字符串"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x622A;&#x53D6;&#x5B57;&#x7B26;&#x4E32;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#首先介绍下专线"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x9996;&#x5148;&#x4ECB;&#x7ECD;&#x4E0B;&#x4E13;&#x7EBF;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#专线互联ip"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x4E13;&#x7EBF;&#x4E92;&#x8054;IP</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#目标ip"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x76EE;&#x6807;IP</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#nat过程"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">NAT&#x8FC7;&#x7A0B;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#碰到的问题"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x78B0;&#x5230;&#x7684;&#x95EE;&#x9898;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#现象"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x73B0;&#x8C61;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#请求过程"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x8BF7;&#x6C42;&#x8FC7;&#x7A0B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#问题分析"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x95EE;&#x9898;&#x5206;&#x6790;</span></a></li></ol></li></ol>
         
         </div>
       </aside>
@@ -305,7 +325,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#linux" title="linux">linux</a>
+                          <a class="tag" href="/tags/#网络" title="网络">网络</a>
                         
                     </div>
                 </section>

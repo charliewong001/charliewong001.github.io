@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -208,6 +208,135 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/article/network/记一次NAT&NGINX转发的问题/">
+        <h2 class="post-title">
+            记一次NAT和nginx转发导致的请求404的问题
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            首先介绍下专线
+专线互联IP
+专线互联IP即设备IP，设备IP大部分是运营商分配的，是一个IP段
+设备：可能是网关、网桥、路由器、交换机之类的在网络链路中的设备
+目标IP
+设备在收到TCP数据包之后，查看目标IP，根据目标IP来决定将请求转发到内部的哪台机器
+网络运维人员可以在设备上做配置，将对方访问的目标IP与转发到的IP做好映射等。
+NAT过程
+NAT转换是对源IP和目标IP进行转换。
+......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-15
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#网络" title="网络">网络</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/encoding/ASN1/">
+        <h2 class="post-title">
+            Untitled
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            123456title: ASN.1catalog: truedate: 2019-08-13subtitle:header-img:tags: 编码
+参考资料
+https://www.cnblogs.com/NathanYang/p/9951282.html
+http://www.asnlab.cn/products.html
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-13
+        </p>
+        <div class="tags">
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/reading/书单/">
+        <h2 class="post-title">
+            书单
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+门后的秘密
+软技能-代码之外的生存指南
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-10
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#读书" title="读书">读书</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/encoding/DER/">
+        <h2 class="post-title">
+            DER编码
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+https://blog.csdn.net/wak0408/article/details/45767059
+https://blog.csdn.net/jiftlixu/article/details/19836405
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-07
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#编码" title="编码">编码</a>
+            
+        </div>
+    
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -430,7 +559,7 @@ ASCII是美国信息交换标准代码，是现在通用的单字节编码系统
         </p>
         <div class="tags">
             
-              <a href="/tags/#encoding" title="encoding">encoding</a>
+              <a href="/tags/#编码" title="编码">编码</a>
             
         </div>
     
@@ -496,160 +625,7 @@ STX (start of text)
         </p>
         <div class="tags">
             
-              <a href="/tags/#encoding" title="encoding">encoding</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/encoding/编码格式/">
-        <h2 class="post-title">
-            编码格式
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            总述
-
-
-
-编码格式
-编码范围
-描述
-说明
-
-
-
-
-ASCII
-0x00-0x7F
-单字节编码
-https://baike.baidu.com/item/ASCII/309296?fr=aladdin
-
-
-ISO 8859-1
-0x00-0xFF
-单字节编码，向下兼容ASCII，0x00-0x7F是与ASCII一样的
-https://baike.baidu.com/item/ISO-8859......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-07-11
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#encoding" title="encoding">encoding</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/algorithm/填充方式/">
-        <h2 class="post-title">
-            填充方式
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            1.概述
-在分组加密算法中（例如AES），我们首先要将原文进行分组，然后每个分组进行加密，然后组装密文。
-其中有一步是分组
-2.PKCS#5
-PKCS5Padding
-以DES加密算法为例
-模式采用DES/CBC/NOPadding、DES/CBC/PKCS5Padding
-
-DES/CBC/NOPadding模式
-
-NOPadding仅支持8的倍数字节数的输入
-若输入为8 * n字节，则密......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-07-08
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/algorithm/DES/">
-        <h2 class="post-title">
-            DES加密
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-参考资料
-https://blog.csdn.net/qq_27570955/article/details/52442092
-https://blog.csdn.net/android_jiangjun/article/details/79654940
-https://blog.csdn.net/gc_gongchao/column/info/18763
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-07-04
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/jvm/java中的四种引用/">
-        <h2 class="post-title">
-            java 中的四种引用
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            强引用
-软引用
-弱引用
-虚引用
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-06-23
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#jvm" title="jvm">jvm</a>
+              <a href="/tags/#编码" title="编码">编码</a>
             
         </div>
     
@@ -702,19 +678,11 @@ https://blog.csdn.net/gc_gongchao/column/info/18763
             
         
             
-            <a href="/tags/#encoding" title="encoding" rel="3">encoding</a>
+            <a href="/tags/#编码" title="编码" rel="4">编码</a>
             
         
             
-            <a href="/tags/#framework" title="framework" rel="2">framework</a>
-            
-        
-            
-            <a href="/tags/#jvm" title="jvm" rel="5">jvm</a>
-            
-        
-            
-            <a href="/tags/#hexo" title="hexo" rel="1">hexo</a>
+            <a href="/tags/#设计架构" title="设计架构" rel="2">设计架构</a>
             
         
             
@@ -722,7 +690,19 @@ https://blog.csdn.net/gc_gongchao/column/info/18763
             
         
             
+            <a href="/tags/#hexo" title="hexo" rel="1">hexo</a>
+            
+        
+            
+            <a href="/tags/#jvm" title="jvm" rel="5">jvm</a>
+            
+        
+            
             <a href="/tags/#linux" title="linux" rel="3">linux</a>
+            
+        
+            
+            <a href="/tags/#网络" title="网络" rel="1">网络</a>
             
         
             
@@ -734,11 +714,11 @@ https://blog.csdn.net/gc_gongchao/column/info/18763
             
         
             
-            <a href="/tags/#读书笔记-职场" title="读书笔记-职场" rel="1">读书笔记-职场</a>
+            <a href="/tags/#qrcode" title="qrcode" rel="1">qrcode</a>
             
         
             
-            <a href="/tags/#qrcode" title="qrcode" rel="1">qrcode</a>
+            <a href="/tags/#读书" title="读书" rel="2">读书</a>
             
         
             
@@ -802,23 +782,23 @@ https://blog.csdn.net/gc_gongchao/column/info/18763
     <ul>
       
         <li>
+          <a href="/article/network/记一次NAT&NGINX转发的问题/">记一次NAT和nginx转发导致的请求404的问题</a>
+        </li>
+      
+        <li>
+          <a href="/article/encoding/ASN1/">(no title)</a>
+        </li>
+      
+        <li>
+          <a href="/article/reading/书单/">书单</a>
+        </li>
+      
+        <li>
+          <a href="/article/encoding/DER/">DER编码</a>
+        </li>
+      
+        <li>
           <a href="/article/jvm/class标志位/">class类文件访问标志</a>
-        </li>
-      
-        <li>
-          <a href="/article/jvm/jvm疑问收集/">JVM疑问收集</a>
-        </li>
-      
-        <li>
-          <a href="/article/jvm/understanding-the-jvm/【03-02】垃圾收集器/">【深入理解 Java 虚拟机】【03-02】垃圾收集器</a>
-        </li>
-      
-        <li>
-          <a href="/article/jvm/jdk命令行工具/">jdk命令行工具</a>
-        </li>
-      
-        <li>
-          <a href="/article/encoding/String&ASCII&Byte/">String、ASCII、Byte</a>
         </li>
       
     </ul>
@@ -833,7 +813,7 @@ https://blog.csdn.net/gc_gongchao/column/info/18763
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>
