@@ -58,13 +58,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/%E5%AE%89%E5%85%A8%E7%AE%97%E6%B3%95/</loc>
-        <lastmod>2019-08-07T03:45:48.385Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/%E8%AF%BB%E4%B9%A6/</loc>
         <lastmod>2019-08-10T02:52:16.051Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -79,13 +72,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/%E7%BC%96%E7%A0%81/</loc>
-        <lastmod>2019-08-14T01:47:48.890Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%9E%B6%E6%9E%84/</loc>
         <lastmod>2019-08-14T01:48:14.295Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -95,6 +81,20 @@
     <url>
         <loc>http://charliewong001.github.io/tags/%E7%BD%91%E7%BB%9C/</loc>
         <lastmod>2019-08-15T11:26:15.547Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/%E5%AE%89%E5%85%A8%E7%AE%97%E6%B3%95/</loc>
+        <lastmod>2019-08-16T09:32:36.052Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/%E7%BC%96%E7%A0%81/</loc>
+        <lastmod>2019-08-19T07:26:36.029Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

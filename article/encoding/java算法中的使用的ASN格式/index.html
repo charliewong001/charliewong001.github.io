@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/site_icon.jpg">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          java算法中使用的ASN编码格式 - Charlie | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://charliewong001.github.io/article/encoding/java算法中的使用的ASN格式/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/article.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#编码" title="编码">编码</a>
+                            
+                        </div>
+                        <h1>java算法中使用的ASN编码格式</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Charlie on
+                            2019-08-19
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Charlie</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<!--
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言">前言</h2>
+<p>java中的算法实现，不论是生成密钥、生成签名都会对结果进行编码，而编码方式则是ASN.1格式</p>
+<h2 id="javasecuritykey">java.security.Key</h2>
+<p>这个接口是java中算法密钥接口，定义了所有算法密钥的最顶层设计。</p>
+<p>其中getFormat()接口返回这个密钥的编码方式。</p>
+<p>getEncoded()接口返回编码后的密钥值。</p>
+<p>其中密钥的编码格式是什么？其注释中也有相关说明</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* &lt;LI&gt;An Encoded Form</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;P&gt;This is an external encoded form for the key used when a standard</span></span><br><span class="line"><span class="comment"> * representation of the key is needed outside the Java Virtual Machine,</span></span><br><span class="line"><span class="comment"> * as when transmitting the key to some other party. The key</span></span><br><span class="line"><span class="comment"> * is encoded according to a standard format (such as</span></span><br><span class="line"><span class="comment"> * X.509 &#123;<span class="doctag">@code</span> SubjectPublicKeyInfo&#125; or PKCS#8), and</span></span><br><span class="line"><span class="comment"> * is returned using the &#123;<span class="doctag">@link</span> #getEncoded() getEncoded&#125; method.</span></span><br><span class="line"><span class="comment"> * Note: The syntax of the ASN.1 type &#123;<span class="doctag">@code</span> SubjectPublicKeyInfo&#125;</span></span><br><span class="line"><span class="comment"> * is defined as follows:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment">* &lt;pre&gt;</span></span><br><span class="line"><span class="comment"> * SubjectPublicKeyInfo ::= SEQUENCE &#123;</span></span><br><span class="line"><span class="comment"> *   algorithm AlgorithmIdentifier,</span></span><br><span class="line"><span class="comment"> *   subjectPublicKey BIT STRING &#125;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * AlgorithmIdentifier ::= SEQUENCE &#123;</span></span><br><span class="line"><span class="comment"> *   algorithm OBJECT IDENTIFIER,</span></span><br><span class="line"><span class="comment"> *   parameters ANY DEFINED BY algorithm OPTIONAL &#125;</span></span><br><span class="line"><span class="comment"> * &lt;/pre&gt;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * For more information, see</span></span><br><span class="line"><span class="comment"> * &lt;a href="http://www.ietf.org/rfc/rfc3280.txt"&gt;RFC 3280:</span></span><br><span class="line"><span class="comment"> * Internet X.509 Public Key Infrastructure Certificate and CRL Profile&lt;/a&gt;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;LI&gt;A Format</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;P&gt;This is the name of the format of the encoded key. It is returned</span></span><br><span class="line"><span class="comment"> * by the &#123;<span class="doctag">@link</span> #getFormat() getFormat&#125; method.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;/UL&gt;</span></span><br><span class="line"><span class="comment"> **/</span></span><br></pre></td></tr></table></figure>
+<p>由上面注释可知，其中publicKey的格式是按照ASN.1格式去编码，并且有SubjectPublicKeyInfo结构体来承载publicKey的信息。</p>
+<h2 id="java-rsa算法解析编码后的公私玥">java rsa算法解析编码后的公私玥</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(<span class="string">"RSA"</span>);</span><br><span class="line">        keyPairGenerator.initialize(<span class="number">1024</span>);</span><br><span class="line">        KeyPair keyPair = keyPairGenerator.generateKeyPair();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 解析编码后的publicKey</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        PublicKey publicKey = keyPair.getPublic();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">byte</span>[] b = publicKey.getEncoded();</span><br><span class="line">        SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfo.getInstance(b);</span><br><span class="line">        AlgorithmIdentifier algorithmIdentifier = publicKeyInfo.getAlgorithm();</span><br><span class="line">        DERBitString derBitString = publicKeyInfo.getPublicKeyData();</span><br><span class="line">        <span class="keyword">byte</span>[] bit = derBitString.getBytes();</span><br><span class="line">        System.out.println(HexUtil.byteToHex(bit));</span><br><span class="line"></span><br><span class="line">        ASN1Sequence seq = ASN1Sequence.getInstance(bit);</span><br><span class="line">        <span class="keyword">byte</span>[] exponent = ASN1Integer.getInstance(seq.getObjectAt(<span class="number">0</span>)).getValue().toByteArray();</span><br><span class="line">        <span class="keyword">byte</span>[] modulus = ASN1Integer.getInstance(seq.getObjectAt(<span class="number">1</span>)).getValue().toByteArray();</span><br><span class="line"></span><br><span class="line">        System.out.println(HexUtil.byteToHex(exponent));</span><br><span class="line">        System.out.println(HexUtil.byteToHex(modulus));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 解析编码后的privateKey</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        PrivateKey privateKey = keyPair.getPrivate();</span><br><span class="line">        <span class="keyword">byte</span>[] bb = privateKey.getEncoded();</span><br><span class="line"></span><br><span class="line">        ASN1Sequence seq1 = ASN1Sequence.getInstance(bb);</span><br><span class="line">        ASN1OctetString derOctetString = ASN1OctetString.getInstance(seq1.getObjectAt(<span class="number">2</span>));</span><br><span class="line">        <span class="keyword">byte</span>[] bbb = derOctetString.getOctets();</span><br><span class="line"></span><br><span class="line">        ASN1Sequence seq11 = ASN1Sequence.getInstance(bbb);</span><br><span class="line">        <span class="keyword">byte</span>[] pri_exponent = 	    ASN1Integer.getInstance(seq11.getObjectAt(<span class="number">1</span>)).getValue().toByteArray();</span><br><span class="line">        <span class="keyword">byte</span>[] pri_modulus = ASN1Integer.getInstance(seq11.getObjectAt(<span class="number">3</span>)).getValue().toByteArray();</span><br><span class="line"></span><br><span class="line">        System.out.println(HexUtil.byteToHex(pri_exponent));</span><br><span class="line">        System.out.println(HexUtil.byteToHex(pri_modulus));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="java-ecc算法解析编码后的签名值">java ecc算法解析编码后的签名值</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.sankuai.cx.etcp.code.util.HexUtil;</span><br><span class="line"><span class="keyword">import</span> org.bouncycastle.asn1.ASN1EncodableVector;</span><br><span class="line"><span class="keyword">import</span> org.bouncycastle.asn1.ASN1Integer;</span><br><span class="line"><span class="keyword">import</span> org.bouncycastle.asn1.ASN1Sequence;</span><br><span class="line"><span class="keyword">import</span> org.bouncycastle.asn1.DERSequence;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.math.BigInteger;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>:wangchao</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span>: 2019/8/8 11:17 AM</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>:</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ASNUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * BC的SM3withSM2验签需要的rs是asn1格式的，这个方法将直接拼接r||s的字节数组转化成asn1格式</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sign in plain byte array</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> rs result in asn1 format</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] rsPlainByteArrayToAsn1(<span class="keyword">byte</span>[] sign,<span class="keyword">int</span> rsLen)&#123;</span><br><span class="line">        <span class="keyword">if</span>(sign.length != rsLen * <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"err rs. "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        BigInteger r = <span class="keyword">new</span> BigInteger(<span class="number">1</span>, Arrays.copyOfRange(sign, <span class="number">0</span>, rsLen));</span><br><span class="line">        BigInteger s = <span class="keyword">new</span> BigInteger(<span class="number">1</span>, Arrays.copyOfRange(sign, rsLen, rsLen * <span class="number">2</span>));</span><br><span class="line">        ASN1EncodableVector v = <span class="keyword">new</span> ASN1EncodableVector();</span><br><span class="line">        v.add(<span class="keyword">new</span> ASN1Integer(r));</span><br><span class="line">        v.add(<span class="keyword">new</span> ASN1Integer(s));</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> DERSequence(v).getEncoded(<span class="string">"DER"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * BC的SM3withSM2签名得到的结果的rs是asn1格式的，这个方法转化成直接拼接r||s</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> rsDer rs in asn1 format</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> sign result in plain byte array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] rsAsn1ToPlainByteArray(<span class="keyword">byte</span>[] rsDer,<span class="keyword">int</span> rsLen)&#123;</span><br><span class="line">        ASN1Sequence seq = ASN1Sequence.getInstance(rsDer);</span><br><span class="line">        <span class="keyword">byte</span>[] r = bigIntToFixexLengthBytes(ASN1Integer.getInstance(seq.getObjectAt(<span class="number">0</span>)).getValue(),rsLen);</span><br><span class="line">        <span class="keyword">byte</span>[] s = bigIntToFixexLengthBytes(ASN1Integer.getInstance(seq.getObjectAt(<span class="number">1</span>)).getValue(),rsLen);</span><br><span class="line">        <span class="keyword">byte</span>[] result = <span class="keyword">new</span> <span class="keyword">byte</span>[rsLen * <span class="number">2</span>];</span><br><span class="line">        System.arraycopy(r, <span class="number">0</span>, result, <span class="number">0</span>, r.length);</span><br><span class="line">        System.arraycopy(s, <span class="number">0</span>, result, rsLen, s.length);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] bigIntToFixexLengthBytes(BigInteger rOrS,<span class="keyword">int</span> FixedLength)&#123;</span><br><span class="line">        <span class="comment">// for sm2p256v1, n is 00fffffffeffffffffffffffffffffffff7203df6b21c6052b53bbf40939d54123,</span></span><br><span class="line">        <span class="comment">// r and s are the result of mod n, so they should be less than n and have length&lt;=32</span></span><br><span class="line">        <span class="keyword">byte</span>[] rs = rOrS.toByteArray();</span><br><span class="line">        <span class="keyword">if</span>(rs.length == FixedLength) &#123;</span><br><span class="line">            <span class="keyword">return</span> rs;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(rs.length == FixedLength + <span class="number">1</span> &amp;&amp; rs[<span class="number">0</span>] == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> Arrays.copyOfRange(rs, <span class="number">1</span>, FixedLength + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(rs.length &lt; FixedLength) &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] result = <span class="keyword">new</span> <span class="keyword">byte</span>[FixedLength];</span><br><span class="line">            Arrays.fill(result, (<span class="keyword">byte</span>)<span class="number">0</span>);</span><br><span class="line">            System.arraycopy(rs, <span class="number">0</span>, result, FixedLength - rs.length, rs.length);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"err rs: "</span> + HexUtil.byteToHex(rs));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：上面两段代码示例，均依赖 bouncycastle的实现</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.bouncycastle<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>bcmail-jdk15on<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.59<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/article/network/记一次NAT&NGINX转发的问题/" data-toggle="tooltip" data-placement="top" title="记一次NAT和nginx转发导致的请求404的问题">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#前言"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x524D;&#x8A00;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#javasecuritykey"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">java.security.Key</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java-rsa算法解析编码后的公私玥"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">java rsa&#x7B97;&#x6CD5;&#x89E3;&#x6790;&#x7F16;&#x7801;&#x540E;&#x7684;&#x516C;&#x79C1;&#x73A5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java-ecc算法解析编码后的签名值"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">java ecc&#x7B97;&#x6CD5;&#x89E3;&#x6790;&#x7F16;&#x7801;&#x540E;&#x7684;&#x7B7E;&#x540D;&#x503C;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#编码" title="编码">编码</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/charliewong001">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Charlie 2019 
+                    <br>
+                    <!--
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true" >
+                    </iframe>
+                    -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://charliewong001.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://charliewong001.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

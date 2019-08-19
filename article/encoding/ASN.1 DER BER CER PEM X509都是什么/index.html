@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          Charlie | Blog
+          ASN.1 DER BER CER PEM X509都是什么 - Charlie | Blog
         
     </title>
 
-    <link rel="canonical" href="http://charliewong001.github.io/article/encoding/ASN1/">
+    <link rel="canonical" href="http://charliewong001.github.io/article/encoding/ASN.1 DER BER CER PEM X509都是什么/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,12 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
+                              <a class="tag" href="/tags/#编码" title="编码">编码</a>
+                            
                         </div>
-                        <h1></h1>
+                        <h1>ASN.1 DER BER CER PEM X509都是什么</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
-                            2019-08-13
+                            2019-08-07
                         </span>
                     </div>
                 
@@ -211,10 +213,82 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">title: ASN.1</span><br><span class="line">catalog: true</span><br><span class="line">date: 2019-08-13</span><br><span class="line">subtitle:</span><br><span class="line">header-img:</span><br><span class="line">tags: 编码</span><br></pre></td></tr></table></figure>
+                <h2 id="asn1">ASN.1</h2>
+<p>ASN.1(Abstract Syntax Notation dotone),抽象语法标记1。是定义抽象数据类型形式的标准,是用于描述数据表示、传输、编码的记法。</p>
+<p>ASN.1只包含信息结构，不处理具体业务数据，它不是一个编程语言。</p>
+<p>ASN.1包含数据类型定义、数据描述的语法、编码规则等</p>
+<p><strong><font color="red">BER、DER就是其中的一种编码规则，而DER是BER编码的一个子集</font></strong></p>
+<h2 id="ber编码basic-encoding-rules">BER编码(Basic Encoding Rules)</h2>
+<p>ASN.1 的基本编码规则定义了一种或多种把任意 ASN.1 值表示成字节字符串的方法，<br>
+缩写为BER。 （当然还有其它的方法，但是BER是 OSI中转换这些值的标准） 使用 BER，一个 ASN.1 的值有三种编码方法，选择哪种取决于值的类型和值的长度是否已知。这三种方法是：简单定长编码，结构化定长编码，及结构化不定长编码。简单的non-string类型使用第一种（简单定长编码） ；结构化类型可使用任一种结构化的编码方法；简单的string类型根据值的长度是否已知可使用任一种方法。隐式标签定义的类型可使用下<br>
+层类型的方法，显式标签定义的类型使用结构化的编码方法。</p>
+<p>每种BER编码方法都有三或四部分：<br>
+Identifier octets:定义了ASN.1 值的类和标签值，<br>
+指明编码方法是简单的还是结构化<br>
+的。<br>
+Length octets:对于定长编码方法，它指出了内容字节个数；对于结构化非定长编<br>
+码方法，它指明长度是不确定的。<br>
+Contents octets:对于简单定长编码方法，它给出了值的具体表示；对于结构化的<br>
+方法，它给出了值内容的BER编码的串联。<br>
+End-of-contents octets:对于结构化非定长的编码方法，它表示内容结束；对于其<br>
+它方法，没有该部分。</p>
+<h2 id="der编码distinguished-encoding-rules">DER编码(Distinguished Encoding Rules)</h2>
+<p>DER是BER的子集，它定义了使用一个octet string来表示任何ASN.1 值的编码方法。<br>
+DER用于需要使用唯一的octet string编码的应用程序，例如根据一个 ASN.1 编码来计算数字签名。DER在X.509 的第8.7 节定义。</p>
+<p>DER在第 3节给出的规则基础上增加了如下限制：</p>
+<ol>
+<li>
+<p>如果长度在0－127之间，必须使用短型长度表示法。</p>
+</li>
+<li>
+<p>如果长度大于等于 128，必须使用长型长度表示法。并且长度必须使用尽可能少的字节表示。</p>
+</li>
+<li>
+<p>对于简单 string类型和在其基础上使用隐式标签生成的类型，必须使用简单定长编<br>
+码方法。</p>
+</li>
+<li>
+<p>对于结构化类型和在其基础上使用隐式标签生成的类型、及在任何类型基础上使用<br>
+显式标签生成的类型，必须使用结构化定长编码方法。<br>
+对于特殊类型（如BIT STRING、SEQUENCE、SET 和 SET OF）的其他限制见第5 节。</p>
+</li>
+</ol>
+<h2 id="x509">X.509</h2>
+<p>X509是一种证书格式</p>
+<h3 id="什么是数字证书">什么是数字证书</h3>
+<p>数字证书就是互联网通讯中标志通讯各方身份信息的一系列数据，提供了一种在Internet上验证您身份的方式，其作用类似于司机的驾驶执照或日常生活中的身份证。它是由一个由权威机构-----CA机构，又称为证书授权(Certificate Authorit y)中心发行的，人们可以在网上用它来识别对方的身份。数字证书是一个经证书授权 中心数字签名的包含公开密钥拥有者信息以及公开密钥的文件。最简单的证书包含一 个公开密钥、名称以及证书授权中心的数字签名。一般情况下证书中还包括密钥的有 效时间，发证机关(证书授权中心)的名称，该证书的序列号等信息，证书的格式遵循 ITUT X.509国际标准。</p>
+<h3 id="x509证书包含的内容">X.509证书包含的内容</h3>
+<p>证书的版本信息；<br>
+证书的序列号，每个证书都有一个唯一的证书序列号；<br>
+证书所使用的签名算法；<br>
+证书的发行机构名称，命名规则一般采用X.500格式；<br>
+证书的有效期，现在通用的证书一般采用UTC时间格式，它的计时范围为1950-2049;<br>
+证书所有人的名称，命名规则一般采用X.500格式；<br>
+证书所有人的公开密钥；<br>
+证书发行者对证书的签名。</p>
+<p><strong>X.509证书定义了具体的格式，证书中包含的内容按照规定的格式进行组装，证书生成者、解析者，都按照这种格式去生成证书、解析证书</strong></p>
+<h3 id="x509如何描述其中的数据结构">X.509如何描述其中的数据结构</h3>
+<p>答案是ASN.1，它使用了ASN.1来描述了数字证书的数据结构。X509格式的证书，具体的编码也会有多种，如DER编码格式，直接存储的DER编码的X509证书，通常后缀名就叫 x509.der或者der，使用PEM格式编码的X509证书后缀名通常叫x509.pem或pem。</p>
+<h3 id="x509证书的扩展名">X.509证书的扩展名</h3>
+<p>首先我们要理解文件的扩展名代表什么。DER、PEM、CRT和CER这些扩展名经常令人困惑。很多人错误地认为这些扩展名可以互相代替。尽管的确有时候有些扩展名是可以互换的，但是最好你能确定证书是如何编码的，进而正确地标识它们。正确地标识证书有助于证书的管理。</p>
+<h4 id="编码-也用于扩展名">编码 (也用于扩展名)</h4>
+<ul>
+<li>.DER = **扩展名DER用于二进制DER编码的证书。**这些证书也可以用CER或者CRT作为扩展名。比较合适的说法是“我有一个DER编码的证书”，而不是“我有一个DER证书”。</li>
+<li>**.PEM = 扩展名PEM用于ASCII(Base64)编码的各种X.509 v3 证书。**文件开始由一行&quot;—– BEGIN …“开始。</li>
+</ul>
+<h4 id="常用的扩展名">常用的扩展名</h4>
+<ul>
+<li>.CRT = 扩展名CRT用于证书。证书可以是DER编码，也可以是PEM编码。扩展名CER和CRT几乎是同义词。这种情况在各种unix/linux系统中很常见。</li>
+<li>CER = CRT证书的微软型式。可以用微软的工具把CRT文件转换为CER文件（CRT和CER必须是相同编码的，DER或者PEM）。扩展名为CER的文件可以被IE识别并作为命令调用微软的cryptoAPI（具体点就是rudll32.exe cryptext.dll, CyrptExtOpenCER），进而弹出一个对话框来导入并/或查看证书内容。</li>
+<li>.KEY = 扩展名KEY用于PCSK#8的公钥和私钥。这些公钥和私钥可以是DER编码或者PEM编码。</li>
+</ul>
+<p>CRT文件和CER文件只有在使用相同编码的时候才可以安全地相互替代。</p>
 <h2 id="参考资料">参考资料</h2>
 <p><a href="https://www.cnblogs.com/NathanYang/p/9951282.html" target="_blank" rel="noopener">https://www.cnblogs.com/NathanYang/p/9951282.html</a></p>
 <p><a href="http://www.asnlab.cn/products.html" target="_blank" rel="noopener">http://www.asnlab.cn/products.html</a></p>
+<p><a href="https://blog.csdn.net/wak0408/article/details/45767059" target="_blank" rel="noopener">https://blog.csdn.net/wak0408/article/details/45767059</a></p>
+<p><a href="https://blog.csdn.net/jiftlixu/article/details/19836405" target="_blank" rel="noopener">https://blog.csdn.net/jiftlixu/article/details/19836405</a></p>
+<p>《ASN.1/BER/DER编码子集入门指南》<a href="https://www.cnblogs.com/alasika/archive/2011/06/03/2071181.html" target="_blank" rel="noopener">https://www.cnblogs.com/alasika/archive/2011/06/03/2071181.html</a></p>
 
                 
 
@@ -223,12 +297,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/network/记一次NAT&NGINX转发的问题/" data-toggle="tooltip" data-placement="top" title="记一次NAT和nginx转发导致的请求404的问题">&larr; Previous Post</a>
+                            <a href="/article/reading/书单/" data-toggle="tooltip" data-placement="top" title="书单">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/reading/书单/" data-toggle="tooltip" data-placement="top" title="书单">Next Post &rarr;</a>
+                            <a href="/article/jvm/class标志位/" data-toggle="tooltip" data-placement="top" title="class类文件访问标志">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -272,6 +346,24 @@
             <!-- Tabe of Content -->
             <!-- Table of Contents -->
 
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#asn1"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">ASN.1</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#ber编码basic-encoding-rules"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">BER&#x7F16;&#x7801;(Basic Encoding Rules)</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#der编码distinguished-encoding-rules"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">DER&#x7F16;&#x7801;(Distinguished Encoding Rules)</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#x509"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">X.509</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#什么是数字证书"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">&#x4EC0;&#x4E48;&#x662F;&#x6570;&#x5B57;&#x8BC1;&#x4E66;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#x509证书包含的内容"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">X.509&#x8BC1;&#x4E66;&#x5305;&#x542B;&#x7684;&#x5185;&#x5BB9;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#x509如何描述其中的数据结构"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">X.509&#x5982;&#x4F55;&#x63CF;&#x8FF0;&#x5176;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#x509证书的扩展名"><span class="toc-nav-number">4.4.</span> <span class="toc-nav-text">X.509&#x8BC1;&#x4E66;&#x7684;&#x6269;&#x5C55;&#x540D;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#编码-也用于扩展名"><span class="toc-nav-number">4.4.1.</span> <span class="toc-nav-text">&#x7F16;&#x7801; (&#x4E5F;&#x7528;&#x4E8E;&#x6269;&#x5C55;&#x540D;)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#常用的扩展名"><span class="toc-nav-number">4.4.2.</span> <span class="toc-nav-text">&#x5E38;&#x7528;&#x7684;&#x6269;&#x5C55;&#x540D;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
                 
             <!-- Sidebar Container -->
             <div class="
@@ -286,6 +378,8 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
+                          <a class="tag" href="/tags/#编码" title="编码">编码</a>
+                        
                     </div>
                 </section>
                 
