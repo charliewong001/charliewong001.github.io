@@ -16,13 +16,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/hexo/</loc>
-        <lastmod>2019-05-26T08:07:36.126Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/java/</loc>
         <lastmod>2019-05-26T14:25:13.106Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -95,6 +88,13 @@
     <url>
         <loc>http://charliewong001.github.io/tags/%E7%BC%96%E7%A0%81/</loc>
         <lastmod>2019-08-19T07:26:36.029Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/hexo/</loc>
+        <lastmod>2019-08-19T07:30:23.387Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
