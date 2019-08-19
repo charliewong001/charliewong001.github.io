@@ -58,13 +58,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/tags/understanding-the-jvm/</loc>
-        <lastmod>2019-08-14T01:47:22.996Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%9E%B6%E6%9E%84/</loc>
         <lastmod>2019-08-14T01:48:14.295Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -95,6 +88,13 @@
     <url>
         <loc>http://charliewong001.github.io/tags/hexo/</loc>
         <lastmod>2019-08-19T07:30:23.387Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/tags/understanding-the-jvm/</loc>
+        <lastmod>2019-08-19T09:31:39.721Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

@@ -7,6 +7,30 @@
     </url>
 
     <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9002%E3%80%91java%20%E5%86%85%E5%AD%98/</loc>
+        <lastmod>2019-08-19T09:31:39.721Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9003-01%E3%80%91%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/</loc>
+        <lastmod>2019-08-19T08:23:24.085Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9001%E3%80%91%E8%B5%B0%E8%BF%9B%20java/</loc>
+        <lastmod>2019-08-19T08:11:44.885Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://charliewong001.github.io/article/hexo/huweihuang-them-problem/</loc>
         <lastmod>2019-08-19T07:30:23.387Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -79,22 +103,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9002%E3%80%91java%20%E5%86%85%E5%AD%98/</loc>
-        <lastmod>2019-08-14T01:47:22.996Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9001%E3%80%91%E8%B5%B0%E8%BF%9B%20java/</loc>
-        <lastmod>2019-08-14T01:47:20.378Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/article/encoding/ASCII%E7%A0%81%E5%AF%B9%E7%85%A7%E8%A1%A8/</loc>
         <lastmod>2019-08-13T12:10:23.295Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -161,14 +169,6 @@
     <url>
         <loc>http://charliewong001.github.io/article/jvm/jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7/</loc>
         <lastmod>2019-07-22T03:40:55.778Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9003-01%E3%80%91%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/</loc>
-        <lastmod>2019-07-21T01:57:12.932Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
