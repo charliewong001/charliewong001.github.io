@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -223,6 +223,21 @@
                     <span class="tag-text">2019</span>
                 </span>
                 <ul>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <li >
+                    08-22
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                    <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/" style="color: #0085a1">
+                        <span>
+                            【深入理解Java虚拟机】【06】类文件结构
+                        </span>
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </li>
                 
                   <!-- <li class="listing-item">
                   <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
@@ -319,26 +334,11 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <li >
-                    07-17
-                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/article/jvm/understanding-the-jvm/【03-02】垃圾收集器/" style="color: #0085a1">
-                        <span>
-                            【深入理解 Java 虚拟机】【03-02】垃圾收集器
-                        </span>
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </li>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <li >
                     07-15
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/article/jvm/jdk命令行工具/" style="color: #0085a1">
+                    <a href="/article/jvm/understanding-the-jvm/【04】jdk命令行工具/" style="color: #0085a1">
                         <span>
-                            jdk命令行工具
+                            【深入理解Java虚拟机】【04】jdk命令行工具
                         </span>
                     </a>
                     <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
@@ -456,9 +456,9 @@
                  <li >
                     06-14
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/article/jvm/understanding-the-jvm/【03-01】垃圾收集算法原理/" style="color: #0085a1">
+                    <a href="/article/jvm/understanding-the-jvm/【03】垃圾收集&内存分配/" style="color: #0085a1">
                         <span>
-                            【深入理解 Java 虚拟机】【03-01】垃圾收集器
+                            【深入理解Java虚拟机】【03】垃圾收集和内存分配
                         </span>
                     </a>
                     <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
@@ -533,7 +533,7 @@
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                     <a href="/article/jvm/understanding-the-jvm/【02】java 内存/" style="color: #0085a1">
                         <span>
-                            【深入理解 Java 虚拟机】【02】java 内存
+                            【深入理解Java虚拟机】【02】java 内存
                         </span>
                     </a>
                     <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
@@ -548,7 +548,7 @@
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                     <a href="/article/jvm/understanding-the-jvm/【01】走进 java/" style="color: #0085a1">
                         <span>
-                            【深入理解 Java 虚拟机】【01】走进 java
+                            【深入理解Java虚拟机】【01】走进 java
                         </span>
                     </a>
                     <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
@@ -726,9 +726,9 @@
                  <li >
                     05-22
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/article/algorithm/ECDH/" style="color: #0085a1">
+                    <a href="/article/algorithm/AsymmetricSign/" style="color: #0085a1">
                         <span>
-                            ECDH密钥协商算法
+                            非对称密钥签名算法流程
                         </span>
                     </a>
                     <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
@@ -741,9 +741,9 @@
                  <li >
                     05-22
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/article/algorithm/AsymmetricSign/" style="color: #0085a1">
+                    <a href="/article/algorithm/ECDH/" style="color: #0085a1">
                         <span>
-                            非对称密钥签名算法流程
+                            ECDH密钥协商算法
                         </span>
                     </a>
                     <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
@@ -833,11 +833,11 @@
             
         
             
-            <a href="/tags/#设计架构" title="设计架构" rel="2">设计架构</a>
+            <a href="/tags/#编码" title="编码" rel="5">编码</a>
             
         
             
-            <a href="/tags/#编码" title="编码" rel="5">编码</a>
+            <a href="/tags/#设计架构" title="设计架构" rel="2">设计架构</a>
             
         
             
@@ -845,15 +845,11 @@
             
         
             
+            <a href="/tags/#jvm" title="jvm" rel="4">jvm</a>
+            
+        
+            
             <a href="/tags/#java" title="java" rel="1">java</a>
-            
-        
-            
-            <a href="/tags/#jvm" title="jvm" rel="5">jvm</a>
-            
-        
-            
-            <a href="/tags/#linux" title="linux" rel="3">linux</a>
             
         
             
@@ -861,11 +857,11 @@
             
         
             
-            <a href="/tags/#markdown" title="markdown" rel="2">markdown</a>
+            <a href="/tags/#linux" title="linux" rel="3">linux</a>
             
         
             
-            <a href="/tags/#读书" title="读书" rel="2">读书</a>
+            <a href="/tags/#markdown" title="markdown" rel="2">markdown</a>
             
         
             
@@ -877,11 +873,15 @@
             
         
             
+            <a href="/tags/#读书" title="读书" rel="2">读书</a>
+            
+        
+            
             <a href="/tags/#tools" title="tools" rel="2">tools</a>
             
         
             
-            <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm" rel="4">understanding-the-jvm</a>
+            <a href="/tags/#深入理解Java虚拟机" title="深入理解Java虚拟机" rel="5">深入理解Java虚拟机</a>
             
         
     </div>
@@ -937,6 +937,10 @@
     <ul>
       
         <li>
+          <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/">【深入理解Java虚拟机】【06】类文件结构</a>
+        </li>
+      
+        <li>
           <a href="/article/encoding/java算法中的使用的ASN格式/">java算法中使用的ASN编码格式</a>
         </li>
       
@@ -952,10 +956,6 @@
           <a href="/article/encoding/ASN.1 DER BER CER PEM X509都是什么/">ASN.1 DER BER CER PEM X509都是什么</a>
         </li>
       
-        <li>
-          <a href="/article/jvm/class标志位/">class类文件访问标志</a>
-        </li>
-      
     </ul>
   </div>
 
@@ -968,7 +968,7 @@
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>

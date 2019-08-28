@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          【深入理解Java虚拟机】【03】垃圾收集和内存分配 - Charlie | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/understanding-the-jvm/【03】垃圾收集&amp;内存分配/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/article.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#深入理解Java虚拟机" title="深入理解Java虚拟机">深入理解Java虚拟机</a>
+                            
+                        </div>
+                        <h1>【深入理解Java虚拟机】【03】垃圾收集和内存分配</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Charlie on
+                            2019-06-14
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Charlie</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<!--
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>[TOC]</p>
+<h2 id="对象是否可回收判断方法">对象是否可回收判断方法</h2>
+<h3 id="引用计数算法主流虚拟机未采用">引用计数算法<font color="red">(主流虚拟机未采用)</font></h3>
+<ul>
+<li>
+<p>实现思想</p>
+<p>在对象中添加引用计数器，引用它时，计数器加 1，对它的引用失效，计数器减 1。计数器为 0 的对象就是不可能再被引用的</p>
+</li>
+<li>
+<p>问题</p>
+<p>无法解决对象之间循环引用的问题</p>
+</li>
+</ul>
+<h3 id="可达性分析算法">可达性分析算法</h3>
+<ul>
+<li>
+<p>实现思想</p>
+<p>从 GC Roots 对象作为起始点，向下搜索，当一个对象到 GC Roots 没有任何引用链，则此对象是不可用的。</p>
+</li>
+<li>
+<p>GCRoots</p>
+<p>引用链搜索的起始点，包括</p>
+<ul>
+<li>虚拟机栈(栈帧中的本地变量表)中引用的对象</li>
+<li>方法区中类静态属性引用的对象(?)</li>
+<li>方法区中常量引用的对象(?)</li>
+<li>本地方法栈中 JNI(Native 方法)引用的对象</li>
+</ul>
+</li>
+</ul>
+<h2 id="垃圾收集算法原理">垃圾收集算法原理</h2>
+<h3 id="标记-清除">标记-清除</h3>
+<p>首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象。</p>
+<p>缺点：</p>
+<ol>
+<li>标记和清除两个过程的效率都不高</li>
+<li>标记清除之后会产生大量不连续的内存碎片</li>
+</ol>
+<p><img src="/postImg/image-20190820194447307.png" alt="image-20190820194447307"></p>
+<h3 id="复制算法">复制算法</h3>
+<p>将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这一块的内存用完了，就将还存活着的对象复制到另外一块上面，然后再把已使用过的内存空间一次清理掉。这样使得每次都是对整个半区进行内存回收，内存分配时也就不用考虑内存碎片等复杂情况，只要移动堆顶指针，按顺序分配内存即可，实现简单，运行高效。</p>
+<p>缺点：浪费一半内存</p>
+<p>实际使用：</p>
+<p>​        将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor[1]。当回收时，将Eden和Survivor中还存活着的对象一次性地复制到另外一块Survivor空间上，最后清理掉Eden和刚才用过的Survivor空间。HotSpot虚拟机默认Eden和Survivor的大小比例是8:1，也就是每次新生代中可用内存空间为整个新生代容量的90%（80%+10%），只有10%的内存会被“浪费”。当然，98%的对象可回收只是一般场景下的数据，我们没有办法保证每次回收都只有不多于10%的对象存活，当Survivor空间不够用时，需要依赖其他内存（这里指老年代）进行分配担保（Handle Promotion）。</p>
+<p><img src="/postImg/image-20190820194554296.png" alt="image-20190820194554296"></p>
+<h3 id="标记-整理">标记-整理</h3>
+<p>标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存。</p>
+<p><img src="/postImg/image-20190820194622204.png" alt="image-20190820194622204"></p>
+<h3 id="分代收集算法">分代收集算法</h3>
+<p>目前大多数jvm采用的算法</p>
+<p>算法核心思想：根据对象的存活周期将内存划分为若干个区域。</p>
+<p>​        一般情况下将堆内存分为：新生代和老年代。</p>
+<ol>
+<li>新生代特点：每次内存垃圾回收时，有大量内存对象要被回收。</li>
+<li>老年代特点：每次垃圾回收时，只有少量对象需要被回收。</li>
+</ol>
+<p>目前大多数垃圾收集器：</p>
+<ol>
+<li>
+<p>对于新生代都采用Copying算法。</p>
+<p>​       因为新生代每次都有大量对象被回收，也就是说复制的次数较少，但是实际中并不是按1：1来划分新生代的内存空间。 一般将新生代划分为一块较大的Eden区和两块较小的Survivor区（一般为8:1:1）,每次使用Eden区和一块Survivor区。当进行回收时，一般都将Eden区和Survivor中还存活的对象复制到另一块Survivor中，然后清除Eden区和刚才使用过的Survivor区。</p>
+</li>
+<li>
+<p>对于老年代都采用Mark-Compact算法。</p>
+</li>
+</ol>
+<p>​                        老年代每次回收都只有少量对象回收。</p>
+<h2 id="问题">问题</h2>
+<ul>
+<li>OopMap(Ordinary Object Pointer Map)，详细解读</li>
+<li>安全点的设置规则</li>
+<li>安全区域的划分规则</li>
+</ul>
+<h2 id="垃圾收集器总览">垃圾收集器总览</h2>
+<p><img src="/postImg/image-20190820155054777.png" alt="image-20190820155054777"></p>
+<h3 id="1serial收集器">1.Serial收集器</h3>
+<p>Serial收集器是最基本、历史最悠久的收集器，在JDK1.3.1之前是虚拟机新生代收集的唯一选择。</p>
+<p>特点：单线程，简单高效(因为没有线程交互所带来的系统开销)，进行垃圾收集时需要暂停其他所有线程(stop the world)，所以就会有一定的卡顿现象。</p>
+<p>应用：虚拟机在Clinet模式下的默认新生代收集器。</p>
+<p><img src="/postImg/image-20190820155821456.png" alt="image-20190820155821456"></p>
+<p><img src="/postImg/image-20190719142817363.png" alt="image-20190719142817363"></p>
+<h3 id="2parnew收集器">2.ParNew收集器</h3>
+<p>ParNew收集器是Serial收集器的多线程版本。</p>
+<p>特点：多线程，速度相对较慢(因为有线程交互所带来的系统开销)，进行垃圾收集时需要暂停其他所有进程</p>
+<p>应用：虚拟机在Server模式下首选的新生代收集器，目前除了Serial收集器外，目前只有它能与CMS收集器配合工作。</p>
+<ul>
+<li>XX:ParallelGCThreads：通过这个参数来设置GC线程数量.</li>
+<li>使用-XX：+UseConcMarkSweepGC选项后的默认新生代收集器，也可以使用-XX：+UseParNewGC选项来强制指定它。</li>
+</ul>
+<p><img src="/postImg/image-20190820161952608.png" alt="image-20190820161952608"></p>
+<h3 id="3parallel-scavenge收集器">3.Parallel Scavenge收集器</h3>
+<ul>
+<li>特性：
+<ul>
+<li>吞吐量优先收集器</li>
+</ul>
+</li>
+<li>和ParNew收集器的区别：关注点不同<br>
+其他收集器的关注点是：在垃圾收集时尽量缩短用户线程的停顿时间.<br>
+parallel scaveng的关注点是：达到一个可控的吞吐量.<br>
+概念：吞吐量 = 代码运行时间/(代码运行时间+垃圾回收时间)</li>
+<li>基本原理：通过设置两个参数来精准控制吞吐量.
+<ul>
+<li>最大垃圾收集停顿时间：-XX:MaxGCPauseMills</li>
+<li>直接设置吞吐量大小：-XX:GCTimeRadio</li>
+</ul>
+</li>
+</ul>
+<p><img src="/postImg/image-20190719142945321.png" alt="image-20190719142945321"></p>
+<h3 id="4serial-old收集器">4.Serial Old收集器</h3>
+<p>老年代串行收集器</p>
+<ul>
+<li>特性：
+<ul>
+<li>采用标记-整理算法.</li>
+</ul>
+</li>
+<li>在Server使用场景：
+<ul>
+<li>在jdk1.5之前的版本和Parallel Scavenge配合使用.</li>
+<li>作为CMS收集器的备选预案.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/postImg/image-20190820162128108.png" alt="image-20190820162128108"></p>
+<h3 id="5parallelold收集器">5.ParallelOld收集器</h3>
+<p>Parallel Old收集器是Parallel Scavenge收集器的老年代版本，使用多线程和&quot;标记-整理&quot;算法。</p>
+<p>特点：适用于老年代，多线程</p>
+<p>应用：在注重吞吐量及CPU资源敏感的场合，优先考虑Parallel Scavenge收集器和Parallel Old收集器</p>
+<p><img src="/postImg/image-20190820162228640.png" alt="image-20190820162228640"></p>
+<p>ParallelOldGC</p>
+<p><img src="/postImg/image-20190719142907520.png" alt="image-20190719142907520"></p>
+<h3 id="6cms收集器">6.CMS收集器</h3>
+<p>CMS(Concurrent Mark Sweep)收集器是一种以获取最短回收停顿时间为目标的收集器，基于&quot;标记-清除&quot;算法。</p>
+<p>收集过程：</p>
+<ol>
+<li>
+<p>初始标记(CMS initial mark)</p>
+<p>特点：单线程，stop the world</p>
+<p>作用：仅仅是标记一下GC Roots能直接关联到的对象，速度很快</p>
+</li>
+<li>
+<p>并发标记(CMS concurrent mark)</p>
+<p>特点：单线程，与其他线程并发运行</p>
+</li>
+<li>
+<p>重新标记(CMS remark)</p>
+<p>特点：多线程，stop the world</p>
+<p>作用：修正并发标记期间，因用户程序继续运行而导致标记产生变动的那一部分对象的标记记录。</p>
+</li>
+<li>
+<p>并发清除(CMS concurrent sweep)</p>
+<p>​	特点：单线程，与其他线程并发运行</p>
+</li>
+</ol>
+<p>应用：服务端</p>
+<p>很明显的缺点：</p>
+<ol>
+<li>对CPU资源敏感。CMS默认启动的回收线程(CPU数量 + 3) / 4 ，当CPU &gt;= 4的时候，并发回收时垃圾收集线程最多占用不超过25%的CPU资源，但是当CPU &lt; 4 的时候，CMS对用户程序的影响就可能变得很大。</li>
+<li>CMS无法处理&quot;浮动垃圾&quot;(Floating Garbage)，可能出现&quot;Concurrent Mode Failure&quot;失败而导致另一次Full GC的产生。 什么是&quot;浮动垃圾&quot;呢？在CMS结束标记之后，有一部分对象也成可以被清理的垃圾了，可CMS无法在本次的垃圾处理过程中回收掉它们，所以又动态产生的这部分垃圾叫做&quot;浮动垃圾&quot;。在CMS运行的同时，也有用户线程在运行，所以就需要预留够足够的内存空间给用户线程，而当CMS不能保证这一点的时候，就会出现&quot;Concurrent Mode Failure&quot;这种错误。</li>
+<li>CMS基于的&quot;标记-清除&quot;算法会产生内存碎片。(不过CMS较好地解决了这种问题，解决的办法是在经过一次的Full GC之后，还会再进行一次碎片整理)</li>
+</ol>
+<p>ConcMarkSweepGC</p>
+<p><img src="/postImg/image-20190719143021439.png" alt="image-20190719143021439"></p>
+<h3 id="7g1收集器">7.G1收集器</h3>
+<p>面向服务端，设计用来取代CMS</p>
+<p>特点：</p>
+<ol>
+<li>并行与并发，充分利用多核</li>
+<li>分代收集</li>
+<li>空间整合，整体上基于“标记整理”，局部（两个Region之间）上基于“复制”算法，不会产生内存碎片</li>
+<li>可预测的停顿，可以指定最大停顿时间（并不一定实现，可能会失败。G1有一个合理的精确的收集这些区域的代价模型，它使用这个模型决定在用户指定的暂停时间内收集哪些、多少个区域。）</li>
+</ol>
+<p>G1分代收集的说明：G1仍采用分代收集的策略，但是不同于上面的收集器，G1的分代不是固定的区域，而是如下图一样把堆分成一个个Region，每个region具有不同的角色。</p>
+<p><img src="/postImg/image-20190820162653475.png" alt="image-20190820162653475"></p>
+<p>已记忆集合 Remember Set (RSet) : 避免GC时全堆扫描</p>
+<p>在串行和并行收集器中，GC通过整堆扫描，来确定对象是否处于可达路径中。然而G1为了避免STW式的整堆扫描，在每个分区记录了一个已记忆集合(RSet)，内部类似一个反向指针，记录引用分区内对象的卡片索引。当要回收该分区时，通过扫描分区的RSet，来确定引用本分区内的对象是否存活，进而确定本分区内的对象存活情况。</p>
+<p>事实上，并非所有的引用都需要记录在RSet中，如果一个分区确定需要扫描，那么无需RSet也可以无遗漏的得到引用关系。那么引用源自本分区的对象，当然不用落入RSet中；同时，G1 GC每次都会对年轻代进行整体收集，因此引用源自年轻代的对象，也不需要在RSet中记录。最后只有老年代的分区可能会有RSet记录，这些分区称为拥有RSet分区(an RSet’s owning region)。</p>
+<p>G1收集器运作步骤：</p>
+<ol>
+<li>初始标记</li>
+<li>并发标记</li>
+<li>最终标记</li>
+<li>筛选回收</li>
+</ol>
+<p><img src="/postImg/image-20190820162727969.png" alt="image-20190820162727969"></p>
+<h3 id="8g1的gc模式">8.G1的GC模式</h3>
+<p>G1中提供了三种模式垃圾回收模式，young gc、mixed gc 和 full gc，在不同的条件下被触发。</p>
+<h4 id="1-young-gc">1. young gc</h4>
+<p>发生在年轻代的GC算法，一般对象（除了巨型对象）都是在eden region中分配内存，当所有eden region被耗尽无法申请内存时，就会触发一次young gc，这种触发机制和之前的young gc差不多，执行完一次young gc，活跃对象会被拷贝到survivor region或者晋升到old region中，空闲的region会被放入空闲列表中，等待下次被使用。</p>
+<h4 id="2-mixed-gc">2. mixed gc</h4>
+<p>当越来越多的对象晋升到老年代old region时，为了避免堆内存被耗尽，虚拟机会触发一个混合的垃圾收集器，即mixed gc，该算法并不是一个old gc，除了回收整个young region，还会回收一部分的old region，这里需要注意：是一部分老年代，而不是全部老年代，可以选择哪些old region进行收集，从而可以对垃圾回收的耗时时间进行控制。</p>
+<h4 id="3-full-gc">3. full gc</h4>
+<p>如果对象内存分配速度过快，mixed gc来不及回收，导致老年代被填满，就会触发一次full gc，G1的full gc算法就是单线程执行的serial old gc，会导致异常长时间的暂停时间，需要进行不断的调优，尽可能的避免full gc。</p>
+<h2 id="理解gc日志">理解GC日志</h2>
+<p><img src="/postImg/image-20190820163015483.png" alt="image-20190820163015483"></p>
+<h2 id="内存分配回收策略">内存分配回收策略</h2>
+<ol>
+<li>对象优先在Eden区分配</li>
+<li>大对象直接进入老年代</li>
+<li>长期存活对象进入老年代</li>
+<li>动态对象年龄判定</li>
+<li>空间分配担保</li>
+</ol>
+<h2 id="问题">问题</h2>
+<ul>
+<li>与垃圾收集器相关的jvm参数</li>
+<li>如何查看现在线上各系统jvm垃圾收集器是什么
+<ul>
+<li>jmap -heap jvmid</li>
+</ul>
+</li>
+<li>逻辑CPU是什么意思</li>
+<li>在垃圾收集中，并行、并发的区别，在编程中，并行、并发的区别</li>
+<li>新生代晋升入老年代的对象年龄可以设置（PretenureSizeThreshold）</li>
+<li>如何查看对象的年龄</li>
+<li>如何动态实时修改jvm参数（修改）</li>
+<li>分析垃圾回收日志的工具</li>
+</ul>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/jvm/jvm参数/" data-toggle="tooltip" data-placement="top" title="JVM参数">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/qrcode/zxing/" data-toggle="tooltip" data-placement="top" title="zxing">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#对象是否可回收判断方法"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x53EF;&#x56DE;&#x6536;&#x5224;&#x65AD;&#x65B9;&#x6CD5;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#引用计数算法主流虚拟机未采用"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x5F15;&#x7528;&#x8BA1;&#x6570;&#x7B97;&#x6CD5;<font color="red">(&#x4E3B;&#x6D41;&#x865A;&#x62DF;&#x673A;&#x672A;&#x91C7;&#x7528;)</font></span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#可达性分析算法"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x53EF;&#x8FBE;&#x6027;&#x5206;&#x6790;&#x7B97;&#x6CD5;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#垃圾收集算法原理"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x5783;&#x573E;&#x6536;&#x96C6;&#x7B97;&#x6CD5;&#x539F;&#x7406;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#标记-清除"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x6807;&#x8BB0;-&#x6E05;&#x9664;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#复制算法"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x590D;&#x5236;&#x7B97;&#x6CD5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#标记-整理"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x6807;&#x8BB0;-&#x6574;&#x7406;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#分代收集算法"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x5206;&#x4EE3;&#x6536;&#x96C6;&#x7B97;&#x6CD5;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#问题"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x95EE;&#x9898;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#垃圾收集器总览"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;&#x603B;&#x89C8;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1serial收集器"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">1.Serial&#x6536;&#x96C6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2parnew收集器"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">2.ParNew&#x6536;&#x96C6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3parallel-scavenge收集器"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">3.Parallel Scavenge&#x6536;&#x96C6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4serial-old收集器"><span class="toc-nav-number">4.4.</span> <span class="toc-nav-text">4.Serial Old&#x6536;&#x96C6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5parallelold收集器"><span class="toc-nav-number">4.5.</span> <span class="toc-nav-text">5.ParallelOld&#x6536;&#x96C6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#6cms收集器"><span class="toc-nav-number">4.6.</span> <span class="toc-nav-text">6.CMS&#x6536;&#x96C6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#7g1收集器"><span class="toc-nav-number">4.7.</span> <span class="toc-nav-text">7.G1&#x6536;&#x96C6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#8g1的gc模式"><span class="toc-nav-number">4.8.</span> <span class="toc-nav-text">8.G1&#x7684;GC&#x6A21;&#x5F0F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#1-young-gc"><span class="toc-nav-number">4.8.1.</span> <span class="toc-nav-text">1. young gc</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-mixed-gc"><span class="toc-nav-number">4.8.2.</span> <span class="toc-nav-text">2. mixed gc</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-full-gc"><span class="toc-nav-number">4.8.3.</span> <span class="toc-nav-text">3. full gc</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#理解gc日志"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">&#x7406;&#x89E3;GC&#x65E5;&#x5FD7;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#内存分配回收策略"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">&#x5185;&#x5B58;&#x5206;&#x914D;&#x56DE;&#x6536;&#x7B56;&#x7565;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#问题"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">&#x95EE;&#x9898;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#深入理解Java虚拟机" title="深入理解Java虚拟机">深入理解Java虚拟机</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/charliewong001">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Charlie 2019 
+                    <br>
+                    <!--
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true" >
+                    </iframe>
+                    -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://charliewong001.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://charliewong001.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

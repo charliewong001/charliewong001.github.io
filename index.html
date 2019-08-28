@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -208,6 +208,34 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/">
+        <h2 class="post-title">
+            【深入理解Java虚拟机】【06】类文件结构
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            ...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#深入理解Java虚拟机" title="深入理解Java虚拟机">深入理解Java虚拟机</a>
+            
+        </div>
+    
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -439,91 +467,39 @@ class的访问标志（access_flag），位置在常量池之后，长度为2字
 
 <div class="post-preview">
 
-    <a href="/article/jvm/understanding-the-jvm/【03-02】垃圾收集器/">
+    <a href="/article/jvm/understanding-the-jvm/【04】jdk命令行工具/">
         <h2 class="post-title">
-            【深入理解 Java 虚拟机】【03-02】垃圾收集器
+            【深入理解Java虚拟机】【04】jdk命令行工具
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            垃圾收集器总览
-
-问题
-
-与垃圾收集器相关的jvm参数
-如何查看现在线上各系统jvm垃圾收集器是什么
-
-jmap -heap jvmid
-
-
-逻辑CPU是什么意思
-在垃圾收集中，并行、并发的区别，在编程中，并行、并发的区别
-新生代晋升入老年代的对象年龄可以设置（PretenureSizeThreshold）
-如何查看对象的年龄
-如何动态实时修改jvm参数（修改）
-分析垃圾回收日志的工具
-
-s......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-07-17
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm">understanding-the-jvm</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/jvm/jdk命令行工具/">
-        <h2 class="post-title">
-            jdk命令行工具
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            jps
-命令格式
-jps [option] [hostid]
-选项
+            [TOC]
+jdk命令行工具
+0.概览
 
 
 
-选项
+名称
 作用
 
 
 
 
--q
-只输出LVMID，省略主类
-
-
--m
-输出虚拟机进程启动时，传递给主类main函数的参数
-
-
--l
-输出主类的全名，如果进程执行的是jar包，输出Jar路径
-
-
--v
-输出虚拟机进程启动时JVM参数
-
+jps
+JVM Process Status Tool，显示系统中所有的Hotspot虚拟机进程
 
 
 jstat
-jstat（JVM Statistics Monitoring Tool）
+JVM Statistics Monitoring Tool，用于收集HotSpot虚拟机各方面的运行数据
+
+
+jinfo
+Configuration info for java，显示虚拟机配置信息
+
+
+jmap
 ......
         </div>
     </a>
@@ -534,7 +510,7 @@ jstat（JVM Statistics Monitoring Tool）
         </p>
         <div class="tags">
             
-              <a href="/tags/#jvm" title="jvm">jvm</a>
+              <a href="/tags/#深入理解Java虚拟机" title="深入理解Java虚拟机">深入理解Java虚拟机</a>
             
         </div>
     
@@ -685,11 +661,11 @@ STX (start of text)
             
         
             
-            <a href="/tags/#设计架构" title="设计架构" rel="2">设计架构</a>
+            <a href="/tags/#编码" title="编码" rel="5">编码</a>
             
         
             
-            <a href="/tags/#编码" title="编码" rel="5">编码</a>
+            <a href="/tags/#设计架构" title="设计架构" rel="2">设计架构</a>
             
         
             
@@ -697,15 +673,11 @@ STX (start of text)
             
         
             
+            <a href="/tags/#jvm" title="jvm" rel="4">jvm</a>
+            
+        
+            
             <a href="/tags/#java" title="java" rel="1">java</a>
-            
-        
-            
-            <a href="/tags/#jvm" title="jvm" rel="5">jvm</a>
-            
-        
-            
-            <a href="/tags/#linux" title="linux" rel="3">linux</a>
             
         
             
@@ -713,11 +685,11 @@ STX (start of text)
             
         
             
-            <a href="/tags/#markdown" title="markdown" rel="2">markdown</a>
+            <a href="/tags/#linux" title="linux" rel="3">linux</a>
             
         
             
-            <a href="/tags/#读书" title="读书" rel="2">读书</a>
+            <a href="/tags/#markdown" title="markdown" rel="2">markdown</a>
             
         
             
@@ -729,11 +701,15 @@ STX (start of text)
             
         
             
+            <a href="/tags/#读书" title="读书" rel="2">读书</a>
+            
+        
+            
             <a href="/tags/#tools" title="tools" rel="2">tools</a>
             
         
             
-            <a href="/tags/#understanding-the-jvm" title="understanding-the-jvm" rel="4">understanding-the-jvm</a>
+            <a href="/tags/#深入理解Java虚拟机" title="深入理解Java虚拟机" rel="5">深入理解Java虚拟机</a>
             
         
     </div>
@@ -789,6 +765,10 @@ STX (start of text)
     <ul>
       
         <li>
+          <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/">【深入理解Java虚拟机】【06】类文件结构</a>
+        </li>
+      
+        <li>
           <a href="/article/encoding/java算法中的使用的ASN格式/">java算法中使用的ASN编码格式</a>
         </li>
       
@@ -804,10 +784,6 @@ STX (start of text)
           <a href="/article/encoding/ASN.1 DER BER CER PEM X509都是什么/">ASN.1 DER BER CER PEM X509都是什么</a>
         </li>
       
-        <li>
-          <a href="/article/jvm/class标志位/">class类文件访问标志</a>
-        </li>
-      
     </ul>
   </div>
 
@@ -820,7 +796,7 @@ STX (start of text)
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>
