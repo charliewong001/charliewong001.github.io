@@ -95,7 +95,7 @@
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Charlie on
-                            2019-08-22
+                            2019-08-29
                         </span>
                     </div>
                 
@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -213,12 +213,333 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                
+                <p>[TOC]</p>
+<h1 id="无关性的基石">无关性的基石</h1>
+<p>代码编译的结果从本地机器码编程字节码，是存储格式发展的一小步，却是编程语言发展的一大步。Java 在诞生之初，曾经有一个著名的口号“一次编译，到处运行”，这句话充分表达了软件开发人员对冲破平台界限的渴求。</p>
+<p>各种不同平台的虚拟机都统一使用的存储格式 —— 字节码，是构成平台无关性的基石。虚拟机的另外一种特性是语言无关性，目前已经出现了一大批在 Java 虚拟机之上运行的语言，比如 Scala、Clojure、Groovy 等。实现语言无关特性的基础仍然是虚拟机和字节码存储格式，Java 虚拟机不和包括 Java 在内的任何语言绑定，它只与 class 文件这种特定的二进制文件格式关联。</p>
+<h1 id="class文件的结构">Class文件的结构</h1>
+<p>Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有添加任何分隔符。</p>
+<p>Class 文件格式采用一种类似于 C 语言结构体的伪结构来存储数据，这种伪结构只有两种数据类型：无符号数和表。无符号数属于基本的数据类型，以 u1、u2、u4、u8 分别代表 1 个字节、2 个字节、4 个字节、8 个字节的无符号数，可以用来描述数字、索引引用、数量值或者 UTF8 编码构成的字符串。</p>
+<p>表是由多个无符号数或其他表作为数据项构成的复合数据类型，所有表都习惯性地以 _info 结尾。表用于描述有层次关系的复合结构的数据，整个 Class 文件本质上就是一张表，它由以下数据项构成：</p>
+<p><img src="/postImg/image-20190829104509907.png" alt="image-20190829104509907"></p>
+<p><img src="/postImg/image-20190829113916895.png" alt="image-20190829113916895"></p>
+<h2 id="魔数和版本号">魔数和版本号</h2>
+<p>Class 文件的头 4 个字节称为魔数，其唯一作用是确定该文件是否是一个能被虚拟机接受的 Class 文件，其值固定为 0xCAFEBABE。</p>
+<p>紧接着魔数的 4 个字节是 Class 文件的版本号，第 5、6 字节是次版本号 minor version，第 7、8 字节是主版本号 major version。jdk7 的主版本号是 51。</p>
+<h2 id="常量池">常量池</h2>
+<p>紧接着主次版本号之后的是常量池，常量池可以认为是 Class 文件中的资源仓库，它是 Class 文件中与其他项目关联最多的数据类型。</p>
+<p>常量池的入库放置一个 u2 类型的数据，表示常量池容量计数值。与 Java 中语言习惯不同的是，这个容量计数从 1 而非从 0 开始。如果常量池容量为十六进制的 0x0016，即十进制的 22，那么表示常量池里有 21 项数据，索引值范围是 1 到 21。设计者将第 0 项常量空出来，是由特殊考虑的，方便在特定情况下表达“不引用任何一个常量池项目”的含义。Class 文件结构中，只有常量池的容量计数从 1 开始，其他都是从 0 开始。</p>
+<p>常量池中主要存放两类数据：字面量和符号引用。字面量比较接近于 Java 语言层面的常量概念，如文本字符串、声明为 final 类型的常量值等。而符号引用则属于编译原理方面的概念，包括以下三类常量：</p>
+<ol>
+<li>
+<p>类和接口的全限定名；</p>
+</li>
+<li>
+<p>字段的名称和描述符；</p>
+</li>
+<li>
+<p>方法的名称和描述符。</p>
+</li>
+</ol>
+<p>常量池中的每一项常量都是一个表，JDK1.7 一共支持 14 种常量类型：</p>
+<p><img src="/postImg/image-20190829114433102.png" alt="image-20190829114433102"></p>
+<p><strong>其中每一项常量的结构组成为：</strong></p>
+<p><img src="/postImg/image-20190829114726127.png" alt="image-20190829114726127"></p>
+<p><img src="/postImg/image-20190829114746273.png" alt="image-20190829114746273"></p>
+<h2 id="访问标志">访问标志</h2>
+<p>在常量池结束之后，紧接着的 2 个字节代表访问标志 access flags，用于识别一些类或接口级别的访问信息，比如：这个 Class 是类还是接口？是否 public？如果是类的话，是否被声明为 final？具体标志见下表：</p>
+<p><img src="/postImg/image-20190829114845381.png" alt="image-20190829114845381"></p>
+<h2 id="类索引-父类索引和接口索引集合">类索引、父类索引和接口索引集合</h2>
+<p>Class 文件中由这三项数据来确定这个类的继承关系。由于 Java 不允许多重继承，因此父类索引也只有一个，类索引和父类索引使用两个 u2 类型的索引值表示，各自执行一个类型为 CONSTANT_Class_info 的类描述符常量。对于接口索引集合，入口的第一项 u2 类型数据表示索引表的容量，也就是接口数量，其他 u2 类型数据同样指向类描述符常量。</p>
+<h2 id="字段表集合">字段表集合</h2>
+<h3 id="字段表结构">字段表结构</h3>
+<p>字段表 field_info 用于描述接口或类中声明的变量，包括类级变量和实例级变量，但不包括方法内部声明的局部变量。在 Java 中描述一个字段的信息有哪些呢？</p>
+<ol>
+<li>
+<p>字段的作用域：public、private、protected</p>
+</li>
+<li>
+<p>实例级变量还是类级变量：static</p>
+</li>
+<li>
+<p>可变性：final</p>
+</li>
+<li>
+<p>可见性：volatile</p>
+</li>
+<li>
+<p>可否序列化：transient</p>
+</li>
+<li>
+<p>字段数据类型</p>
+</li>
+<li>
+<p>字段名称</p>
+</li>
+</ol>
+<p>字段表结构如下图所示，第一项数据是 access_flags，与类中的访问标志类似。紧随其后的是两个索引值：name_index、descriptor_index，分别表示字段的简单名称以及字段和方法的描述符。</p>
+<p><img src="/postImg/image-20190829115602734.png" alt="image-20190829115602734"></p>
+<p><img src="/postImg/image-20190829143850626.png" alt="image-20190829143850626"></p>
+<h3 id="描述符">描述符</h3>
+<p>这里解释一下，什么是简单名称、描述符，以及前面提到的“全限定名”？全限定名和简单名称好理解，比如 com/apache/util/TestClass 是类的全限定名，就是把类全名里的 . 换成了 /，结尾加上分号 ; 用于分割多个连续的全限定名。简单名称是没有类型和参数修饰的方法或字段名称，比如 int m()，其简单名称就是 m。</p>
+<p>相对于全限定名和简单名称来说，方法和字段的描述符更复杂些，因为是包含的信息更多：字段类型、方法参数和返回值类型。基本数据类型以及 Void 类型都用一个大写字符标识，对象类型用 L 加对象的全限定名标识，对于数组每个维度使用一个 [ 来表示，二维数组就是 [[，一个整型数组 int[] 会被记录为 [I。</p>
+<p>当使用描述符来描述方法的时候，按照先参数列表后返回值的顺序表示，参数列表按照顺序放在 () 之内。比如 void inc()，描述符就是 ()V；java.lang.String toString(int v) 的描述符是 “(I)Ljava/lang/String;”。</p>
+<p><img src="/postImg/image-20190829115644190.png" alt="image-20190829115644190"></p>
+<h3 id="字段表访问标志">字段表访问标志</h3>
+<p><img src="/postImg/image-20190829143916704.png" alt="image-20190829143916704"></p>
+<h3 id="字段属性表集合">字段属性表集合</h3>
+<p>字段表最后是属性表集合，多数时候为空，如果自动是常量，则用来存放常量值信息，即ConstantValue类型的属性表。</p>
+<p>在定义field字段的过程中，我们有时候会很自然地对field字段直接赋值，如下所示：</p>
+<pre><code>public static final int MAX=100;
+public  int count=0;
+</code></pre>
+<p>对于虚拟机而言，上述的两个field字段赋值的时机是不同的：<br>
+1.对于非静态（即无static修饰）的field字段的赋值将会出现在实例构造方法<init>()中<br>
+2.对于静态的field字段，有两个选择：1、在静态构造方法<cinit>()中进行；2 、使用ConstantValue属性进行赋值</cinit></init></p>
+<blockquote>
+<p>Sun javac编译器对于静态field字段的初始化赋值策略<br>
+目前的Sun javac编译器的选择是：如果使用final和static同时修饰一个field字段，并且这个字段是基本类型或者String类型的，那么编译器在编译这个字段的时候，会在对应的field_info结构体中增加一个ConstantValue类型的结构体，在赋值的时候使用这个ConstantValue进行赋值；如果该field字段并没有被final修饰，或者不是基本类型或者String类型，那么将在类构造方法<cinit>()中赋值。</cinit></p>
+</blockquote>
+<p>对于上述的<strong>public static final init MAX=100;</strong>   javac编译器在编译此<strong>field</strong>字段构建<strong>field_info</strong>结构体时，除了访问标志、名称索引、描述符索引外，会增加一个<strong>ConstantValue</strong>类型的属性表。</p>
+<p><img src="/postImg/image-20190829144039832.png" alt="image-20190829144039832"></p>
+<h2 id="方法表集合">方法表集合</h2>
+<h3 id="方法表结构">方法表结构</h3>
+<p>class 文件中对方法的描述和对字段的描述格式一样，依次包括：访问标志、名称索引、描述符索引、属性表集合。方法里的代码位于属性表中 Code 属性里，属性表是 class 文件中最具扩展性的数据项。</p>
+<p><img src="/postImg/image-20190829120213962.png" alt="image-20190829120213962"></p>
+<p><img src="/postImg/image-20190829144838474.png" alt="image-20190829144838474"></p>
+<blockquote>
+<p>访问标志(access_flags)：</p>
+<blockquote>
+<p>method_info结构体最前面的两个字节表示的访问标志（access_flags），记录这这个方法的作用域、静态or非静态、可变性、是否可同步、是否本地方法、是否抽象等信息，实际上不止这些信息，我们后面会详细介绍访问标志这两个字节的每一位具体表示什么意思。</p>
+</blockquote>
+<p>名称索引(name_index)：</p>
+<blockquote>
+<p>紧跟在访问标志（access_flags）后面的两个字节称为名称索引，这两个字节中的值指向了常量池中的某一个常量池项，这个方法的名称以UTF-8格式的字符串存储在这个常量池项中。如public void methodName(),很显然，“methodName”则表示着这个方法的名称，那么在常量池中会有一个CONSTANT_Utf8_info格式的常量池项，里面存储着“methodName”字符串，而mehodName()方法的方法表中的名称索引则指向了这个常量池项。</p>
+</blockquote>
+<p>描述索引(descriptor_index)：</p>
+<blockquote>
+<p>描述索引表示的是这个方法的特征或者说是签名，一个方法会有若干个参数和返回值，而若干个参数的数据类型和返回值的数据类型构成了这个方法的描述，其基本格式为：     (参数数据类型描述列表)返回值数据类型   。我们将在后面继续讨论。</p>
+</blockquote>
+<p>属性表(attribute_info)集合：</p>
+<blockquote>
+<p>这个属性表集合非常重要，方法的实现被JVM编译成JVM的机器码指令，机器码指令就存放在一个Code类型的属性表中；如果方法声明要抛出异常，那么异常信息会在一个Exceptions类型的属性表中予以展现。Code类型的属性表可以说是非常复杂的内容，也是本文最难的地方。</p>
+</blockquote>
+</blockquote>
+<h3 id="方法访问标志">方法访问标志</h3>
+<p><img src="/postImg/image-20190829120325951.png" alt="image-20190829120325951"></p>
+<p><img src="/postImg/image-20190829145033211.png" alt="image-20190829145033211"></p>
+<h3 id="名称索引和描述符索引-一个方法的签名">名称索引和描述符索引----一个方法的签名</h3>
+<blockquote>
+<p>紧接着访问标志（access_flags）后面的两个字节，叫做名称索引(name_index)，这两个字节中的值是指向了常量池中某个常量池项的索引，该常量池项表示这这个方法名称的字符串。</p>
+<p>方法描述符索引(descrptor_index)是紧跟在名称索引后面的两个字节，这两个字节中的值跟名称索引中的值性质一样，都是指向了常量池中的某个常量池项。这两个字节中的指向的常量池项，是表示了方法描述符的字符串。</p>
+<p>所谓的方法描述符，实质上就是指用一个什么样的字符串来描述一个方法，方法描述符的组成如下图所示：</p>
+</blockquote>
+<p><img src="/postImg/image-20190829145340090.png" alt="image-20190829145340090"></p>
+<h3 id="方法属性表集合">方法属性表集合</h3>
+<p>属性表集合记录了某个方法的一些属性信息，这些信息包括：</p>
+<blockquote>
+<ul>
+<li>这个方法的代码实现，即<strong>方法的可执行的机器指令</strong></li>
+<li>这个方法声明的<strong>要抛出的异常信息</strong></li>
+<li>这个方法是否<strong>被@deprecated注解表示</strong></li>
+<li>这个方法是否是<strong>编译器自动生成的</strong></li>
+</ul>
+</blockquote>
+<p><img src="/postImg/image-20190829145613415.png" alt="image-20190829145613415"></p>
+<h2 id="属性表集合">属性表集合</h2>
+<p>属性表是一个很常见的数据项，在 class 文件、字段表、方法表里都可以携带自己的属性表，用于描述某些场景专有的信息。</p>
+<p>与 Class 文件中其他数据项目要求严格的顺序、长度和内容不同，属性表集合的限制稍微宽松些，不再要求各个属性表具有严格顺序。只要不与已有属性名重复，任何人实现的编译器都可以往属性表中写入自定义信息，Java 虚拟机运行时会忽略掉它不认识的属性。</p>
+<p>Java 虚拟机规范 (Java SE 7) 中定义了 21 种属性，属性表里包含三项数据：指向属性名常量的索引值、属性值长度、属性值。</p>
+<p>属性表结构如下图：</p>
+<p><img src="/postImg/image-20190829153004884.png" alt="image-20190829153004884"></p>
+<p><strong>虚拟机中预定义属性列表见下图：</strong></p>
+<p><img src="/postImg/page211image38473376.jpg" alt="page211image38473376.jpg"></p>
+<p><img src="/postImg/image-20190829153236346.png" alt="image-20190829153236346"></p>
+<h3 id="code属性">Code属性</h3>
+<p><strong>Code</strong>类型的<strong>属性表(attribute_info)<strong>可以说是</strong>class</strong>文件中最为重要的部分，因为它包含的是<strong>JVM</strong>可以运行的机器码指令，<strong>JVM</strong>能够运行这个类，就是从这个属性中取出机器码的。除了要执行的机器码，它还包含了一些其他信息，如下所示</p>
+<p><img src="/postImg/image-20190829152309692.png" alt="image-20190829152309692"></p>
+<p><img src="/postImg/image-20190829145846802.png" alt="image-20190829145846802"></p>
+<p><strong>Code属性表结构体解释</strong></p>
+<blockquote>
+<p>1.attribute_name_index,属性名称索引，占有2个字节，其内的值指向了常量池中的某一项，该项表示字符串“Code”;</p>
+<ol start="2">
+<li>attribute_length,属性长度，占有 4个字节，其内的值表示后面有多少个字节是属于此Code属性表的；</li>
+<li>max_stack,操作数栈深度的最大值，占有 2 个字节，在方法执行的任意时刻，操作数栈都不应该超过这个值，虚拟机的运行的时候，会根据这个值来设置该方法对应的栈帧(Stack Frame)中的操作数栈的深度；</li>
+<li>max_locals,最大局部变量数目，占有 2个字节，其内的值表示局部变量表所需要的存储空间大小；</li>
+<li>code_length,机器指令长度，占有 4 个字节，表示跟在其后的多少个字节表示的是机器指令；</li>
+<li>code,机器指令区域，该区域占有的字节数目由 code_length中的值决定。JVM最底层的要执行的机器指令就存储在这里；</li>
+<li>exception_table_length,显式异常表长度，占有2个字节，如果在方法代码中出现了try{} catch()形式的结构，该值不会为空，紧跟其后会跟着若干个exception_table结构体，以表示异常捕获情况；</li>
+<li>exception_table，显式异常表，占有8 个字节，start_pc,end_pc,handler_pc中的值都表示的是PC计数器中的指令地址。exception_table表示的意思是：如果字节码从第start_pc行到第end_pc行之间出现了catch_type所描述的异常类型，那么将跳转到handler_pc行继续处理。</li>
+<li>attribute_count,属性计数器，占有 2 个字节，表示Code属性表的其他属性的数目</li>
+<li>attribute_info,表示Code属性表具有的属性表，它主要分为两个类型的属性表：“LineNumberTable”类型和“LocalVariableTable”类型。<br>
+“LineNumberTable”类型的属性表记录着Java源码和机器指令之间的对应关系<br>
+“LocalVariableTable”类型的属性表记录着局部变量描述</li>
+</ol>
+</blockquote>
+<p><strong>Code属性表</strong>的组成部分：</p>
+<blockquote>
+<p><strong>机器指令----code：</strong></p>
+<blockquote>
+<p>目前的JVM使用一个字节表示机器操作码，即对JVM底层而言，它能表示的机器操作码不多于2的 8 次方，即 256个。class文件中的机器指令部分是class文件中最重要的部分，并且非常复杂，本文的重点不止介绍它，我将专门在一片博文中讨论它，敬请期待。</p>
+</blockquote>
+<p><strong>异常处理跳转信息—exception_table：</strong></p>
+<blockquote>
+<p>如果代码中出现了try{}catch{}块，那么try{}块内的机器指令的地址范围记录下来，并且记录对应的catch{}块中的起始机器指令地址，当运行时在try块中有异常抛出的话，JVM会将catch{}块对应懂得其实机器指令地址传递给PC寄存器，从而实现指令跳转；</p>
+</blockquote>
+<p><strong>Java源码行号和机器指令的对应关系—LineNumberTable属性表：</strong></p>
+<blockquote>
+<p>编译器在将java源码编译成class文件时，会将源码中的语句行号跟编译好的机器指令关联起来，这样的class文件加载到内存中并运行时，如果抛出异常，JVM可以根据这个对应关系，抛出异常信息，告诉我们我们的源码的多少行有问题，方便我们定位问题。这个信息不是运行时必不可少的信息，但是默认情况下，编译器会生成这一项信息，如果你项取消这一信息，你可以使用-g:none 或-g:lines来取消或者要求设置这一项信息。如果使用了-g:none来生成class文件，class文件中将不会有LineNumberTable属性表，造成的影响就是 将来如果代码报错，将无法定位错误信息报错的行，并且如果项调试代码，将不能在此类中打断点（因为没有指定行号。）</p>
+</blockquote>
+<p><strong>局部变量表描述信息----LocalVariableTable属性表：</strong></p>
+<blockquote>
+<p>局部变量表信息会记录栈帧局部变量表中的变量和java源码中定义的变量之间的关系，这个信息不是运行时必须的属性，默认情况下不会生成到class文件中。你可以根据javac指令的-g:none或者-g:vars选项来取消或者设置这一项信息。</p>
+<p>它有什么作用呢？  当我们使用IDE进行开发时，最喜欢的莫过于它们的代码提示功能了。如果在项目中引用到了第三方的jar包，而第三方的包中的class文件中有无LocalVariableTable属性表的区别如下所示：<br>
+<img src="/postImg/image-20190829150230692.png" alt="image-20190829150230692"></p>
+</blockquote>
+</blockquote>
+<h3 id="exceptions属性">Exceptions属性</h3>
+<p>有些方法在定义的时候，会声明该方法会抛出什么类型的异常，如下定义一个<strong>Interface</strong>接口，它声明了sayHello()方法，抛出Exception异常：</p>
+<p><img src="/postImg/image-20190829150716787.png" alt="image-20190829150716787"></p>
+<blockquote>
+<p>如上图所示，Exceptions类型的属性表(attribute_info)结构体由一下元素组成：</p>
+<ul>
+<li>属性名称索引(attribute_name_index)：占有 2个字节，其中的值指向了常量池中的表示&quot;Exceptions&quot;字符串的常量池项；</li>
+</ul>
+<ul>
+<li>属性长度(attribute_length)：它比较特殊，占有4个字节，它的值表示跟在其后面多少个字节表示异常信息；</li>
+</ul>
+<ul>
+<li>异常数量(number_of_exceptions)：占有2 个字节，它的值表示方法声明抛出了多少个异常，即表示跟在其后有多少个异常名称索引；</li>
+</ul>
+<ul>
+<li>异常名称索引(exceptions_index_table)：占有2个字节，它的值指向了常量池中的某一项，该项是一个CONSTANT_Class_info类型的项，表示这个异常的完全限定名称；</li>
+</ul>
+</blockquote>
+<h3 id="linenumbertable属性">LineNumberTable属性</h3>
+<p>该属性用于描述 Java 源码行号和字节码行号之间的对应关系，它并不是运行时必须属性，但默认会生成到 class 文件中。在 javac 中分别使用 -g:none 和 -g:lines 选项来取消或要求生成这项信息。如果没有 LineNumberTable 属性，对程序运行的影响就是，当抛出异常时堆栈中不会显示出错的行号，调试时也无法按照源码行来断点。</p>
+<p>LineNumberTable属性表是作为Code属性表的属性存在的</p>
+<p>LineNumberTable属性表结构如下图</p>
+<p><img src="/postImg/image-20190829152549024.png" alt="image-20190829152549024"></p>
+<blockquote>
+<p>属性表结构里主要有两个数据：长度字段 line_number_table_length、行号对照表 line_number_info，line_number_info 表包括了两个 u2 类型的数据项：start_pc、line_number，前者是字节码行号，后者是 Java 源码行号</p>
+</blockquote>
+<p>编译器在将java源码编译成class文件时，会将源码中的语句行号跟编译好的机器指令关联起来，这样的class文件加载到内存中并运行时，如果抛出异常，JVM可以根据这个对应关系，抛出异常信息，告诉我们我们的源码的多少行有问题，方便我们定位问题。这个信息不是运行时必不可少的信息，但是默认情况下，编译器会生成这一项信息，如果你项取消这一信息，你可以使用-g:none 或-g:lines来取消或者要求设置这一项信息。如果使用了-g:none来生成class文件，class文件中将不会有LineNumberTable属性表，造成的影响就是 将来如果代码报错，将无法定位错误信息报错的行，并且如果项调试代码，将不能在此类中打断点（因为没有指定行号。）</p>
+<h3 id="localvariabletable属性">LocalVariableTable属性</h3>
+<p>LocalVariableTable属性表结构如下图</p>
+<p><img src="/postImg/image-20190829152647255.png" alt="image-20190829152647255"></p>
+<p><strong>local_variable_info 描述了栈帧与源码中局部变量的关联，结构如下所示：</strong></p>
+<p><img src="/postImg/image-20190829153948627.png" alt="image-20190829153948627"></p>
+<blockquote>
+<p>start_pc 和 length 分别代表了局部变量生命周期开始的字节码偏移量及其作用范围的覆盖长度，两者结合起来就是该局部变量在字节码之中的作用域范围。</p>
+<p>name_index 和 descriptor_index 都是常量池中 CONSTANT_utf8_info 型常量的索引，分别代表了局部变量的名称以及描述符。index 是局部变量在栈帧局部变量表 slot 中的位置，当代表的数据类型为 64 位时，占用的 slot 为 index 和 index+1 两个。</p>
+<p>在 JDK1.5 引入泛型后，多了一个姐妹属性 LocalVariableTypeTable，和 LocalVariableTable 很像，仅仅是把字段描述符 descriptor_index 换成了特征签名 signature。对于非泛型类型来说，描述符和特征签名是一致的，由于描述符中泛型的参数类型被擦除，描述符不能准确描述泛型类型了，因此出现了 LocalVariableTypeTable。</p>
+</blockquote>
+<p>局部变量表信息会记录栈帧局部变量表中的变量和java源码中定义的变量之间的关系，这个信息不是运行时必须的属性，默认情况下不会生成到class文件中。你可以根据javac指令的-g:none或者-g:vars选项来取消或者设置这一项信息。</p>
+<p>它有什么作用呢？  当我们使用IDE进行开发时，最喜欢的莫过于它们的代码提示功能了。如果在项目中引用到了第三方的jar包，而第三方的包中的class文件中有无LocalVariableTable属性表的区别如下所示：<br>
+<img src="/postImg/image-20190829150230692.png" alt="image-20190829150230692"></p>
+<h3 id="constantvalue属性">ConstantValue属性</h3>
+<p>ConstantValue 属性的作用是通知虚拟机自动为静态变量赋值，只有 static 关键字修饰的类变量才可以使用这些属性。非 static 变量是在实例构造器方法中进行赋值的，而类变量既可以在类构造器中赋值，也可以使用 ConstantValue 属性赋值。目前 sun javac 编译器会把 final static 修饰的基本类型或 String 变量放在 ConstantValue 属性里，其他使用类构造器赋值，不过 Java 虚拟机规范只是规定了 ConstantValue 属性只能存放 static 变量，并不要求是 final 的。</p>
+<p>ConstantValue 属性结构如下图所示：</p>
+<p><img src="/postImg/image-20190829152825174.png" alt="image-20190829152825174"></p>
+<h1 id="字节码指令">字节码指令</h1>
+<h2 id="字节码指令简介">字节码指令简介</h2>
+<p>Java 虚拟机的指令由一个字节长度的代表某种特定含义的数字（称作操作码，OpsCode）以及紧随其后的零到多个参数构成。由于 Java 指令是面向操作数栈，而非寄存器的架构，所以大多数指令都不包含操作数，只有一个操作码。</p>
+<h2 id="字节码与数据类型">字节码与数据类型</h2>
+<p>在 Java 虚拟机指令集中，大多数指令都包含了操作对应的数据类型信息。例如，iload 是从局部变量表中加载 int 数据到操作数栈，而 fload 加载的是 float 类型的数据。对于大多数与数据类型相关的指令，它们的操作码助记符里都有特殊的字符来表明专门为哪种数据类型服务：i 代表 int 类型数据，l 代表 long，s 代表 short，b 代表 byte，c 代表 char，f 代表 float，d 代表 double，a 代表 reference。</p>
+<p>由于 Java 虚拟机的操作码长度只有一个字节，所以包含了数据类型的操作码就为指令设计带来了巨大的压力：如果每种与数据类型相关的指令，都支持所有数据类型的话，那么指令数量就会超出一个字节所能表示的范围了。</p>
+<p>下表列出了 Java 虚拟机所支持的指令集与数据类型之间的关系，从中可以看出大部分指令都没有支持 byte、char、short，甚至没有指令支持 boolean。编译器会在编译时，将 byte、short 类型的数据带符号扩展为 int 类型数据，将 boolean、char 类型数据零位扩展至 int 类型数据。因此，大多数对于 byte、short、boolean、char 类型数据的操作，实际上都是使用 int 类型作为运算类型。</p>
+<p><img src="/postImg/image-20190830104042194.png" alt="image-20190830104042194"></p>
+<h2 id="指令分类">指令分类</h2>
+<p>Java 虚拟机中主要有以下几种指令：</p>
+<ol>
+<li>加载和存储指令：用于将数据在栈帧中的局部变量表和操作数栈直接来回传输。包括以下几类：</li>
+</ol>
+<p>​	- 将局部变量加载到操作数栈：iload、iload_n、lload、lload_n、fload、fload_n、dload、dload_n、aload、aload_n</p>
+<p>​	- 将数值从操作数栈存储到局部变量表：istore、istore_n、lstore、lstore_n、fstore、fstore_n、dstore、dstore_n、astore、astore_n</p>
+<p>​	- 将一个常量加载到操作数栈的指令包括有 bipush、sipush、ldc、ldc_w、ldc2_w、aconst_null、iconst_m1、iconst_i、lconst_l、fconst_f、dconst_d</p>
+<p>​	- 扩充局部变量表的访问索引的指令：wide</p>
+<ol start="2">
+<li>运算指令</li>
+</ol>
+<p>​	- 加法指令：iadd、ladd、fadd、dadd</p>
+<p>​	- 减法指令：isub、lsub、fsub、dsub</p>
+<p>​	- 乘法指令：imul、lmul、fmul、dmul</p>
+<p>​	- 除法指令：idiv、ldiv、fdiv、ddiv</p>
+<p>​	- 求余指令：irem、lrem、frem、drem</p>
+<p>​	- 取反指令：ineg、lneg、fneg、dneg</p>
+<p>​	- 位移指令：ishl、ishr、iushr、lshl、lshr、lushr</p>
+<p>​	- 按位或指令：ior、lor</p>
+<p>​	- 按位与指令：iand、land</p>
+<p>​	- 按位异或指令：ixor、lxor</p>
+<p>​	- 局部变量自增指令：iinc</p>
+<p>​	- 比较指令：dcmpg、dcmpl、fcmpg、fcmpl、lcmp</p>
+<ol start="3">
+<li>类型转换指令</li>
+</ol>
+<p>​	- Java虚拟机对于宽化类型转换直接支持，并不需要指令执行。</p>
+<p>​	- 窄化类型转换指令包括：i2b、i2c、i2s、l2i、f2i、f2l、d2i、d2l和d2f。窄化类型转换很可能会造成精度丢失。</p>
+<ol start="4">
+<li>对象创建与操作指令</li>
+</ol>
+<p>​	- 创建类实例的指令：new</p>
+<p>​	- 创建数组的指令：newarray，anewarray，multianewarray</p>
+<p>​	- 访问类字段（static字段，或者称为类变量）和实例字段（非static字段，或者成为实例变量）的指令：getfield、putfield、getstatic、putstatic</p>
+<p>​	- 把一个数组元素加载到操作数栈的指令：baload、caload、saload、iaload、laload、faload、daload、aaload</p>
+<p>​	- 将一个操作数栈的值储存到数组元素中的指令：bastore、castore、sastore、iastore、fastore、dastore、aastore</p>
+<p>​	- 取数组长度的指令：arraylength</p>
+<p>​	- 检查类实例类型的指令：instanceof、checkcast</p>
+<ol start="5">
+<li>控制转移指令</li>
+</ol>
+<p>​	- 条件分支：ifeq、iflt、ifle、ifne、ifgt、ifge、ifnull、ifnonnull、if_icmpeq、if_icmpne、if_icmplt, if_icmpgt、if_icmple、if_icmpge、if_acmpeq和if_acmpne</p>
+<p>​	- 复合条件分支：tableswitch、lookupswitch</p>
+<p>​	- 无条件分支：goto、goto_w、jsr、jsr_w、ret</p>
+<ol start="6">
+<li>操作数栈管理指令</li>
+</ol>
+<p>​	- 将栈顶元素出栈：pop、pop2</p>
+<p>​	- 赋值栈顶元素再重新压入栈顶：dup、dup2、dup_x1、dup2_x1、dup_x2、dup2_x2</p>
+<p>​	- 栈顶两个元素互换：swap</p>
+<ol start="7">
+<li>方法调用和返回指令</li>
+</ol>
+<p>​	- invokevirtual指令用于调用对象的实例方法，根据对象的实际类型进行分派（虚方法分派），这也是Java语言中最常见的方法分派方式。</p>
+<p>​	- invokeinterface指令用于调用接口方法，它会在运行时搜索一个实现了这个接口方法的对象，找出适合的方法进行调用。</p>
+<p>​	- invokespecial指令用于调用一些需要特殊处理的实例方法，包括实例初始化方法、私有方法和父类方法。</p>
+<p>​	- invokestatic指令用于调用类方法（static方法）</p>
+<p>​	- invokedynamic指令用于调用以绑定了invokedynamic指令的调用点对象（call site object）作为目标的方法。调用点对象是一个特殊的语法结构，当一条invokedynamic指令首次被Java虚拟机执行前，Java虚拟机将会执行一个引导方法（bootstrap method）并以这个方法的运行结果作为调用点对象。因此，每条invokedynamic指令都有独一无二的链接状态，这是它与其他方法调用指令的一个差异。</p>
+<p>​	- 方法返回指令则是根据返回值的类型区分的，包括：ireturn、lreturn、freturn、dreturn、areturn、return（返回 void）。</p>
+<ol start="8">
+<li>
+<p>显示抛出异常指令 athrow</p>
+</li>
+<li>
+<p>同步指令：monitorenter 和 monitorexit。</p>
+</li>
+</ol>
+<h2 id="公有设计与私有实现">公有设计与私有实现</h2>
+<p>Java 虚拟机规范描绘了 Java 虚拟机应有的共同程序存储格式：Class 文件格式以及字节码 指令集。这些内容与硬件、操作系统以及具体的虚拟机实现之间是完全独立的，Java 虚拟机实现必须能够读取 Class 文件并精确实现包含在其中的 Java 虚拟机代码的语义。</p>
+<p>一个优秀的 Java 虚拟机实现，在满足虚拟机规范的约束下，对具体实现做出修改和优化也是可行的，并且虚拟机规范明确鼓励实现者这样做。虚拟机实现者可以利用这种伸缩性，来让 Java 虚拟机获得更高的性能、更低的内存消耗或更好的可移植性，选择哪种特性取决于 Java 虚拟机实现的目标和关注点是什么。虚拟机实现方式主要有以下两种：</p>
+<ol>
+<li>
+<p>将输入的 Java 虚拟机代码在加载或执行时翻译成另一种虚拟机的指令集。</p>
+</li>
+<li>
+<p>将输入的 Java 虚拟机代码翻译成宿主机 CPU 的本地指令集（JIT 代码生成技术）。</p>
+</li>
+</ol>
+<p><strong>参考资料</strong></p>
+<p><a href="https://blog.csdn.net/luanlouis/article/details/40301985" target="_blank" rel="noopener">https://blog.csdn.net/luanlouis/article/details/40301985</a></p>
+
                 
 
                 <hr>
                 <!-- Pager -->
                 <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/jvm/understanding-the-jvm/【07】虚拟机类加载机制/" data-toggle="tooltip" data-placement="top" title="【深入理解Java虚拟机】【07】虚拟机类加载机制">&larr; Previous Post</a>
+                        </li>
                     
                     
                         <li class="next">
@@ -278,7 +599,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="nav">none</ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#无关性的基石"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x65E0;&#x5173;&#x6027;&#x7684;&#x57FA;&#x77F3;</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#class文件的结构"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Class&#x6587;&#x4EF6;&#x7684;&#x7ED3;&#x6784;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#魔数和版本号"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x9B54;&#x6570;&#x548C;&#x7248;&#x672C;&#x53F7;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#常量池"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x5E38;&#x91CF;&#x6C60;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#访问标志"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x8BBF;&#x95EE;&#x6807;&#x5FD7;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#类索引-父类索引和接口索引集合"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x7C7B;&#x7D22;&#x5F15;&#x3001;&#x7236;&#x7C7B;&#x7D22;&#x5F15;&#x548C;&#x63A5;&#x53E3;&#x7D22;&#x5F15;&#x96C6;&#x5408;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#字段表集合"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x5B57;&#x6BB5;&#x8868;&#x96C6;&#x5408;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#字段表结构"><span class="toc-nav-number">2.5.1.</span> <span class="toc-nav-text">&#x5B57;&#x6BB5;&#x8868;&#x7ED3;&#x6784;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#描述符"><span class="toc-nav-number">2.5.2.</span> <span class="toc-nav-text">&#x63CF;&#x8FF0;&#x7B26;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#字段表访问标志"><span class="toc-nav-number">2.5.3.</span> <span class="toc-nav-text">&#x5B57;&#x6BB5;&#x8868;&#x8BBF;&#x95EE;&#x6807;&#x5FD7;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#字段属性表集合"><span class="toc-nav-number">2.5.4.</span> <span class="toc-nav-text">&#x5B57;&#x6BB5;&#x5C5E;&#x6027;&#x8868;&#x96C6;&#x5408;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#方法表集合"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">&#x65B9;&#x6CD5;&#x8868;&#x96C6;&#x5408;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#方法表结构"><span class="toc-nav-number">2.6.1.</span> <span class="toc-nav-text">&#x65B9;&#x6CD5;&#x8868;&#x7ED3;&#x6784;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#方法访问标志"><span class="toc-nav-number">2.6.2.</span> <span class="toc-nav-text">&#x65B9;&#x6CD5;&#x8BBF;&#x95EE;&#x6807;&#x5FD7;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#名称索引和描述符索引-一个方法的签名"><span class="toc-nav-number">2.6.3.</span> <span class="toc-nav-text">&#x540D;&#x79F0;&#x7D22;&#x5F15;&#x548C;&#x63CF;&#x8FF0;&#x7B26;&#x7D22;&#x5F15;----&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x7684;&#x7B7E;&#x540D;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#方法属性表集合"><span class="toc-nav-number">2.6.4.</span> <span class="toc-nav-text">&#x65B9;&#x6CD5;&#x5C5E;&#x6027;&#x8868;&#x96C6;&#x5408;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#属性表集合"><span class="toc-nav-number">2.7.</span> <span class="toc-nav-text">&#x5C5E;&#x6027;&#x8868;&#x96C6;&#x5408;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#code属性"><span class="toc-nav-number">2.7.1.</span> <span class="toc-nav-text">Code&#x5C5E;&#x6027;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#exceptions属性"><span class="toc-nav-number">2.7.2.</span> <span class="toc-nav-text">Exceptions&#x5C5E;&#x6027;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#linenumbertable属性"><span class="toc-nav-number">2.7.3.</span> <span class="toc-nav-text">LineNumberTable&#x5C5E;&#x6027;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#localvariabletable属性"><span class="toc-nav-number">2.7.4.</span> <span class="toc-nav-text">LocalVariableTable&#x5C5E;&#x6027;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#constantvalue属性"><span class="toc-nav-number">2.7.5.</span> <span class="toc-nav-text">ConstantValue&#x5C5E;&#x6027;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#字节码指令"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x5B57;&#x8282;&#x7801;&#x6307;&#x4EE4;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#字节码指令简介"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x5B57;&#x8282;&#x7801;&#x6307;&#x4EE4;&#x7B80;&#x4ECB;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#字节码与数据类型"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">&#x5B57;&#x8282;&#x7801;&#x4E0E;&#x6570;&#x636E;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#指令分类"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">&#x6307;&#x4EE4;&#x5206;&#x7C7B;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#公有设计与私有实现"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text">&#x516C;&#x6709;&#x8BBE;&#x8BA1;&#x4E0E;&#x79C1;&#x6709;&#x5B9E;&#x73B0;</span></a></li></ol></li></ol>
         
         </div>
       </aside>

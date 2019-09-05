@@ -7,8 +7,48 @@
     </url>
 
     <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9007%E3%80%91%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/</loc>
+        <lastmod>2019-09-05T11:40:59.281Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9006%E3%80%91%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/</loc>
+        <lastmod>2019-09-04T07:08:37.654Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9002%E3%80%91java%20%E5%86%85%E5%AD%98/</loc>
+        <lastmod>2019-08-30T08:30:48.835Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://charliewong001.github.io/article/jvm/jvm%E7%96%91%E9%97%AE%E6%94%B6%E9%9B%86/</loc>
-        <lastmod>2019-08-28T07:43:23.010Z</lastmod>
+        <lastmod>2019-08-30T02:36:57.518Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9004%E3%80%91jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7/</loc>
+        <lastmod>2019-08-28T08:27:30.474Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://charliewong001.github.io/article/algorithm/%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/</loc>
+        <lastmod>2019-08-28T08:22:20.755Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -39,14 +79,6 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9006%E3%80%91%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/</loc>
-        <lastmod>2019-08-28T07:43:03.553Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9003%E3%80%91%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86&%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/</loc>
         <lastmod>2019-08-28T07:42:55.435Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -55,24 +87,8 @@
     </url>
 
     <url>
-        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9002%E3%80%91java%20%E5%86%85%E5%AD%98/</loc>
-        <lastmod>2019-08-28T07:42:51.522Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9001%E3%80%91%E8%B5%B0%E8%BF%9B%20java/</loc>
         <lastmod>2019-08-28T07:42:47.706Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/article/jvm/understanding-the-jvm/%E3%80%9004%E3%80%91jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7/</loc>
-        <lastmod>2019-08-28T07:42:40.995Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -193,14 +209,6 @@
     <url>
         <loc>http://charliewong001.github.io/article/algorithm/%E5%A1%AB%E5%85%85%E6%96%B9%E5%BC%8F/</loc>
         <lastmod>2019-07-08T09:16:16.336Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://charliewong001.github.io/article/algorithm/%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/</loc>
-        <lastmod>2019-07-08T09:16:14.440Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

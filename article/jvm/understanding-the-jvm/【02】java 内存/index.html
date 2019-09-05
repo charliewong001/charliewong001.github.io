@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -243,10 +243,11 @@ JVM的多线程是通过线程轮流切换并分配处理器来实现的，对�
 </ul>
 <p><font color="EF0023">Q：如果是新启动的一个线程，那么不会因为线程异步问题，无法控制执行顺序吗？</font></p>
 <table><tr><td bgcolor="#F6FFEE">A：当前线程应当会被阻塞，直到另外一个线程执行结束。例如：通过死循环来控制阻塞（当然死循环效率太低，这里只是一个例子）</td></tr></table>
-### 1.2.虚拟机栈
+<h3 id="12虚拟机栈">1.2.虚拟机栈</h3>
 <ul>
 <li>
 <p><strong>什么是虚拟机栈</strong></p>
+<p>虚拟机栈是一个后入先出（LIFO）栈</p>
 <p>线程私有，每个线程都有一个虚拟机栈，生命周期与线程相同</p>
 <p>虚拟机栈的栈元素是栈帧，一个方法开始被调用，这个方法的栈帧入虚拟机栈，这个方法执行完毕返回时，其栈帧出虚拟机栈，因此，虚拟机栈中栈帧的入栈顺序就是方法调用顺序</p>
 </li>
@@ -273,6 +274,42 @@ JVM的多线程是通过线程轮流切换并分配处理器来实现的，对�
 </ul>
 <h3 id="13栈帧">1.3.栈帧</h3>
 <p><img src="/postImg/SouthEast.jpeg" alt="img"></p>
+<p>一个线程中，当线程调用某个方法时，JVM会相应的创建一个栈帧（Stack Frame），放入虚拟机栈中，用来表示某个方法的调用。</p>
+<p>栈帧是用来存储数据，和存储部分过程结果的数据结构，同时也用来处理动态链接（Dynamic linking）、方法返回值、异常分派（Dispatch Exception）。</p>
+<p>线程对（某个对象的）方法的调用，就对应着一个栈帧的入栈、出栈（虚拟机栈）的过程。线程在运行过程中，只有一个栈帧是处于活跃状态，称为当前活动栈帧，当前活动栈帧，始终处于虚拟机栈的栈顶，当前活动栈帧对应的方法，也是当前线程正在执行的方法。</p>
+<ul>
+<li>
+<p>局部变量表</p>
+<blockquote>
+<p>局部变量表存储的是一个方法中定义的局部变量。局部变量表的数量在编译期就已经确定了，存储到了方法的Code属性中。</p>
+</blockquote>
+</li>
+<li>
+<p>操作数栈</p>
+<blockquote>
+<p>JVM底层字节码指令集是基于栈类型的，所有的操作码都是对操作数栈上的数据进行的操作。对每一个方法调用，JVM都会创建一个操作数栈，供计算使用。栈的深度，在编译期就已经确定了，其栈深度存储在方法的Code属性中。</p>
+</blockquote>
+</li>
+<li>
+<p>动态链接</p>
+<blockquote>
+<p>没一个栈帧内部都存储着一个指向运行时常量池的引用，来支持当前方法的代码实现动态链接</p>
+<p>动态链接指向的是，当前执行方法的指令信息，即class文件中方法表中的Code属性信息。</p>
+</blockquote>
+</li>
+<li>
+<p>方法出口（返回地址）</p>
+<blockquote>
+<ul>
+<li>若方法正常返回，当前栈帧承担着恢复调用者状态的责任。</li>
+</ul>
+<p>其状态包括：调用者的局部变量表、操作数栈、被正确增加过来表示执行了该方法调用指令的程序计数器等。使得调用者的代码，能在被调用的方法返回、并且返回值被推入调用者的栈帧的操作数栈后，能够继续正确的执行。</p>
+<ul>
+<li>若方法执行过程中，某些指令导致了JVM抛出异常，且方法内部并没有对异常进行捕获处理，方法异常调用完成后，一定不会有方法返回值返回给他的调用者。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
 <h3 id="14本地方法栈">1.4.本地方法栈</h3>
 <p>本地方法栈，为虚拟机使用到的 native 方法服务。在虚拟机规范中对本地方法栈中方法是用的语言、使用方式与数据结构并没有强制规定，因此具体的虚拟机可以自由实现它。甚至有的虚拟机(譬如 Sun HotSpot 虚拟机)直接就把本地方发展和虚拟机栈合二为一。</p>
 <h3 id="15java-堆">1.5.Java 堆</h3>
@@ -311,6 +348,7 @@ JVM的多线程是通过线程轮流切换并分配处理器来实现的，对�
 <p>当方法区无法满足内存分配的需求时，会抛出 OutofMemoryError 异常。</p>
 </li>
 </ul>
+<p><img src="/postImg/20141013142924359.png" alt="img"></p>
 <h3 id="17运行时常量池">1.7.运行时常量池</h3>
 <ul>
 <li>
@@ -464,6 +502,8 @@ JVM的多线程是通过线程轮流切换并分配处理器来实现的，对�
 <p>进程内存减去 Xmx (若 java8 以下的虚拟机还需要减去 MaxPermSize)，程序计数器消耗内存很小可以忽略</p>
 <p>剩下的内存由虚拟机栈和本地方法栈瓜分。</p>
 <p><strong><font color="red">所以每个线程分配到的栈容量越大，可以建立的线程数量就越小。</font></strong></p>
+<p><strong>参考资料</strong></p>
+<p><a href="https://blog.csdn.net/luanlouis/article/details/40043991" target="_blank" rel="noopener">https://blog.csdn.net/luanlouis/article/details/40043991</a></p>
 
                 
 
@@ -533,7 +573,7 @@ JVM的多线程是通过线程轮流切换并分配处理器来实现的，对�
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-运行时数据区域"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1. &#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#11程序计数器"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1.1.&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#13栈帧"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">1.3.&#x6808;&#x5E27;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#14本地方法栈"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">1.4.&#x672C;&#x5730;&#x65B9;&#x6CD5;&#x6808;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#15java-堆"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">1.5.Java &#x5806;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#16方法区"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">1.6.&#x65B9;&#x6CD5;&#x533A;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#17运行时常量池"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">1.7.&#x8FD0;&#x884C;&#x65F6;&#x5E38;&#x91CF;&#x6C60;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#18直接内存"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">1.8.&#x76F4;&#x63A5;&#x5185;&#x5B58;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2虚拟机中的对象"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x865A;&#x62DF;&#x673A;&#x4E2D;&#x7684;&#x5BF9;&#x8C61;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#21对象创建过程"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">2.1.&#x5BF9;&#x8C61;&#x521B;&#x5EFA;&#x8FC7;&#x7A0B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#22对象内存布局"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">2.2.&#x5BF9;&#x8C61;&#x5185;&#x5B58;&#x5E03;&#x5C40;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#221对象头"><span class="toc-nav-number">2.2.1.</span> <span class="toc-nav-text">2.2.1.&#x5BF9;&#x8C61;&#x5934;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#222-32位虚拟机mark-word"><span class="toc-nav-number">2.2.2.</span> <span class="toc-nav-text">2.2.2. 32&#x4F4D;&#x865A;&#x62DF;&#x673A;Mark Word</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#223-64位虚拟机mark-word"><span class="toc-nav-number">2.2.3.</span> <span class="toc-nav-text">2.2.3. 64&#x4F4D;&#x865A;&#x62DF;&#x673A;Mark Word</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#224-mark-word各部分含义"><span class="toc-nav-number">2.2.4.</span> <span class="toc-nav-text">2.2.4. Mark Word&#x5404;&#x90E8;&#x5206;&#x542B;&#x4E49;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#222实例数据"><span class="toc-nav-number">2.2.5.</span> <span class="toc-nav-text">2.2.2.&#x5B9E;&#x4F8B;&#x6570;&#x636E;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#223对齐填充"><span class="toc-nav-number">2.2.6.</span> <span class="toc-nav-text">2.2.3.&#x5BF9;&#x9F50;&#x586B;&#x5145;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#23对象访问定位"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">2.3.&#x5BF9;&#x8C61;&#x8BBF;&#x95EE;&#x5B9A;&#x4F4D;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3虚拟机栈与其他内存的关系"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x865A;&#x62DF;&#x673A;&#x6808;&#x4E0E;&#x5176;&#x4ED6;&#x5185;&#x5B58;&#x7684;&#x5173;&#x7CFB;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-运行时数据区域"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1. &#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#11程序计数器"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1.1.&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#12虚拟机栈"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">1.2.&#x865A;&#x62DF;&#x673A;&#x6808;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#13栈帧"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">1.3.&#x6808;&#x5E27;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#14本地方法栈"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">1.4.&#x672C;&#x5730;&#x65B9;&#x6CD5;&#x6808;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#15java-堆"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">1.5.Java &#x5806;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#16方法区"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">1.6.&#x65B9;&#x6CD5;&#x533A;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#17运行时常量池"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">1.7.&#x8FD0;&#x884C;&#x65F6;&#x5E38;&#x91CF;&#x6C60;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#18直接内存"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text">1.8.&#x76F4;&#x63A5;&#x5185;&#x5B58;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2虚拟机中的对象"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x865A;&#x62DF;&#x673A;&#x4E2D;&#x7684;&#x5BF9;&#x8C61;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#21对象创建过程"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">2.1.&#x5BF9;&#x8C61;&#x521B;&#x5EFA;&#x8FC7;&#x7A0B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#22对象内存布局"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">2.2.&#x5BF9;&#x8C61;&#x5185;&#x5B58;&#x5E03;&#x5C40;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#221对象头"><span class="toc-nav-number">2.2.1.</span> <span class="toc-nav-text">2.2.1.&#x5BF9;&#x8C61;&#x5934;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#222-32位虚拟机mark-word"><span class="toc-nav-number">2.2.2.</span> <span class="toc-nav-text">2.2.2. 32&#x4F4D;&#x865A;&#x62DF;&#x673A;Mark Word</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#223-64位虚拟机mark-word"><span class="toc-nav-number">2.2.3.</span> <span class="toc-nav-text">2.2.3. 64&#x4F4D;&#x865A;&#x62DF;&#x673A;Mark Word</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#224-mark-word各部分含义"><span class="toc-nav-number">2.2.4.</span> <span class="toc-nav-text">2.2.4. Mark Word&#x5404;&#x90E8;&#x5206;&#x542B;&#x4E49;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#222实例数据"><span class="toc-nav-number">2.2.5.</span> <span class="toc-nav-text">2.2.2.&#x5B9E;&#x4F8B;&#x6570;&#x636E;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#223对齐填充"><span class="toc-nav-number">2.2.6.</span> <span class="toc-nav-text">2.2.3.&#x5BF9;&#x9F50;&#x586B;&#x5145;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#23对象访问定位"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">2.3.&#x5BF9;&#x8C61;&#x8BBF;&#x95EE;&#x5B9A;&#x4F4D;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3虚拟机栈与其他内存的关系"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x865A;&#x62DF;&#x673A;&#x6808;&#x4E0E;&#x5176;&#x4ED6;&#x5185;&#x5B58;&#x7684;&#x5173;&#x7CFB;</span></a></li></ol>
         
         </div>
       </aside>

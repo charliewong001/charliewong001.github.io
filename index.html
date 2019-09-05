@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,6 +211,38 @@
 
 <div class="post-preview">
 
+    <a href="/article/jvm/understanding-the-jvm/【07】虚拟机类加载机制/">
+        <h2 class="post-title">
+            【深入理解Java虚拟机】【07】虚拟机类加载机制
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            [TOC]
+概述
+在Class文件中描述的各种信息，最终都需要加载到虚拟机中之后才能运行和使用。
+虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是虚拟机的类加载机制。
+与那些在编译时需要进行连接工作的语言不同，在Java语言里面，类型的加载、连接和初始化过程都是在程序运行期间完成的，这种策略虽然会令类加载时......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-30
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#JVM" title="JVM">JVM</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/">
         <h2 class="post-title">
             【深入理解Java虚拟机】【06】类文件结构
@@ -219,13 +251,16 @@
             
         </h3>
         <div class="post-content-preview">
-            ...
+            [TOC]
+无关性的基石
+代码编译的结果从本地机器码编程字节码，是存储格式发展的一小步，却是编程语言发展的一大步。Java 在诞生之初，曾经有一个著名的口号“一次编译，到处运行”，这句话充分表达了软件开发人员对冲破平台界限的渴求。
+各种不同平台的虚拟机都统一使用的存储格式 —— 字节码，是构成平台无关性的基石。虚拟机的另外一种特性是语言无关性，目前已经出现了一大批在 Java 虚拟机之上运行......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Charlie on
-            2019-08-22
+            2019-08-29
         </p>
         <div class="tags">
             
@@ -446,8 +481,12 @@ class的访问标志（access_flag），位置在常量池之后，长度为2字
 如何查看一个对象的对象头信息
 
 
+什么样的数据才会进入常量池
 
-...
+
+istore 将值从操作数栈存储到局部变量表：怎么知道存储到哪个局部变量？
+
+istore 后面会跟一个操作数，此操......
         </div>
     </a>
     
@@ -550,72 +589,6 @@ ASCII是美国信息交换标准代码，是现在通用的单字节编码系统
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/encoding/ASCII码对照表/">
-        <h2 class="post-title">
-            ASCII码对照表
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-
-
-Bin(二进制)
-Oct(八进制)
-Dec(十进制)
-Hex(十六进制)
-缩写/字符
-解释
-
-
-
-
-0000 0000
-00
-0
-0x00
-NUL(null)
-空字符
-
-
-0000 0001
-01
-1
-0x01
-SOH(start of headline)
-标题开始
-
-
-0000 0010
-02
-2
-0x02
-STX (start of text)
-正文开始
-
-
-0000 0011
-0......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-07-11
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#编码" title="编码">编码</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -669,15 +642,15 @@ STX (start of text)
             
         
             
+            <a href="/tags/#JVM" title="JVM" rel="10">JVM</a>
+            
+        
+            
             <a href="/tags/#hexo" title="hexo" rel="1">hexo</a>
             
         
             
             <a href="/tags/#java" title="java" rel="1">java</a>
-            
-        
-            
-            <a href="/tags/#JVM" title="JVM" rel="9">JVM</a>
             
         
             
@@ -761,6 +734,10 @@ STX (start of text)
     <ul>
       
         <li>
+          <a href="/article/jvm/understanding-the-jvm/【07】虚拟机类加载机制/">【深入理解Java虚拟机】【07】虚拟机类加载机制</a>
+        </li>
+      
+        <li>
           <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/">【深入理解Java虚拟机】【06】类文件结构</a>
         </li>
       
@@ -776,10 +753,6 @@ STX (start of text)
           <a href="/article/reading/书单/">书单</a>
         </li>
       
-        <li>
-          <a href="/article/encoding/ASN.1 DER BER CER PEM X509都是什么/">ASN.1 DER BER CER PEM X509都是什么</a>
-        </li>
-      
     </ul>
   </div>
 
@@ -792,7 +765,7 @@ STX (start of text)
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>
