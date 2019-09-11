@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          【深入理解Java虚拟机】【08】虚拟机字节码执行引擎 - Charlie | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/understanding-the-jvm/【08】虚拟机字节码执行引擎/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/article.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#JVM" title="JVM">JVM</a>
+                            
+                        </div>
+                        <h1>【深入理解Java虚拟机】【08】虚拟机字节码执行引擎</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Charlie on
+                            2019-09-06
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Charlie</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<!--
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>[TOC]</p>
+<h1 id="概述">概述</h1>
+<p>执行引擎是 Java 虚拟机最核心的组成部分之一。虚拟机是相对于物理机的概念，物理机的执行引擎是直接建立在硬件、处理器、指令集和操作系统层面上的，而虚拟机的执行引擎是由自己实现的，因此可以执行指定指令集，而且能够执行那些不被硬件直接支持的指令集格式。</p>
+<p>在 Java 虚拟机规范中制定了虚拟机字节码执行引擎的概念模型，这个概念模型成为各种虚拟机执行引擎的统一外观：输入的是字节码，处理过程是字节码解析的等效过程，输出的是执行结果。这里主要从概念模型的角度讲解虚拟机的方法调用和字节码执行。</p>
+<ul>
+<li>
+<p>解释执行</p>
+<blockquote>
+<p>通过解释器执行</p>
+</blockquote>
+</li>
+<li>
+<p>编译执行</p>
+<blockquote>
+<p>通过即时编译器产生本地代码 执行</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="运行时栈帧结构">运行时栈帧结构</h1>
+<p><img src="/postImg/SouthEast.jpeg" alt="img"></p>
+<p>一个线程中，当线程调用某个方法时，JVM会相应的创建一个栈帧（Stack Frame），放入虚拟机栈中，用来表示某个方法的调用。</p>
+<p>栈帧是用来存储数据，和存储部分过程结果的数据结构，同时也用来处理动态链接（Dynamic linking）、方法返回值、异常分派（Dispatch Exception）。</p>
+<p>每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附 加信息。在编译程序代码的时候，栈帧中需要多大的局部变量表，多深的操作数栈都已经完 全确定了，并且写入到方法表的Code属性之中，因此一个栈帧需要分配多少内存，不会受 到程序运行期变量数据的影响，而仅仅取决于具体的虚拟机实现。</p>
+<p>线程对（某个对象的）方法的调用，就对应着一个栈帧的入栈、出栈（虚拟机栈）的过程。线程在运行过程中，只有一个栈帧是处于活跃状态，称为当前活动栈帧，当前活动栈帧，始终处于虚拟机栈的栈顶，当前活动栈帧对应的方法，也是当前线程正在执行的方法。</p>
+<h2 id="局部变量表">局部变量表</h2>
+<ul>
+<li>
+<p>局部变量表存储的是一个方法中定义的局部变量。局部变量表的数量在编译期就已经确定了，存储到了方法的Code属性max_locals中。</p>
+</li>
+<li>
+<p>局部变量表的容量以变量槽（Variable Slot，下称 Slot）为最小单位，虚拟机规范中并没有定义一个 Slot 应该占多大的内存空间，只是说应该能存放一个 boolean、byte、char、short、int、float、reference 或 returnAddress 类型的数据。这 8 种数据类型都可以使用 32 位或更小的物理内存来存放，但这种描述与明确指出“每个 slot 占用 32 位长度的内存空间”是有区别的，它允许 slot 的长度随着操作系统、处理器或虚拟机的不同而发生变化。</p>
+</li>
+<li>
+<p>如果一个 slot 长度设定为 32 位，那么 64 位的 long、double 怎么办？虚拟机会以高位对齐的方式为其分配两个连续的 slot 空间。读写 64 位数据需要操作两个 slot 的话，就不是原子操作了，是否会有线程安全问题呢？由于局部变量表建立在线程堆栈上，是线程私有数据，无论读写两个连续的 slot 是否为原子操作，都不会引起数据安全问题。</p>
+</li>
+<li>
+<p>虚拟机通过索引定位的方式使用局部变量表，索引值的范围从 0 开始到局部变量表最大 slot 数量。如果访问的是 32 位数据，索引 n 代表使用了第 n 个 slot，如果访问的是 64 位数据，则会同时使用第 n 和 n+1 个 slot。</p>
+</li>
+<li>
+<p>方法执行时，虚拟机使用局部变量表完成参数值到参数变量列表的传递过程。如果执行的是实例方法，那局部变量表中第 0 位索引的 slot 默认是用于传递方法所属对象实例的引用，也就是常见的 this。其余参数按照参数表顺序排列，占用从 1 开始的局部变量表 slot，参数表分配完毕后，再根据方法体内部定义的变量顺序和作用域分配剩余的 slot。</p>
+</li>
+<li>
+<p>为了节省栈帧空间，局部变量表中的 slot 是可以重用的，因为方法体中定义的变量，其作用域不一定会覆盖整个方法体。如果当前 PC 计数器的值超出了某个变量的作用域，那么该变量占用的 slot 就可以被重用。不过，这样的设计除了节省栈空间外，还有一些额外的副作用，比如影响系统的垃圾收集行为。</p>
+<blockquote>
+<p>在下面的程序里，执行程序时发现，虽然 gc 时 PC 计数器已经超出了 placeholder 的作用域，但是这 64 MB 内存没有被回收。原因是，作为 GC Roots 一部分的局部变量表仍然保持着对它的关联。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">&gt;   &#123;</span><br><span class="line">&gt;     <span class="keyword">byte</span>[] placeholder = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   System.gc();</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>在 System.gc() 之前插入一行 int a = 0，再运行程序发现 64 MB 内存被回收了。原因是，gc 时局部变量表里原先存储 placeholder 的 slot 已经被重用，存储了 a。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">&gt;   &#123;</span><br><span class="line">&gt;     <span class="keyword">byte</span>[] placeholder = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">&gt;   System.gc();</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li>
+<p>局部变量和类变量的区别是：类变量有两次赋初始值的过程，一次在准备阶段，赋系统初始值，一次在初始化阶段，赋程序定义的初始值。因此即使程序员没有为类变量赋初始值，类变量仍然有一个确定的初始值。但局部变量就不一样，如果一个局部变量定义了但没有赋初始值，是不能使用的。</p>
+</li>
+</ul>
+<h2 id="操作数栈">操作数栈</h2>
+<p>JVM底层字节码指令集是基于栈类型的，所有的操作码都是对操作数栈上的数据进行的操作。对每一个方法调用，JVM都会创建一个操作数栈，供计算使用。栈的深度，在编译期就已经确定了，其栈深度存储在方法的Code属性的max_stacks中。</p>
+<p><strong><em>32位数据类型所占的栈容量为1，64位数据类型所占的栈容量为2</em></strong></p>
+<p>当一个方法刚刚开始执行的时候，操作数栈是空的，在方法执行过程中，会有各种字节码指令往操作数栈中写入和提取内容，也就是出栈、入栈操作。举例来说，整数加法的字节码指令 iadd 在运行的时候，需要操作数栈栈顶两个元素存入了 int 值，iadd 会把取出栈顶两个元素，相加之后把结果再存入操作数栈。</p>
+<p>操作数栈中的数据类型必须与字节码指令序列匹配，在编译程序代码时，编译时必须严格保证这一点，在类校验阶段的数据流分析中还要在此验证这一点。</p>
+<p>在概念模型中，两个栈帧作为虚拟机栈的元素，是完全相互独立的。但在大多数虚拟机的实现里，都会做一些优化处理，令两个栈帧出现一部分重叠。让下面栈帧的操作数栈和上面栈帧的部分局部变量表重叠在一起，这样在进行方法调用时可以共用一部分数据，无需进行额外的参数复制传递，重叠过程如下图所示：</p>
+<p><img src="/postImg/image-20190906161217711.png" alt="image-20190906161217711"></p>
+<h2 id="动态链接">动态链接</h2>
+<p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态连接。Class 文件的常量池中存有大量的符号引用，字节码中的方法调用指令就以常量池中指向方法的符号引用作为参数。这些符号引用一部分会在类加载阶段或第一次使用的时候就转化为直接引用，这种转化称为静态解析。另一部分在每次运行期间转化为直接引用，这部分称为动态连接。</p>
+<h2 id="方法返回地址">方法返回地址</h2>
+<p>一个方法开始执行后，只有两种方式可以退出这个方法：</p>
+<ol>
+<li>
+<p>当执行遇到返回指令，会将返回值传递给上层的方法调用者，这种退出的方式称为正常完成出口（Normal Method Invocation Completion），一般来说，调用者的PC计数器可以作为返回地址。</p>
+</li>
+<li>
+<p>当执行遇到异常，并且当前方法体内没有得到处理，就会导致方法退出，此时是没有返回值的，称为异常完成出口（Abrupt Method Invocation Completion），返回地址要通过异常处理器表来确定。</p>
+</li>
+</ol>
+<p>当方法返回时可能进行 3 个操作：</p>
+<ol>
+<li>
+<p>恢复上层方法的局部变量表和操作数栈。</p>
+</li>
+<li>
+<p>把返回值压入调用者调用者栈帧的操作数栈。</p>
+</li>
+<li>
+<p>调整 PC 计数器的值以指向方法调用指令后面的一条指令。</p>
+</li>
+</ol>
+<h2 id="附加信息">附加信息</h2>
+<p>虚拟机规范允许具体的虚拟机实现增加一些规范里没有描述的信息到栈帧之中，例如与 调试相关的信息，这部分信息完全取决于具体的虚拟机实现，这里不再详述。</p>
+<h1 id="方法调用">方法调用</h1>
+<p>***<font color="red">方法调用并非指方法执行，方法调用阶段的唯一任务就是确定方法调用的版本（即调用哪一个方法），暂时还不涉及方法内部的具体执行过程。</font>***在程序运行时，进行方法调用是最频繁、最普遍的操作，但前面已经讲过，Class 文件的编译过程不包含传统编译中的连接步骤，一切方法调用在 Class 里存储的都是符号引用，而不是方法实际运行时内存布局的入口地址（直接引用）。这个特性给 Java 带来了强大的动态扩展能力，但也使得方法调用过程变得复杂起来，需要在类加载期间甚至是运行期间才能确定目标方法的直接引用。</p>
+<h2 id="解析">解析</h2>
+<p>在类加载的解析阶段，会将一部分符号引用转化为直接引用，这种解析成立的前提是：方法在程序运行之前就有一个可确定的调用版本，并且这个方法的调用版本在运行期间不可变。换句话说，调用目标在程序写好，编译器编译时就可以确定下来了。这类方法调用称为解析。</p>
+<p>***<font color="red">在 Java 语言中符合“编译期可知，运行期不可变”的方法主要包含静态方法和私有方法两大类。</font>***前者与类型直接关联，后者在外部不可见，这两种方法各自的特点决定了他们不可能通过继承或别的方式重写其他版本，因此适合在类加载阶段进行解析。</p>
+<p>Java 虚拟机规范里提供了 5 条方法调用字节码指令：</p>
+<ol>
+<li>
+<p>invokestatic: 调用静态方法。</p>
+</li>
+<li>
+<p>invokespecial: 调用实例构造器&lt;init&gt;方法、私有方法和父类方法。</p>
+</li>
+<li>
+<p>invokevirturl: 调用所有的虚方法。</p>
+<blockquote>
+<p><strong>Java虚方法你可以理解为java里所有被overriding的方法都是virtual的,所有重写的方法都是override的。</strong></p>
+<p><strong>在JVM字节码执行引擎中，方法调用会使用invokevirtual字节码指令来调用所有的虚方法。</strong></p>
+</blockquote>
+</li>
+<li>
+<p>invokeinterface: 调用接口方法，会在运行时确定一个实现此接口的对象。</p>
+</li>
+<li>
+<p>invokedynamic: 先在运行时动态解析出调用点限定符所引用的方法，然后再执行该方法，在此之前的 4 条调用指令，分派逻辑是固化在 Java 虚拟机内部的。而 invokedynamic 的分派逻辑由用户设定的引导方法决定。</p>
+</li>
+</ol>
+<p>只要是被 <strong><em>invokestatic 和 invokespecial</em></strong> 指令调用的方法，都可以在解析阶段确定唯一的调用版本，符合这个条件的有<strong><em>静态方法、私有方法、实例构造器、父类方法</em></strong>，他们在类加载的时候就会把符号引用转化为直接引用。这一类方法被称为非虚方法，相对的其他方法就是虚方法（final 方法除外）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码里 sayHello 是一个静态方法，编译后使用 javap -verbose 看字节码，会发现的确是通过 invokestatic 方法来调用的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">0</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">         0: invokestatic  #5                  // Method sayHello:()V</span><br><span class="line">         <span class="number">3</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">14</span>: <span class="number">0</span></span><br><span class="line">        line <span class="number">15</span>: <span class="number">3</span></span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            <span class="number">0</span>       <span class="number">4</span>     <span class="number">0</span>  args   [Ljava/lang/String;</span><br></pre></td></tr></table></figure>
+<p>除了使用 invokestatic 和 invokespecial 调用的方法之外，还有一种就是被 final 修饰的方法。虽然 final 方法是使用 invokevirtual 来调用的，但由于它无法被覆盖，又没有其他版本，所以无需对方法接收者进行多态选择。在 Java 虚拟机规范中，明确说明了 final 方法是非虚方法。</p>
+<p>***解析调用是一个静态的过程，在编译期间就完全确定，在类装载的解析阶段就会把涉及的符号引用全部转变为可确定的直接引用，不会延迟到运行期才去完成。***而分派 Dispatch 调用则可能是静态的，也可能是动态的，根据分派的宗量数又可以分为单分派、多分派。这两类分派方式的两两组合就构成了静态单分派、静态多分派、动态单分派、动态多分派 4 种分派组合情况。下面我们看看虚拟机中的方法分派是如何进行的。</p>
+<h2 id="分派">分派</h2>
+<p>Java 是一门面向对象的程序语言，因为 Java 具备面向对象的基本特征：继承、封装、多态。这里讲解的分派调用将会揭示多态性特征的一些最基本的体现，比如“重载”和“重写”在 Java 虚拟机之中是如何实现的。</p>
+<h3 id="静态分派">静态分派</h3>
+<p>先看一个例子:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StatisticDispatch</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Human</span> </span>&#123;&#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;&#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Woman</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Human human)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello, guy"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Man man)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello, gentleman"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Woman woman)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello, lady"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Human man = <span class="keyword">new</span> Man();</span><br><span class="line">        Human woman = <span class="keyword">new</span> Woman();</span><br><span class="line">        StatisticDispatch dispatch = <span class="keyword">new</span> StatisticDispatch();</span><br><span class="line">        dispatch.sayHello(man);</span><br><span class="line">        dispatch.sayHello(woman);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>程序运行结果为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello, guy</span><br><span class="line">hello, guy</span><br></pre></td></tr></table></figure>
+<p>为什么会选择参数类型为 Human 的重载方法呢？在解决这个问题前，我们先看两个重要的概念。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Human man = <span class="keyword">new</span> Man();</span><br></pre></td></tr></table></figure>
+<p>对于上面的代码，Human 是变量的静态类型（Static Type），而 Man 是变量的实际类型（Actual Type）。变量的静态类型是编译期就可以确定的，而实际类型需要等到运行时才能确定。虚拟机（准确的说是编译器）在重载时是通过参数的静态类型而非实际类型来作为判定依据的。因为静态类型是编译期可知的，javac 编译器会根据参数的静态类型决定使用哪个重载版本，所以选择了 sayHello(Human) 作为调用目标，并把这个方法的符号引用写到了 invokevirtual 的参数中，利用 javap -verbose 查看字节码文件可以验证这一点。</p>
+<p>所有依赖静态类型来定位方法执行版本的分派动作称为静态分派。静态分派的典型应用 是方法重载。静态分派发生在编译阶段，因此确定静态分派的动作实际上不是由虚拟机来执行的。</p>
+<h3 id="动态分派">动态分派</h3>
+<p>动态分派和多态性的另一个重要体现：重写 Override 有着密切的关联。先看一下动态分派的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicDispatch</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"hello man"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Woman</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"hello woman"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Human man = <span class="keyword">new</span> Man();</span><br><span class="line">        Human woman = <span class="keyword">new</span> Woman();</span><br><span class="line">        man.sayHello();</span><br><span class="line">        woman.sayHello();</span><br><span class="line">        man = <span class="keyword">new</span> Woman();</span><br><span class="line">        man.sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行程序，输出如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hello man</span><br><span class="line">hello woman</span><br><span class="line">hello woman</span><br></pre></td></tr></table></figure>
+<p>虚拟机是如何知道要调用哪个方法 的？ 显然这里不可能再根据静态类型来决定，因为静态类型同样都是Human的两个变量man 和woman在调用sayHello（）方法时执行了不同的行为。</p>
+<p>下面通过 main 方法字节码来看一下动态分派的过程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">2</span>, locals=<span class="number">3</span>, args_size=<span class="number">1</span></span><br><span class="line">         0: new           #2                  // class com/meituan/mtrace/web/DynamicDispatch$Man</span><br><span class="line">         <span class="number">3</span>: dup</span><br><span class="line">         4: invokespecial #3                  // Method com/meituan/mtrace/web/DynamicDispatch$Man."&lt;init&gt;":()V</span><br><span class="line">         <span class="number">7</span>: astore_1</span><br><span class="line">         8: new           #4                  // class com/meituan/mtrace/web/DynamicDispatch$Woman</span><br><span class="line">        <span class="number">11</span>: dup</span><br><span class="line">        12: invokespecial #5                  // Method com/meituan/mtrace/web/DynamicDispatch$Woman."&lt;init&gt;":()V</span><br><span class="line">        <span class="number">15</span>: astore_2</span><br><span class="line">        <span class="number">16</span>: aload_1</span><br><span class="line">        17: invokevirtual #6                  // Method com/meituan/mtrace/web/DynamicDispatch$Human.sayHello:()V</span><br><span class="line">        <span class="number">20</span>: aload_2</span><br><span class="line">        21: invokevirtual #6                  // Method com/meituan/mtrace/web/DynamicDispatch$Human.sayHello:()V</span><br><span class="line">        24: new           #4                  // class com/meituan/mtrace/web/DynamicDispatch$Woman</span><br><span class="line">        <span class="number">27</span>: dup</span><br><span class="line">        28: invokespecial #5                  // Method com/meituan/mtrace/web/DynamicDispatch$Woman."&lt;init&gt;":()V</span><br><span class="line">        <span class="number">31</span>: astore_1</span><br><span class="line">        <span class="number">32</span>: aload_1</span><br><span class="line">        33: invokevirtual #6                  // Method com/meituan/mtrace/web/DynamicDispatch$Human.sayHello:()V</span><br><span class="line">        <span class="number">36</span>: <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>0-15行：对应 <code>Human man = new Man(); Human woman = new Woman();</code>，并将创建的两个对象放入局部变量表。</li>
+<li>16、20行：分别把刚刚创建的两个对象的引用压到栈 顶</li>
+<li>17、21行：是方法调用指令。</li>
+</ul>
+<p>这两条调用指令，单从字节码角度来看，无论是指令（都是 invokevirtual）还是参数（都是常量池中第22项的常量，注释显示了这个常量是 Human.sayHello（）的符号引用）完全一样的。但是这两句指令最终执行的目标方法并不相 同。原因就需要从invokevirtual指令的多态查找过程开始说起。</p>
+<p>invokevirtual指令的运行时解 析过程大致分为以下几个步骤：</p>
+<ol>
+<li>
+<p>找到操作数栈栈顶第一个元素所指向的对象的实际类型，记作 C；</p>
+</li>
+<li>
+<p>如果在类型 C 中找到与常量中的描述符和简单名称都相符的方法，则进行访问权限校验。如果通过则返回这个方法的直接引用，查找过程结束；如果不通过，则返回 java.lang.IllegalAccessError 异常；</p>
+</li>
+<li>
+<p>否则，按照继承关系从下往上依次对 C 的各个父类进行第 2 步的搜索和验证过程。</p>
+</li>
+<li>
+<p>如果始终没有找到合适的方法，则抛出 java.lang.AbstractMethodError 异常。</p>
+</li>
+</ol>
+<p>由于 invokevirtual 指令的第一步就是在运行期确定接收者的实际类型，所以两次调用中的 invokevirtual 指令把相同的类符号引用解析到了不同的直接引用上，这个过程就是 Java 语言中方法重写的本质。我们把这种在运行期根据实际类型确定方法执行版本的过程称为动态分派。</p>
+<h3 id="单分派与多分派">单分派与多分派</h3>
+<p>方法的接收者与方法的参数统称为方法的总量，根据分派基于多少种宗量，可以将分派划分为单分派和多分派两种。单分派是根据一个宗量对目标方法进行选择，多分派是根据多余一个宗量对目标方法进行选择。</p>
+<p>在 Java 语言中静态分派要同时考虑实际类型和方法参数，所以 Java 语言中的静态分派属于多分派类型。而在执行 invokevirtual 指令时，唯一影响虚拟机选择的只有实际类型，所以 Java 语言中的动态分派属于单分派类型。</p>
+<h3 id="虚拟机动态分派的实现">虚拟机动态分派的实现</h3>
+<p>由于动态分派是非常频繁的操作，而且动态分派的方法版本选择过程需要运行时在类的方法原数据中搜索合适的目标方法，因此在虚拟机的实际实现中基于性能考虑，大部分实现不会真正进行如此频繁的搜索。面对这种情况，最常用的稳定优化手段就是为类在方法区中建立一个虚方法表，使用虚方法表索引代替原数据以提高查找性能。虚方法表中存放了各个方法的实际入口地址，如果某个方法在子类中没有被重写，那子类在虚方法表中的地址入口和父类是一致的，都指向父类的入口地址。如果子类重写了某个方法，则地址会替换成子类实现版本的入口地址。</p>
+<p>方法表一般在类加载的连接阶段进行初始化，准备了类的变量初始值之后，虚拟机会把该类的方法表也初始化完毕。</p>
+<p>方法表是分派调用的稳定优化手段，虚拟机除了使用方法表之外，还会使用内联缓存和基于“类型继承关系分析”技术的守护内联两种非稳定的“激进优化”手段来获得更高的性能。</p>
+<h2 id="动态类型语言支持">动态类型语言支持</h2>
+<p><strong><em><font color="red">抄的别人的</font></em></strong></p>
+<h3 id="jdk7-与动态类型">JDK7 与动态类型</h3>
+<p>从 JDK7 开始，字节码指令集增加了一个新成员：invokedynamic 指令，这是为了实现“动态类型语言”支持而做的改进之一，也是为 JDK8 顺利实现 LAMBDA 表达式做技术储备。</p>
+<p>什么是“动态类型语言”呢？动态类型语言的关键特征是他的类型检查的主体过程是在运行期而不是编译期，满足这个特征的语言有很多，比如 JavaScript、Python、Lua 等。相对的，在编译期进行类型检查的语言，比如 C++、Java 等就是静态类型语言。</p>
+<p>举个例子来解释类型检查，比如下面这行简单的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.println(<span class="string">"hello world"</span>);</span><br></pre></td></tr></table></figure>
+<p>假设这是一行 Java 代码，obj 的静态类型是 java.io.PrintStream，那变量的实际类型必须是 PrintStream 的子类才是合法的。否则哪怕 obj 实际类型有一个 println(String) 的方法，但与 PrintStream 没有继承关系，因为类型检查不合法，代码依然不能运行。</p>
+<p>但是相同的代码在 ECMAScript（JavaScript）中则不一样，无论 obj 是何种类型，只要这种类型的定义中确实包含有 println(String) 方法，代码就可以执行成功。</p>
+<p>静态类型语言的优点是编译器可以提供严格的类型检查，一些与类型相关的问题可以在编码时就及时发现，有利于稳定性以及代码达到更大规模。而动态类型语言在运行期确定类型，可以为开发人员提供更大的灵活性，某些在静态语言中需要大量“臃肿”代码来实现的功能，由动态类型语言实现会更加清晰和简洁，清晰简洁也就意味着开发效率的提升。</p>
+<p>20 年前，《Java 虚拟机规范》里就规划了这样一个愿景“在未来，我们会对 Java 虚拟机进行适当的扩展，以便更好地支持其他语言运行于 Java 虚拟机之上”。目前已经有很多动态类型语言运行于 Java 虚拟机之上了，比如 Clojure、Groovy、Jython、JRuby 等，能够在同一个虚拟机上实现静态语言的严谨性和动态语言的灵活性，是一件很美妙的事情。</p>
+<p>但遗憾的是，Java 虚拟机层面对动态类型语言的支持一直有所欠缺，主要表现在方法调用上面：JDK1.7 之前的指令集中，4 条方法调用指令（invokestatic、invokespecial、invokevirtual、invokeinterface）的第一个参数都是被调用方法的符号引用（CONSTANT_Methodref_info 或 CONSTANT_InterfaceMethodref_info 常量）。方法的符号引用在编译时产生，而动态类型语言只有在运行期才能确定接受者类型。这样 Java 虚拟机上实现动态类型语言就不得不使用其他方式（编译时留个占位符类型，运行时动态生成字节码实现具体类型到占位符类型的适配）来实现，这样势必让动态类型语言实现的复杂度增加，也可能带来额外的性能或内存开销。因此在 JDK1.7 里新增了 invokedynamic 指令以及 java.lang.invoke 包，在虚拟机层面提供了对动态类型的直接支持。</p>
+<h3 id="javalanginvoke-包">java.lang.invoke 包</h3>
+<p>java.lang.invoke 包的主要目的是在之前单纯依靠符号引用来确定调用的目标方法这种方式以外，提供一种新的动态确定目标方法的机制，称为 MethodHandle。</p>
+<p>如果要实现一个带谓词的排序函数，在 C/C++ 里的常用做法是把谓词定义为函数，用函数指针把谓词传递到排序方法：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void sort(int list[], const int size, int (*compare)(int, int))</span><br></pre></td></tr></table></figure>
+<p>而 Java 里是没有办法把函数作为参数进行传递的，普遍的做法是设计一个带有 compare() 方法的 Comparator 接口，以实现了这个接口的对象作为参数进行传递：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List list, Comparator comparator)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>在拥有了 MethodHandle 之后，Java 语言也拥有了类似于函数指针或委托方法别名的工具了，下面的方法演示了 MethodHandle 的用法，无论 obj 是何种类型，都可以正确调用到 pringln 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodHandleTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassA</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">println</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"From ClassA: "</span> + str);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        Object obj = <span class="keyword">new</span> ClassA();</span><br><span class="line">        getPrintlnMH(obj).invokeExact(<span class="string">"hello"</span>);</span><br><span class="line">        getPrintlnMH(System.out).invokeExact(<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> MethodHandle <span class="title">getPrintlnMH</span><span class="params">(Object receiver)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        MethodType methodType = MethodType.methodType(<span class="keyword">void</span>.class, String.class);</span><br><span class="line">        <span class="keyword">return</span> MethodHandles.lookup()</span><br><span class="line">                .findVirtual(receiver.getClass(), <span class="string">"println"</span>, methodType)</span><br><span class="line">                .bindTo(receiver);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上，方法 getPrintlnMH 里模拟了 invokevirtual 指令的执行过程，只不过它的分派逻辑并非固化在 Class 文件字节码上，而是通过一个具体的方法来实现。这个方法最终的返回值 MethodHandle 可以看做是对最终调用方法的一个引用，以此为基础就可以写出下面这样的函数声明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List list, MethodHandle MethodHandle)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>看完 MethodHandle 的用法之后，大家可能会有疑问，相同的事情用反射不也可以实现吗？MethodHandle 与 Reflection 确实很像，不过它们还是有以下区别：</p>
+<ol>
+<li>
+<p>从本质上讲，MethodHandle 与 Reflection 都是在模拟方法调用，但 Reflection 是在模拟 Java 层次的方法调用，而 MethodHandle 是在模拟字节码层次的方法调用，在 MethodHandle.loolup() 中的三个方法 findVirtual()、findStatic()、findSpecial() 正是对应了 invokevirtual &amp; invokeinterface、invokestatic、invokespecial 这几条字节码指令的行为。</p>
+</li>
+<li>
+<p>Reflection 中的 java.lang.reflect.Method 包含的信息比 MethodHandle 多很多。前者是方法在 Java 端的全面映像，包含方法签名、描述符以及方法属性表在 Java 端的表示方式，还包含执行权限等运行期信息。而后者仅仅包含于执行该方法相关的信息。通俗地讲，前者是重量级（执行慢），后者是轻量级（执行快）。</p>
+</li>
+<li>
+<p>由于 MethodHandle 是对字节码的方法调用指令的模拟，所以理论上虚拟机在这方面做的各种优化（如方法内联），在 MethodHandle 上也可以采用类似的思路去支持（JDK1.7 里还不完善）。而通过反射去调用的方法则不行。</p>
+</li>
+<li>
+<p>Reflection 的设计目标是为 Java 语言服务的，MethodHandle 则设计成可服务于所有 Java 虚拟机之上的语言，当然也包括 Java 语言。</p>
+</li>
+</ol>
+<h3 id="invokedynamic-指令">invokedynamic 指令</h3>
+<p>在某种程度上，invokedynamic 指令与 MethodHandle 是类似的，都是为了解决原有的 4 条 invoke* 指令方法分派规则固化在虚拟机之中的问题，把如何查找目标方法的决定权从虚拟机转嫁到具体用户代码中，让用户有更高的自由度。</p>
+<p>在 JDK1.7 里无法通过 Java 代码编译生成 invokedynamic 指令，JDK1.8 里引入了 Lambda 表达式，其实现就利用了 invokedynamic 指令，先看下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InvokeDynamicTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Runnable x = () -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译成字节码后，再反编译，可以看到 main 方法里第一条指令就是 invokedynamic，该指令第一个参数是常量池数据的索引，第二个参数是保留的占位符（目前必须为 0）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #7.#24         // java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   #2 = InvokeDynamic      #0:#29         // #0:run:()Ljava/lang/Runnable;</span><br><span class="line">  #29 = NameAndType        #39:#40        // run:()Ljava/lang/Runnable;</span><br><span class="line">  #39 = Utf8               run</span><br><span class="line">  #40 = Utf8               ()Ljava/lang/Runnable;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">2</span>, args_size=<span class="number">1</span></span><br><span class="line">         0: invokedynamic #2,  0              // InvokeDynamic #0:run:()Ljava/lang/Runnable;</span><br><span class="line">         <span class="number">5</span>: astore_1</span><br><span class="line">         <span class="number">6</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">9</span>: <span class="number">0</span></span><br><span class="line">        line <span class="number">12</span>: <span class="number">6</span></span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            <span class="number">0</span>       <span class="number">7</span>     <span class="number">0</span>  args   [Ljava/lang/String;</span><br><span class="line">            <span class="number">6</span>       <span class="number">1</span>     <span class="number">1</span>     x   Ljava/lang/Runnable;</span><br></pre></td></tr></table></figure>
+<p>常量池索引为 2 的数据是 CONSTANT_InvokeDynamic_info 类型的常量，其本身又包含了 2 个索引：bootstrap_method_attr_index 是指向 BootstrapMethods 属性表里 BootstrapMethod 方法的索引，这里 #0 表示指向第 0 个 BootstrapMethod。name_and_type_index 索引类常量池里的 CONSTANT_NameAndType_info 类型数据，描述了一个方法名为 run，返回值类型为 java/lang/Runnable 的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_MethodHandle_info &#123;</span><br><span class="line">    u1 tag;</span><br><span class="line">    u1 reference_kind;</span><br><span class="line">    u2 reference_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>BootstrapMethods 属性格式如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">BootstrapMethods_attribute &#123;</span><br><span class="line">    u2 attribute_name_index;</span><br><span class="line">    u4 attribute_length;</span><br><span class="line">    u2 num_bootstrap_methods;</span><br><span class="line">    &#123;   u2 bootstrap_method_ref;</span><br><span class="line">        u2 num_bootstrap_arguments;</span><br><span class="line">        u2 bootstrap_arguments[num_bootstrap_arguments];</span><br><span class="line">    &#125; bootstrap_methods[num_bootstrap_methods];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看字节码可知，该类里只有一个 BootstrapMethod，bootstrap_method_ref 指向常量池 #26，bootstrap_arguments 指向常量池 #27、#28。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  #26 = MethodHandle       #6:#37         // invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span><br><span class="line">  #27 = MethodType         #9             //  ()V</span><br><span class="line">  #28 = MethodHandle       #6:#38         // invokestatic com/meituan/mtrace/web/InvokeDynamicTest.lambda$main$0:()V</span><br><span class="line">  #37 = Methodref          #47.#48        // java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span><br><span class="line"></span><br><span class="line">BootstrapMethods:</span><br><span class="line">  0: #26 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span><br><span class="line">    Method arguments:</span><br><span class="line">      #27 ()V</span><br><span class="line">      #28 invokestatic com/meituan/mtrace/web/InvokeDynamicTest.lambda$main$0:()V</span><br><span class="line">      #27 ()V</span><br></pre></td></tr></table></figure>
+<p>常量 #23 是一个 CONSTANT_MethodHandle_info 类型数据，其结构如下所示：</p>
+<p>reference_kind 是个数字，表示某方法调用指令，这里 #6 表示 REF_invokeStatic，reference_index 是 #29，是个 CONSTANT_Methodref_info，指向 LambdaMetafactory 类的 metafactory 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过加断点运行，可以看到传递给 metafactory 的参数，列在了注释里</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CallSite <span class="title">metafactory</span><span class="params">(MethodHandles.Lookup caller,   // caller: com.meituan.mtrace.web.InvokeDynamicTest</span></span></span><br><span class="line"><span class="function"><span class="params">                                     String invokedName,          // run</span></span></span><br><span class="line"><span class="function"><span class="params">                                     MethodType invokedType,        // ()</span>Runnable</span></span><br><span class="line"><span class="function">                                     MethodType samMethodType,      <span class="comment">// ()void</span></span></span><br><span class="line"><span class="function">                                     MethodHandle implMethod,       <span class="comment">// ()void</span></span></span><br><span class="line"><span class="function">                                     MethodType instantiatedMethodType) <span class="comment">// ()void</span></span></span><br><span class="line"><span class="function">          <span class="keyword">throws</span> LambdaConversionException </span>&#123;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>LambdaMetafactory.metafactory 方法一共有六个参数：</p>
+<ol>
+<li>
+<p>MethodHandles.Lookup caller: 代表查找上下文与调用者的访问权限, 使用invokedynamic指令时, JVM会自动自动填充这个参数。</p>
+</li>
+<li>
+<p>String invokedName: 要实现的方法的名字, 使用 invokedynamic 时, JVM 自动帮我们填充(填充内容来自常量池 <a href="http://InvokeDynamic.NameAndType.Name" target="_blank" rel="noopener">InvokeDynamic.NameAndType.Name</a>), 在这里 JVM 为我们填充为 run, 即 Runnable 接口的唯一方法名 run。</p>
+</li>
+<li>
+<p>MethodType invokedType: 调用点期望的方法参数的类型和返回值的类型(方法signature). 使用 invokedynamic 指令时, JVM 会自动自动填充这个参数(填充内容来自常量池 InvokeDynamic.NameAndType.Type), 在这里是 ()Runnable, 表示这个调用点的目标方法没有参数, 然后 invokedynamic 执行完后会返回一个即 Runnable 实例。</p>
+</li>
+<li>
+<p>MethodType samMethodType:  函数对象将要实现的接口方法类型, 这里运行时, 值为 ()void，即 Runnable.run 方法的类型 #27 ()V。</p>
+</li>
+<li>
+<p>MethodHandle implMethod : 一个直接方法句柄(DirectMethodHandle), 描述在调用时将被执行的具体实现方法 (包含适当的参数适配, 返回类型适配, 和在调用参数前附加上捕获的参数), 在这里为 #28 invokestatic com/meituan/mtrace/web/InvokeDynamicTest.lambda$main$0:()V 方法的方法句柄。</p>
+</li>
+<li>
+<p>MethodType instantiatedMethodType: 函数接口方法替换泛型为具体类型后的方法类型, 通常和 samMethodType 一样, 不同的情况为泛型。当函数接口带泛型参数时，samMethodType 不带泛型真实类型，而 instantiatedMethodType 带有泛型真实类型。</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// implMethod 所指向的静态私有方法，也就是 Runnable.run 的内容</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> lambda$main$<span class="number">0</span>();</span><br><span class="line">  descriptor: ()V</span><br><span class="line">  flags: ACC_PRIVATE, ACC_STATIC, ACC_SYNTHETIC</span><br><span class="line">  Code:</span><br><span class="line">    stack=<span class="number">2</span>, locals=<span class="number">0</span>, args_size=<span class="number">0</span></span><br><span class="line">       0: getstatic     #3                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">       3: ldc           #4                  // String hello</span><br><span class="line">       5: invokevirtual #5                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">       <span class="number">8</span>: <span class="keyword">return</span></span><br><span class="line">    LineNumberTable:</span><br><span class="line">      line <span class="number">12</span>: <span class="number">0</span></span><br><span class="line">      line <span class="number">13</span>: <span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p>总结一下，invokedynamic 指令是如何执行的：</p>
+<ol>
+<li>
+<p>每一个 invokedynamic 指令出现的地方，都叫做一个 dynamic call site（动态调用点）。根据 invokedynamic 指令的操作数可以找到调用点说明符，即 CONSTANT_InvokeDynamic_info 常量。</p>
+</li>
+<li>
+<p>调用点说明符里包含三种信息：</p>
+</li>
+</ol>
+<p>​	- 一个 MethodHandle，指向一个 bootstrap method（启动方法）</p>
+<p>​	- 方法名和方法描述，表示动态调用的方法</p>
+<p>​	- 其他提供给启动方法的参数</p>
+<ol start="3">
+<li>
+<p>接着JVM调用启动方法，并把上一步提到的信息通过参数传给启动方法。</p>
+</li>
+<li>
+<p>启动方法必须返回一个 CallSite 对象，并且，这个 CallSite 对象将永久和这个动态调用点关联。</p>
+</li>
+<li>
+<p>调用跟 CallSite 关联的 MethodHandle 指向的方法。</p>
+</li>
+</ol>
+<p>到这里 invokedynamic 的执行流程就讲完了，下面我们再深入了解一下 LambdaMetafactory.metafactory 这个方法，看看它都做了哪些工作？</p>
+<h3 id="lambdametafactorymetafactory-分析">LambdaMetafactory.metafactory 分析</h3>
+<p>LambdaMetafactory.metafactory 方法主要是创建了动态调用点 CallSite，看下面的代码可知，主要是调用了 InnerClassLambdaMetafactory.buildCallSite 来创建的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CallSite <span class="title">metafactory</span><span class="params">(MethodHandles.Lookup caller,</span></span></span><br><span class="line"><span class="function"><span class="params">                                   String invokedName,</span></span></span><br><span class="line"><span class="function"><span class="params">                                   MethodType invokedType,</span></span></span><br><span class="line"><span class="function"><span class="params">                                   MethodType samMethodType,</span></span></span><br><span class="line"><span class="function"><span class="params">                                   MethodHandle implMethod,</span></span></span><br><span class="line"><span class="function"><span class="params">                                   MethodType instantiatedMethodType)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> LambdaConversionException </span>&#123;</span><br><span class="line">    AbstractValidatingLambdaMetafactory mf;</span><br><span class="line">    mf = <span class="keyword">new</span> InnerClassLambdaMetafactory(caller, invokedType,</span><br><span class="line">                                         invokedName, samMethodType,</span><br><span class="line">                                         implMethod, instantiatedMethodType,</span><br><span class="line">                                         <span class="keyword">false</span>, EMPTY_CLASS_ARRAY, EMPTY_MT_ARRAY);</span><br><span class="line">    <span class="comment">// 参数校验</span></span><br><span class="line">    mf.validateMetafactoryArgs();</span><br><span class="line">    <span class="keyword">return</span> mf.buildCallSite();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>InnerClassLambdaMetafactory.buildCallSite 方法做了三件事：</p>
+<ol>
+<li>
+<p>首先，调用 spinInnerClass 方法创建了一个匿名内部类，也就是 Runnable 接口的一个实现类。</p>
+</li>
+<li>
+<p>然后，调用其构造函数，创建了一个实例。</p>
+</li>
+<li>
+<p>最后，创建指向 ()Ljava/lang/Runnable 方法的 MethodHandle，放入 ConstantCallSite 返回。</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CallSite <span class="title">buildCallSite</span><span class="params">()</span> <span class="keyword">throws</span> LambdaConversionException </span>&#123;</span><br><span class="line">  <span class="comment">// 生成匿名内部类</span></span><br><span class="line">    <span class="keyword">final</span> Class&lt;?&gt; innerClass = spinInnerClass();</span><br><span class="line">    <span class="keyword">if</span> (invokedType.parameterCount() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">final</span> Constructor&lt;?&gt;[] ctrs = AccessController.doPrivileged(</span><br><span class="line">                <span class="keyword">new</span> PrivilegedAction&lt;Constructor&lt;?&gt;[]&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Constructor&lt;?&gt;[] run() &#123;</span><br><span class="line">                Constructor&lt;?&gt;[] ctrs = innerClass.getDeclaredConstructors();</span><br><span class="line">                <span class="keyword">if</span> (ctrs.length == <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="comment">// The lambda implementing inner class constructor is private, set</span></span><br><span class="line">                    <span class="comment">// it accessible (by us) before creating the constant sole instance</span></span><br><span class="line">                    ctrs[<span class="number">0</span>].setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> ctrs;</span><br><span class="line">            &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">        <span class="comment">// 如果不止一个构造函数，则抛异常</span></span><br><span class="line">        <span class="keyword">if</span> (ctrs.length != <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> LambdaConversionException(<span class="string">"Expected one lambda constructor for "</span></span><br><span class="line">                    + innerClass.getCanonicalName() + <span class="string">", got "</span> + ctrs.length);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 创建该内部类的一个实例</span></span><br><span class="line">            Object inst = ctrs[<span class="number">0</span>].newInstance();</span><br><span class="line">            <span class="comment">// MethodHandles.constant 返回一个 MethodHandle，指向一个方法，该方法的返回结果就是 Runnable 实例 inst</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ConstantCallSite(MethodHandles.constant(samBase, inst));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (ReflectiveOperationException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> LambdaConversionException(<span class="string">"Exception instantiating lambda object"</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            UNSAFE.ensureClassInitialized(innerClass);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ConstantCallSite(</span><br><span class="line">                    MethodHandles.Lookup.IMPL_LOOKUP</span><br><span class="line">                         .findStatic(innerClass, NAME_FACTORY, invokedType));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (ReflectiveOperationException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> LambdaConversionException(<span class="string">"Exception finding constructor"</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="基于栈的字节码解释执行引擎">基于栈的字节码解释执行引擎</h1>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/jvm/understanding-the-jvm/【10】早期（编译期）优化/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/jvm/understanding-the-jvm/【07】虚拟机类加载机制/" data-toggle="tooltip" data-placement="top" title="【深入理解Java虚拟机】【07】虚拟机类加载机制">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#概述"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6982;&#x8FF0;</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#运行时栈帧结构"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x8FD0;&#x884C;&#x65F6;&#x6808;&#x5E27;&#x7ED3;&#x6784;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#局部变量表"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#x8868;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#操作数栈"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x64CD;&#x4F5C;&#x6570;&#x6808;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#动态链接"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x52A8;&#x6001;&#x94FE;&#x63A5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#方法返回地址"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x5730;&#x5740;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#附加信息"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x9644;&#x52A0;&#x4FE1;&#x606F;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#方法调用"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x65B9;&#x6CD5;&#x8C03;&#x7528;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#解析"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x89E3;&#x6790;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#分派"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">&#x5206;&#x6D3E;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#静态分派"><span class="toc-nav-number">3.2.1.</span> <span class="toc-nav-text">&#x9759;&#x6001;&#x5206;&#x6D3E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#动态分派"><span class="toc-nav-number">3.2.2.</span> <span class="toc-nav-text">&#x52A8;&#x6001;&#x5206;&#x6D3E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#单分派与多分派"><span class="toc-nav-number">3.2.3.</span> <span class="toc-nav-text">&#x5355;&#x5206;&#x6D3E;&#x4E0E;&#x591A;&#x5206;&#x6D3E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#虚拟机动态分派的实现"><span class="toc-nav-number">3.2.4.</span> <span class="toc-nav-text">&#x865A;&#x62DF;&#x673A;&#x52A8;&#x6001;&#x5206;&#x6D3E;&#x7684;&#x5B9E;&#x73B0;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#动态类型语言支持"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">&#x52A8;&#x6001;&#x7C7B;&#x578B;&#x8BED;&#x8A00;&#x652F;&#x6301;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#jdk7-与动态类型"><span class="toc-nav-number">3.3.1.</span> <span class="toc-nav-text">JDK7 &#x4E0E;&#x52A8;&#x6001;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#javalanginvoke-包"><span class="toc-nav-number">3.3.2.</span> <span class="toc-nav-text">java.lang.invoke &#x5305;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#invokedynamic-指令"><span class="toc-nav-number">3.3.3.</span> <span class="toc-nav-text">invokedynamic &#x6307;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#lambdametafactorymetafactory-分析"><span class="toc-nav-number">3.3.4.</span> <span class="toc-nav-text">LambdaMetafactory.metafactory &#x5206;&#x6790;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#基于栈的字节码解释执行引擎"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x57FA;&#x4E8E;&#x6808;&#x7684;&#x5B57;&#x8282;&#x7801;&#x89E3;&#x91CA;&#x6267;&#x884C;&#x5F15;&#x64CE;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#JVM" title="JVM">JVM</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/charliewong001">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Charlie 2019 
+                    <br>
+                    <!--
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true" >
+                    </iframe>
+                    -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://charliewong001.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://charliewong001.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

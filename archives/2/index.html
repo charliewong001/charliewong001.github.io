@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -208,6 +208,146 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/article/jvm/jvm疑问收集/">
+        <h2 class="post-title">
+            JVM疑问收集
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+
+如何查看对象的年龄
+
+
+如何动态实时修改jvm参数（修改）
+
+
+逻辑CPU是什么意思
+
+
+安全点的设置规则
+
+
+安全区域的划分规则
+
+
+对象头中存储的内容、内容的格式定义
+不同状态下对象的对象头的格式是什么
+如何查看一个对象的对象头信息
+
+
+什么样的数据才会进入常量池
+
+
+istore 将值从操作数栈存储到局部变量表：怎么知道存储到哪个局部变量？
+
+istore 后面会跟一个操作数，此操......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-08-06
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#JVM" title="JVM">JVM</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/jvm/understanding-the-jvm/【04】jdk命令行工具/">
+        <h2 class="post-title">
+            【深入理解Java虚拟机】【04】jdk命令行工具
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            [TOC]
+jdk命令行工具
+0.概览
+
+
+
+名称
+作用
+
+
+
+
+jps
+JVM Process Status Tool，显示系统中所有的Hotspot虚拟机进程
+
+
+jstat
+JVM Statistics Monitoring Tool，用于收集HotSpot虚拟机各方面的运行数据
+
+
+jinfo
+Configuration info for java，显示虚拟机配置信息
+
+
+jmap
+......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-07-15
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#JVM" title="JVM">JVM</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/encoding/String&ASCII&Byte/">
+        <h2 class="post-title">
+            String、ASCII、Byte
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            下面讨论的一些问题，共同的前提是String字符串中的内容是ASCII码表示范围内的符号。
+什么是String?
+字面意思：字符串。其实内部使用char数组存储
+什么是ASCII码
+ASCII是美国信息交换标准代码，是现在通用的单字节编码系统，使用指定的7 位或8 位二进制数组合来表示128 或256 种可能的字符，全称是American Standard Code for Informat......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-07-11
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#编码" title="编码">编码</a>
+            
+        </div>
+    
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -492,114 +632,6 @@ X选项：比如-Xms。这类选项都是以-X开头，可能由于这个原因�
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/jvm/understanding-the-jvm/【03】垃圾收集&内存分配/">
-        <h2 class="post-title">
-            【深入理解Java虚拟机】【03】垃圾收集和内存分配
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            [TOC]
-对象是否可回收判断方法
-引用计数算法(主流虚拟机未采用)
-
-
-实现思想
-在对象中添加引用计数器，引用它时，计数器加 1，对它的引用失效，计数器减 1。计数器为 0 的对象就是不可能再被引用的
-
-
-问题
-无法解决对象之间循环引用的问题
-
-
-可达性分析算法
-
-
-实现思想
-从 GC Roots 对象作为起始点，向下搜索，当一个对象到 GC Roots 没有任何引用链，则此对象是不可用的......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-06-14
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#JVM" title="JVM">JVM</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/qrcode/zxing/">
-        <h2 class="post-title">
-            zxing
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            zxing 相关网站
-https://zxing.github.io/zxing/apidocs/
-https://zxing.github.io/zxing/
-代码示例
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-06-04
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#qrcode" title="qrcode">qrcode</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/algorithm/AES/">
-        <h2 class="post-title">
-            工作模式和填充
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            1.AES 工作模式与填充方式
-算法/模式/填充                        16字节加密后数据长度         不满16字节加密后长度
-AES/CBC/NoPadding                               16                                       不支持
-AES/CBC/PKCS5Padding    ......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-06-03
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -657,15 +689,15 @@ AES/CBC/PKCS5Padding    ......
             
         
             
-            <a href="/tags/#JVM" title="JVM" rel="10">JVM</a>
-            
-        
-            
             <a href="/tags/#hexo" title="hexo" rel="1">hexo</a>
             
         
             
             <a href="/tags/#java" title="java" rel="1">java</a>
+            
+        
+            
+            <a href="/tags/#JVM" title="JVM" rel="13">JVM</a>
             
         
             
@@ -681,15 +713,15 @@ AES/CBC/PKCS5Padding    ......
             
         
             
+            <a href="/tags/#读书" title="读书" rel="2">读书</a>
+            
+        
+            
             <a href="/tags/#网络" title="网络" rel="1">网络</a>
             
         
             
             <a href="/tags/#qrcode" title="qrcode" rel="1">qrcode</a>
-            
-        
-            
-            <a href="/tags/#读书" title="读书" rel="2">读书</a>
             
         
             
@@ -749,23 +781,23 @@ AES/CBC/PKCS5Padding    ......
     <ul>
       
         <li>
+          <a href="/article/jvm/understanding-the-jvm/【09】类加载及执行子系统的案例与实战/">【深入理解Java虚拟机】【09】类加载及执行子系统的案例与实战</a>
+        </li>
+      
+        <li>
+          <a href="/article/jvm/understanding-the-jvm/【10】早期（编译期）优化/">(no title)</a>
+        </li>
+      
+        <li>
+          <a href="/article/jvm/understanding-the-jvm/【08】虚拟机字节码执行引擎/">【深入理解Java虚拟机】【08】虚拟机字节码执行引擎</a>
+        </li>
+      
+        <li>
           <a href="/article/jvm/understanding-the-jvm/【07】虚拟机类加载机制/">【深入理解Java虚拟机】【07】虚拟机类加载机制</a>
         </li>
       
         <li>
           <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/">【深入理解Java虚拟机】【06】类文件结构</a>
-        </li>
-      
-        <li>
-          <a href="/article/encoding/java算法中的使用的ASN格式/">java算法中使用的ASN编码格式</a>
-        </li>
-      
-        <li>
-          <a href="/article/network/记一次NAT&NGINX转发的问题/">记一次NAT和nginx转发导致的请求404的问题</a>
-        </li>
-      
-        <li>
-          <a href="/article/reading/书单/">书单</a>
         </li>
       
     </ul>
@@ -780,7 +812,7 @@ AES/CBC/PKCS5Padding    ......
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>
