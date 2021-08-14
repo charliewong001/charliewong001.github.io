@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          【深入理解Java虚拟机】【12】Java内存模型与线程 - Charlie | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://charliewong001.github.io/article/jvm/understanding-the-jvm/【12】Java内存模型与线程/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/article.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#JVM" title="JVM">JVM</a>
+                            
+                        </div>
+                        <h1>【深入理解Java虚拟机】【12】Java内存模型与线程</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Charlie on
+                            2019-09-12
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Charlie</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<!--
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>[TOC]</p>
+<h1 id="java内存模型">Java内存模型</h1>
+<p>Java内存模型（JMM Java Memory Model）：屏蔽掉各种硬件和操作系统的内存访问差异，以实现Java程序在各个平台下都能达到一致的内存访问效果。</p>
+<p>（在此之前，C/C++直接使用物理硬件和操作系统的内存模型，会由于不同平台上内存模型的差异，导致程序在以套平台上并发完全正常，到另一平台上并发访问经常出错。）</p>
+<p>经过长时间验证和修补，JDK1.5（实现了JSR-133）发布后，Java内存模型成熟和完善起来。</p>
+<p>JSR-133：Java Memory Model and Thread Specification Revision Java内存模型和线程规范修订。</p>
+<p><a href="https://download.oracle.com/otndocs/jcp/memory_model-1.0-pfd-spec-oth-JSpec/" target="_blank" rel="noopener">https://download.oracle.com/otndocs/jcp/memory_model-1.0-pfd-spec-oth-JSpec/</a></p>
+<h2 id="主内存和工作内存">主内存和工作内存</h2>
+<p>Java内存模型规定了所有的变量都存储在主内存里。</p>
+<p>每条线程有自己的工作内存，线程的工作内存保存了被该线程使用到的变量的主内存副本的拷贝。</p>
+<p>线程对变量的所有操作（读取、赋值等）都必须在工作内存中进行，而不能直接读写主内存中的变量。</p>
+<p>不同线程之间无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存完成。</p>
+<blockquote>
+<p>这里所讲的主内存、工作内存与本书第2章所讲的Java内存区域中的Java堆、栈、方法区 等并不是同一个层次的内存划分，这两者基本上是没有关系的</p>
+</blockquote>
+<p><img src="/postImg/image-20190912161838064.png" alt="image-20190912161838064"></p>
+<h2 id="内存间交互操作">内存间交互操作</h2>
+<p>交互协议：一个变量如何从主内存拷贝到工作内存、如何从工作内存同步回主内存</p>
+<p>Java内存模型定义了以下8种操作，虚拟机实现时需要保证每个操作都是原子的、不可再分的。</p>
+<ul>
+<li>lock（锁定）：作用于主内存的变量，把一个变量标识为一条线程独占的状态。</li>
+<li>unclock（解锁）：作用于主内存的变量，把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定。</li>
+<li>read（读取）：作用于主内存的变量，把一个变量的值从主内存传输到线程的工作内存，以便随后的load动作使用。</li>
+<li>load（载入）：作用于工作内存的变量，把read操作从主内存中得到的变量值放入工作内存的变量副本中。</li>
+<li>use（使用）：作用于工作内存的变量，把工作内存中一个变量的值传递给执行引擎。</li>
+<li>assign（赋值）：作用于工作内存的变量，把执行引擎接收到的值赋给工作内存的变量。</li>
+<li>store（存储）：作用于工作内存的变量，把工作内存中一个变量的值传送给主内存中，以便随后的write操作使用。</li>
+<li>write（写入）：作用于主内存的变量，把store操作从工作内存中得到的变量的值放入主内存的变量中。</li>
+</ul>
+<p>操作的规定</p>
+<ul>
+<li>不允许read和load、store和write操作之一单独出现，即不允许一个变量从主内存中读取了但工作内存不接受，或者工作内存发起了回写但主内存不接受的情况出现。</li>
+<li>不允许一个线程丢弃它的最近的assign操作，即变量在工作内存中改变了之后必须把该变化同步到主内存。</li>
+<li>不允许一个线程无原因地（没有发生任何assign操作）把数据从线程的工作内存同步到主内存。</li>
+<li>一个新的变量只能在主内存中诞生，不允许在工作内存中直接使用一个未被初始化（load或assign）的变量，换句话说，就是对一个变量use、store操作之前，必须先执行过了assign和load操作。</li>
+<li>一个变量在同一时刻只允许一个线程对其进行lock操作，但lock操作可以被同一条线程重复执行多次，多次执行lock后，只有执行相同次数的unclock操作，变量才会被解锁。</li>
+<li>如果对一个变量执行lock操作，那么会清空工作内存次变量的值，在执行引擎使用这个变量前，需要重新执行load或assign操作初始化变量的值。</li>
+<li>如果对一个变量执行lock操作，那么会清空工作内存次变量的值，在执行引擎使用这个变量前，需要重新执行load或assign操作初始化变量的值。</li>
+<li>对一个变量执行unclock之前，必须先把此变量同步回主内存中（执行store、write操作）</li>
+</ul>
+<p>这8中内存操作及上述规定，加上对volatile的特殊规定，完全确定了Java程序中哪些内存操作在并发下是安全的。</p>
+<blockquote>
+<p>最新的JSR-133文档，已经放弃采用这8种操作去定义Java内存模型访问协议了。后面会介绍等效判断原则——先行发生原则，来确定一个访问在并发环境下是否安全。</p>
+</blockquote>
+<h2 id="对于volatile型变量的特殊规则">对于volatile型变量的特殊规则</h2>
+<h3 id="volatile语义">volatile语义</h3>
+<ul>
+<li>
+<p>保证此变量对所有线程的可见性</p>
+<blockquote>
+<p>对于volatile变量，当一个线程修改了这个变量的值，其他线程可以立刻得知新值。</p>
+<p>线程在使用变量时，都会去主内存获取一下新的变量值???</p>
+</blockquote>
+</li>
+<li>
+<p>禁止指令重排序优化</p>
+</li>
+</ul>
+<h3 id="保证可见性">保证可见性</h3>
+<p><strong>volatile错误的用法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*volatile变量自增运算测试</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">*<span class="doctag">@author</span> zzm</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileTest</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">int</span> race=<span class="number">0</span>；</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> increase（）&#123;</span><br><span class="line">  	race++；</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> THREADS_COUNT=<span class="number">20</span>；</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main（String[]args）&#123;</span><br><span class="line">  	Thread[]threads=<span class="keyword">new</span> Thread[THREADS_COUNT]；</span><br><span class="line">    <span class="keyword">for</span>（<span class="keyword">int</span> i=<span class="number">0</span>；i＜THREADS_COUNT；i++）&#123;</span><br><span class="line">    	threads[i]=<span class="keyword">new</span> Thread（<span class="keyword">new</span> Runnable（）&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run（）&#123;</span><br><span class="line">          <span class="keyword">for</span>（<span class="keyword">int</span> i=<span class="number">0</span>；i＜<span class="number">10000</span>；i++）&#123;</span><br><span class="line">            increase（）；</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;）；</span><br><span class="line">    	threads[i].start（）；</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//等待所有累加线程都结束</span></span><br><span class="line">    <span class="keyword">while</span>（Thread.activeCount（）＞<span class="number">1</span>）</span><br><span class="line">    Thread.yield（）；</span><br><span class="line">    System.out.println（race）；</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码发起了20个线程，每个线程对race变量进行10000次自增操作，如果这段代码能 够正确并发的话，最后输出的结果应该是200000。但是实际执行的输出结果，每次都是一个小于200000的数字，这说明这段代码并没有做到正确的并发执行。</p>
+<p><strong><em>问题就出现在自增运算“race++”之中。</em></strong></p>
+<p><strong><em>使用javap查看increase（）方法的字节码，可以分析出原因在哪</em></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> increase（）；</span><br><span class="line">Code：</span><br><span class="line">Stack=<span class="number">2</span>，Locals=<span class="number">0</span>，Args_size=<span class="number">0</span></span><br><span class="line">0：getstatic#13；//Field race：I</span><br><span class="line"><span class="number">3</span>：iconst_1</span><br><span class="line"><span class="number">4</span>：iadd</span><br><span class="line">5：putstatic#13；//Field race：I</span><br><span class="line"><span class="number">8</span>：<span class="keyword">return</span></span><br><span class="line">LineNumberTable：</span><br><span class="line">line <span class="number">14</span>：<span class="number">0</span></span><br><span class="line">line <span class="number">15</span>：<span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>只有一行代码的increase（）方法在Class文件中是由4条字节码指令构成的（return 指令不是由race++产生的，这条指令可以不计算），从字节码层面上很容易就分析出并发失 败的原因了：<font color="red">当getstatic指令把race的值取到操作栈顶时，volatile关键字保证了race的值在此 时是正确的，但是在执行iconst_1、iadd这些指令的时候，其他线程可能已经把race的值加大 了，而在操作栈顶的值就变成了过期的数据，所以putstatic指令执行后就可能把较小的race值 同步回主内存之中。</font></em></strong></p>
+<p><strong>volatile正确的用法</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">boolean</span> shutdownRequested；</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> shutdown（）&#123;</span><br><span class="line">	shutdownRequested=<span class="keyword">true</span>；</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> doWork（）&#123;</span><br><span class="line">  <span class="keyword">while</span>（！shutdownRequested）&#123;</span><br><span class="line">  	<span class="comment">//do stuff</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>***由于volatile变量只能保证可见性，在不符合以下两条规则的运算场景中，我们仍然要通 过加锁（使用synchronized或java.util.concurrent中的原子类）来保证原子性。 ***</p>
+<ul>
+<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值。</li>
+<li>变量不需要与其他的状态变量共同参与不变约束。</li>
+</ul>
+<h3 id="禁止指令重排列">禁止指令重排列</h3>
+<p>看一个因为指令重排列会导致错误的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map configOptions;</span><br><span class="line">//此变量必须定义为volatile</span><br><span class="line">volatile boolean initialized = false;</span><br></pre></td></tr></table></figure>
+<p>下面代码在线程A中执行，解析配置信息，解析配置后，将initialized设为true，通知其他线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">configOptions = processConfigOptions();</span><br><span class="line">initialized = <span class="keyword">true</span>;</span><br></pre></td></tr></table></figure>
+<p>下面代码在线程B中执行，等待nitialized设为true，对配置信息进行操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (!initialized) &#123;</span><br><span class="line">   sleep();</span><br><span class="line">&#125;</span><br><span class="line">doSomethingWithConfig();</span><br></pre></td></tr></table></figure>
+<p>如果nitialized变量不用volatile进行修饰，可能会由于重排序优化，导致线程A中initialized=true被提前执行，导致程序错误。</p>
+<p>（重排序优化是机器级的优化，在此提前执行值对应的汇编代码被提前执行）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">线程A  </span><br><span class="line">initialized=<span class="keyword">true</span> </span><br><span class="line">  </span><br><span class="line">线程B </span><br><span class="line"><span class="keyword">while</span> (!initialized) &#123;</span><br><span class="line">   sleep();</span><br><span class="line">&#125;</span><br><span class="line">doSomethingWithConfig();</span><br><span class="line"></span><br><span class="line">线程A</span><br><span class="line">configOptions = processConfigOptions();</span><br></pre></td></tr></table></figure>
+<p>如何禁止执行重排序的？会插入一些内存屏障汇编机器指令，使重排序时无法将指令重排序到内存屏障之前或之后的位置。</p>
+<p><strong><em>volatile变量的注意点</em></strong></p>
+<p>volatile只能保证可见性，在以下场景中，需要使用锁(synchronized 或 juc包中的原子类）来保证原子性。</p>
+<p>1）运算结果依赖变量的当前值</p>
+<p>2）变量需要与其他的状态变量来共同构成不变性约束</p>
+<h3 id="对于long和double型变量的特殊规则">对于long和double型变量的特殊规则</h3>
+<p>Java内存模型允许没有被volatile修饰的64位数据（long和double）划分为两次32位操作。</p>
+<p>目前，商用虚拟机都选择把64位数据的读写作为原子操作看待，因此，写代码时，不需要专门将long和double声明为volatile。</p>
+<h3 id="原子性-可见性-有序性">原子性、可见性、有序性</h3>
+<p>Java内存模型是围绕并发过程中如何处理原子性、可见性和有序性这3个特征来建立的。</p>
+<p>哪些操作实现了这3个特征那？</p>
+<p><strong><em>原子性：</em></strong></p>
+<p>1）对于基本数据类型的访问读写是具备原子性的。</p>
+<p>2）synchronized块之间操作是原子性的（通过monitorenter和monitorexit两条指令）。</p>
+<p><strong><em>可见性：</em></strong></p>
+<p>可见性指当一个线程修改了共享变量的值，其他线程能够立即得知到。</p>
+<p>Java内存模型是通过在变量修改后将新值同步回主内存，在变量读取前从主内存刷新变量值来实现可见性的。</p>
+<p>1）volatile保证可见性：保证新值能够立即同步到主内存，每次使用前从主内存刷新。</p>
+<blockquote>
+<p>Java内存模型是通 过在变量修改后将新值同步回主内存，在变量读取前从主内存刷新变量值这种依赖主内存作 为传递媒介的方式来实现可见性的</p>
+</blockquote>
+<p>2）synchronized同步块保证可见性：对一个变量unlock之前，必须先把此变量同步回主内存</p>
+<p>3）final保证可见性：被final修饰的字段在构造器中一但初始化完成，并且构造器没有把”this“引用传递出去，那其他线程就能够看到final字段的值。</p>
+<p><strong><em>有序性：</em></strong></p>
+<p>如果在本线程内观察，所有的操作都是有序的</p>
+<p>（线程内表现为串行的语义：方法执行过程中所有依赖赋值结果的地方都能获取到正确的结果，但不保证变量赋值操作的顺序与程序代码中的顺序一致）</p>
+<p>如果在一个线程观察另一个线程，所有的操作都是无序的</p>
+<p>（&quot;指令重排序&quot;现象 和 ”工作内存与主内存同步延迟“现象）。</p>
+<p>1）volatile关键字通过禁止指令重排序的语义保证线程之间操作的有序性</p>
+<p>2）synchronized通过”一个变量在同一个时刻只运行一个线程对其进行lock操作“这条规则，保证持有同一个锁的两个同步块只能串行进入</p>
+<h3 id="先行发生原则happens-before">先行发生原则（happens-before）</h3>
+<p>先行发生原则指的是什么？</p>
+<p>如果操作A先行发生于B，那么在发生操作B之前，操作A产生的影响能够被B观察到，影响包括修改了内存中共享变量的值、调用了方法等。</p>
+<p>先行发生原则可以用来做什么那？</p>
+<p>可以用于判断数据是否存在竞争、线程是否安全。</p>
+<p>Java内存模型下有以下天然的先行发生关系，无须任何同步协助就已经存在。</p>
+<p>如果两个操作之间的关系不在此列，且无法根据下列规则推到出来，它们就没有顺序性保障，虚拟机可对他们随意重排序。</p>
+<ul>
+<li>程序次序规则：在一个线程内，按照程序代码顺序，书写在前面的操作先行发生于书写在后面的操作。</li>
+<li>管程锁定规则：对于同一个锁的unlock操作先行发生于后面的lock操作。”后面“指时间上的先后顺序。</li>
+<li>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作。”后面“指时间上的先后顺序</li>
+<li>线程启动规则：Thread对象的start()方法先行发生于此线程的每一个动作。</li>
+<li>线程终止规则：线程中的所有操作都先行发生于对此线程的终止检测。可通过Thread.join()方法结束、Thread.isAlive()的返回值等手段判断线程已经终止运行。</li>
+<li>线程中断规则：对线程的interrupt()方法的调用先行发生于检测到中断事件的发生。可以通过Thread.interrupted()方法检测是否有中断发生</li>
+<li>对象终结规则：一个对象的处理化完成（构造函数执行结束）先行发生于它的finalize()方法的开始</li>
+<li>传递性：操作A先行发生于B，操作B先行发生于C，则操作A先行发生于操作C。</li>
+</ul>
+<h2 id="java与线程">Java与线程</h2>
+<p>线程是比进程更轻量级的调度执行单位，线程的引入，可以把一个进程的资 源分配和执行调度分开，各个线程既可以共享进程资源（内存地址、文件I/O等），又可以 独立调度（线程是CPU调度的基本单位）。</p>
+<p>Java语言则提供了在不同硬件和操作系统平台下对 线程操作的统一处理，每个已经执行start（）且还未结束的java.lang.Thread类的实例就代表 了一个线程。我们注意到Thread类与大部分的Java API有显著的差别，它的所有关键方法都 是声明为Native的。在Java API中，一个Native方法往往意味着这个方法没有使用或无法使用 平台无关的手段来实现（当然也可能是为了执行效率而使用Native方法，不过，通常最高效 率的手段也就是平台相关的手段）。</p>
+<h3 id="线程的实现">线程的实现</h3>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/jvm/understanding-the-jvm/【11】晚期（运行期）优化/" data-toggle="tooltip" data-placement="top" title="【深入理解Java虚拟机】【11】晚期（运行期）优化">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/jvm/understanding-the-jvm/【09】类加载及执行子系统的案例与实战/" data-toggle="tooltip" data-placement="top" title="【深入理解Java虚拟机】【09】类加载及执行子系统的案例与实战">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#java内存模型"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Java&#x5185;&#x5B58;&#x6A21;&#x578B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#主内存和工作内存"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x4E3B;&#x5185;&#x5B58;&#x548C;&#x5DE5;&#x4F5C;&#x5185;&#x5B58;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#内存间交互操作"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x5185;&#x5B58;&#x95F4;&#x4EA4;&#x4E92;&#x64CD;&#x4F5C;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#对于volatile型变量的特殊规则"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">&#x5BF9;&#x4E8E;volatile&#x578B;&#x53D8;&#x91CF;&#x7684;&#x7279;&#x6B8A;&#x89C4;&#x5219;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#volatile语义"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text">volatile&#x8BED;&#x4E49;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#保证可见性"><span class="toc-nav-number">1.3.2.</span> <span class="toc-nav-text">&#x4FDD;&#x8BC1;&#x53EF;&#x89C1;&#x6027;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#禁止指令重排列"><span class="toc-nav-number">1.3.3.</span> <span class="toc-nav-text">&#x7981;&#x6B62;&#x6307;&#x4EE4;&#x91CD;&#x6392;&#x5217;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#对于long和double型变量的特殊规则"><span class="toc-nav-number">1.3.4.</span> <span class="toc-nav-text">&#x5BF9;&#x4E8E;long&#x548C;double&#x578B;&#x53D8;&#x91CF;&#x7684;&#x7279;&#x6B8A;&#x89C4;&#x5219;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#原子性-可见性-有序性"><span class="toc-nav-number">1.3.5.</span> <span class="toc-nav-text">&#x539F;&#x5B50;&#x6027;&#x3001;&#x53EF;&#x89C1;&#x6027;&#x3001;&#x6709;&#x5E8F;&#x6027;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#先行发生原则happens-before"><span class="toc-nav-number">1.3.6.</span> <span class="toc-nav-text">&#x5148;&#x884C;&#x53D1;&#x751F;&#x539F;&#x5219;&#xFF08;happens-before&#xFF09;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java与线程"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">Java&#x4E0E;&#x7EBF;&#x7A0B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#线程的实现"><span class="toc-nav-number">1.4.1.</span> <span class="toc-nav-text">&#x7EBF;&#x7A0B;&#x7684;&#x5B9E;&#x73B0;</span></a></li></ol></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#JVM" title="JVM">JVM</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/charliewong001">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Charlie 2021 
+                    <br>
+                    <!--
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true" >
+                    </iframe>
+                    -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://charliewong001.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://charliewong001.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

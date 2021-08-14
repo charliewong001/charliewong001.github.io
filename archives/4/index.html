@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -208,6 +208,256 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/article/algorithm/工作模式/">
+        <h2 class="post-title">
+            工作模式和填充
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1.分组加密
+块加密，英文Block Cyper，又称分组加密，是一种常见的对称加密，具有代表性的块加密有DES，AES，3DES等。块加密的工作模式允许使用同一个分组密码密钥对多于一块的数据进行加密，并保证其安全性。
+2.工作模式
+主要用于 AES、DES 算法
+ECB-电子密码本模式
+又称电子密码本模式：Electronic codebook，是最简单的块密码加密模式，加密前根据加密块大......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-06-03
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/jvm/understanding-the-jvm/【01】走进 java/">
+        <h2 class="post-title">
+            【深入理解Java虚拟机】【01】走进 java
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            [TOC]
+
+1. JCP 是什么
+百度百科：https://baike.baidu.com/item/jcp/2679009
+官方网站：https://jcp.org
+JCP（Java Community Process) 是一个开放的国际组织，主要由Java开发者以及被授权者组成，职能是发展和更新。
+Java技术和JCP两者的原创者都是SUN计算机公司。然而，JCP已经由SUN于1995......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-26
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#JVM" title="JVM">JVM</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/jvm/understanding-the-jvm/【02】java 内存/">
+        <h2 class="post-title">
+            【深入理解Java虚拟机】【02】java 内存
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            [TOC]
+1. 运行时数据区域
+
+1.1.程序计数器
+
+
+作用
+记录当前线程所执行到的字节码的行号。字节码解释器工作的时候就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。
+
+
+意义
+JVM的多线程是通过线程轮流切换并分配处理器来实现的，对于我们来说的并行事实上一个处理器也只会执行一条线程中的指令。所以，为了保证各线程指令的安全顺利执行，每条线程都有独立的私有的程序计数器。
+
+
+......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-26
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#JVM" title="JVM">JVM</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/framework/etcp-account-分层/">
+        <h2 class="post-title">
+            etcp-account 分层
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            代码分层 (横向功能 &amp; 纵向业务)
+
+横向: 需要提取协议层和标准流程层, 制定标准请求响应, 避免协议转换侵入到业务逻辑代码中
+纵向: 业务流程需要聚合, 避免 xxxService 调用下游一大批 xxxDao 完成一个事情的情况
+
+总的思路就是是：总结、抽象出纵向请求的过程中需要横向扩展的点，发展成独立的一层，总体思想还是聚合、解耦。例如：将业务操作聚合，将业务操作与参数转换......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-25
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#设计架构" title="设计架构">设计架构</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/reading/《靠谱》/">
+        <h2 class="post-title">
+            《靠谱》
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1.沟通四步
+
+先说结论，后讲原因
+列举数据，支撑结论
+具体实例，生动理解
+重申结论，加强印象
+
+2.逻辑树法则
+将一个大问题拆分成各个小问题，有点类似于 OKR
+例如：公司要提高盈利能力，可以细分为：增加收入、节省成本，增加收入与节省成本又可以继续向下拆分。
+3.云-雨-伞法则
+云：是现状
+雨：是通过云推测未来可能出现的状况
+伞：是针对状况作出的对策
+大部分人工作都是得出云的结论就完了，更......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-23
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#读书" title="读书">读书</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/java/AOP-同一方法配置多个AOP切面/">
+        <h2 class="post-title">
+            AOP-同一方法配置多个AOP切面
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#java" title="java">java</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/linux/从服务器上传下载文件/">
+        <h2 class="post-title">
+            从服务器上传/下载文件
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            从服务器下载文件
+
+本地执行：nc -l 9999 &gt;&gt; 文件名.txt
+服务器执行：cat 文件名 | nc 服务器地址 9999
+
+向服务器上传文件
+
+服务器执行：nc -l 9999 &gt;&gt; 文件名.txt
+本地执行：cat 文件名 | nc 服务器地址 9999
+
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#linux" title="linux">linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -313,251 +563,6 @@ https://www.pptstore.net/
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/log/log4j2使用介绍/">
-        <h2 class="post-title">
-            log4j 使用介绍
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            log4j官方地址：http://logging.apache.org/log4j/2.x/manual/configuration.html
-日志级别
-从低到高
-
-
-
-级别
-说明
-
-
-
-
-trace
-追踪,是最低的日志级别,相当于追踪程序的执行,一般不怎么使用
-
-
-debug
-一般在开发中,都将其设置为最低的日志级别，一般程序调试时使用，日志打印的详细些，方便调试
-
-
-info
-输出感兴趣......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#markdown" title="markdown">markdown</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux 常用命令/linux-awk/">
-        <h2 class="post-title">
-            linux-awk
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            截取字符串
-awk -F “query account result=” ‘{print $1}’
-截取 query account result= 之后的字符串输出
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#linux" title="linux">linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux 常用命令/linux-sed/">
-        <h2 class="post-title">
-            linux-sed
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            取时间段
-sed -n ‘/2019-03-16 05:[0-9][0-9]:[0-9][0-9]/,/2019-03-16 07:4[0-9]:[0-9][0-9]/p’ info.log-2019-03-16-1.log
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#linux" title="linux">linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/algorithm/AsymmetricSign/">
-        <h2 class="post-title">
-            非对称密钥签名算法流程
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            疑问&amp;解答
-
-
-Q为什么 RSA 签名算法使用私钥对 hash 值做加密，而不是用公钥对 hash 做加密？
-A： 签名的目的是为了保证内容不被篡改，如果用公钥做加密，对方用私钥去解密验证，因为公钥是公开的，有泄漏风险，所以签名内容是会被伪造的。
-
-
-RSA 签名算法
-以 SHA1WITHRSA 算法为例
-https://baike.baidu.com/item/sha1withrs......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/algorithm/ECDH/">
-        <h2 class="post-title">
-            ECDH密钥协商算法
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            参考资料
-ECDH 密钥协商算法：http://www.orchome.com/1049
-...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/algorithm/ECC/">
-        <h2 class="post-title">
-            ECC 算法原理&JAVA 实现
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            遗留问题
-
-ECCurve.Fp与ECCurve.F2m区别？
-
-概述
-椭圆曲线算法依赖于椭圆曲线，只有椭圆曲线确定之后，才能基于此曲线去做加密、解密，加签、验签。
-椭圆曲线算法同样有多种密钥长度，常用的有160bit、192bit、224bit、256bit、320bit、384bit、512bit。
-常用的曲线有：secp192r1、secp192k1、secp224r1、secp256......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/hexo/huweihuang-them-problem/">
-        <h2 class="post-title">
-            huweihuang theme 问题&解决
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            1.文章阅读页浏览器滚轮滚动问题
-将 layout 下 post.ejs 中的 article 标签整个注释掉就好了，我也不知道为什么…
-2.右侧导航栏顺序随机问题&amp;如何自定义导航栏
-3.怎么在文章中插入图片并正常显示
-hexo 中的相对路径，跟目录就是 public，插入图片时也要使用相对路径。
-在 source 下创建 postImg 目录，用于存放文章中的图片，例如有一张 te......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Charlie on
-            2019-05-21
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#hexo" title="hexo">hexo</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -611,7 +616,7 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
             
         
             
-            <a href="/tags/#设计架构" title="设计架构" rel="2">设计架构</a>
+            <a href="/tags/#设计架构" title="设计架构" rel="3">设计架构</a>
             
         
             
@@ -623,7 +628,11 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
             
         
             
-            <a href="/tags/#JVM" title="JVM" rel="13">JVM</a>
+            <a href="/tags/#JVM" title="JVM" rel="16">JVM</a>
+            
+        
+            
+            <a href="/tags/#手册" title="手册" rel="2">手册</a>
             
         
             
@@ -631,7 +640,7 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
             
         
             
-            <a href="/tags/#手册" title="手册" rel="1">手册</a>
+            <a href="/tags/#网络" title="网络" rel="1">网络</a>
             
         
             
@@ -639,11 +648,7 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
             
         
             
-            <a href="/tags/#读书" title="读书" rel="2">读书</a>
-            
-        
-            
-            <a href="/tags/#网络" title="网络" rel="1">网络</a>
+            <a href="/tags/#tools" title="tools" rel="2">tools</a>
             
         
             
@@ -651,7 +656,11 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
             
         
             
-            <a href="/tags/#tools" title="tools" rel="2">tools</a>
+            <a href="/tags/#读书" title="读书" rel="2">读书</a>
+            
+        
+            
+            <a href="/tags/#相对论" title="相对论" rel="1">相对论</a>
             
         
     </div>
@@ -707,23 +716,23 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
     <ul>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【09】类加载及执行子系统的案例与实战/">【深入理解Java虚拟机】【09】类加载及执行子系统的案例与实战</a>
+          <a href="/article/manual/将博客搬至CSDN/">将博客搬至CSDN</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【10】早期（编译期）优化/">(no title)</a>
+          <a href="/article/framework/业务系统架构/">业务系统架构</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【08】虚拟机字节码执行引擎/">【深入理解Java虚拟机】【08】虚拟机字节码执行引擎</a>
+          <a href="/article/相对论/相对论/">相对论</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【07】虚拟机类加载机制/">【深入理解Java虚拟机】【07】虚拟机类加载机制</a>
+          <a href="/article/实战Java高并发程序设计/【01】/">(no title)</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/">【深入理解Java虚拟机】【06】类文件结构</a>
+          <a href="/article/jvm/understanding-the-jvm/【13】线程安全与锁优化/">【深入理解Java虚拟机】【13】线程安全与锁优化</a>
         </li>
       
     </ul>
@@ -738,7 +747,7 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>
@@ -780,7 +789,7 @@ hexo 中的相对路径，跟目录就是 public，插入图片时也要使用�
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Charlie 2019 
+                    Copyright &copy; Charlie 2021 
                     <br>
                     <!--
                     Theme by <a href="http://beantech.org">BeanTech</a> 

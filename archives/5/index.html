@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -208,6 +208,251 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/article/log/log4j2使用介绍/">
+        <h2 class="post-title">
+            log4j 使用介绍
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            log4j官方地址：http://logging.apache.org/log4j/2.x/manual/configuration.html
+日志级别
+从低到高
+
+
+
+级别
+说明
+
+
+
+
+trace
+追踪,是最低的日志级别,相当于追踪程序的执行,一般不怎么使用
+
+
+debug
+一般在开发中,都将其设置为最低的日志级别，一般程序调试时使用，日志打印的详细些，方便调试
+
+
+info
+输出感兴趣......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#markdown" title="markdown">markdown</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/linux/linux 常用命令/linux-awk/">
+        <h2 class="post-title">
+            linux-awk
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            截取字符串
+awk -F “query account result=” ‘{print $1}’
+截取 query account result= 之后的字符串输出
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#linux" title="linux">linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/linux/linux 常用命令/linux-sed/">
+        <h2 class="post-title">
+            linux-sed
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            取时间段
+sed -n ‘/2019-03-16 05:[0-9][0-9]:[0-9][0-9]/,/2019-03-16 07:4[0-9]:[0-9][0-9]/p’ info.log-2019-03-16-1.log
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#linux" title="linux">linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/algorithm/AsymmetricSign/">
+        <h2 class="post-title">
+            非对称密钥签名算法流程
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            疑问&amp;解答
+
+
+Q为什么 RSA 签名算法使用私钥对 hash 值做加密，而不是用公钥对 hash 做加密？
+A： 签名的目的是为了保证内容不被篡改，如果用公钥做加密，对方用私钥去解密验证，因为公钥是公开的，有泄漏风险，所以签名内容是会被伪造的。
+
+
+RSA 签名算法
+以 SHA1WITHRSA 算法为例
+https://baike.baidu.com/item/sha1withrs......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/algorithm/ECDH/">
+        <h2 class="post-title">
+            ECDH密钥协商算法
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            参考资料
+ECDH 密钥协商算法：http://www.orchome.com/1049
+...
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/algorithm/ECC/">
+        <h2 class="post-title">
+            ECC 算法原理&JAVA 实现
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            遗留问题
+
+ECCurve.Fp与ECCurve.F2m区别？
+
+概述
+椭圆曲线算法依赖于椭圆曲线，只有椭圆曲线确定之后，才能基于此曲线去做加密、解密，加签、验签。
+椭圆曲线算法同样有多种密钥长度，常用的有160bit、192bit、224bit、256bit、320bit、384bit、512bit。
+常用的曲线有：secp192r1、secp192k1、secp224r1、secp256......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#安全算法" title="安全算法">安全算法</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hexo/huweihuang-them-problem/">
+        <h2 class="post-title">
+            huweihuang theme 问题&解决
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1.文章阅读页浏览器滚轮滚动问题
+将 layout 下 post.ejs 中的 article 标签整个注释掉就好了，我也不知道为什么…
+2.右侧导航栏顺序随机问题&amp;如何自定义导航栏
+3.怎么在文章中插入图片并正常显示
+hexo 中的相对路径，跟目录就是 public，插入图片时也要使用相对路径。
+在 source 下创建 postImg 目录，用于存放文章中的图片，例如有一张 te......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Charlie on
+            2019-05-21
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#hexo" title="hexo">hexo</a>
+            
+        </div>
+    
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -338,7 +583,7 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#设计架构" title="设计架构" rel="2">设计架构</a>
+            <a href="/tags/#设计架构" title="设计架构" rel="3">设计架构</a>
             
         
             
@@ -350,7 +595,11 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#JVM" title="JVM" rel="13">JVM</a>
+            <a href="/tags/#JVM" title="JVM" rel="16">JVM</a>
+            
+        
+            
+            <a href="/tags/#手册" title="手册" rel="2">手册</a>
             
         
             
@@ -358,7 +607,7 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#手册" title="手册" rel="1">手册</a>
+            <a href="/tags/#网络" title="网络" rel="1">网络</a>
             
         
             
@@ -366,11 +615,7 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#读书" title="读书" rel="2">读书</a>
-            
-        
-            
-            <a href="/tags/#网络" title="网络" rel="1">网络</a>
+            <a href="/tags/#tools" title="tools" rel="2">tools</a>
             
         
             
@@ -378,7 +623,11 @@ hexo 官网：https://hexo.io/zh-cn/do......
             
         
             
-            <a href="/tags/#tools" title="tools" rel="2">tools</a>
+            <a href="/tags/#读书" title="读书" rel="2">读书</a>
+            
+        
+            
+            <a href="/tags/#相对论" title="相对论" rel="1">相对论</a>
             
         
     </div>
@@ -434,23 +683,23 @@ hexo 官网：https://hexo.io/zh-cn/do......
     <ul>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【09】类加载及执行子系统的案例与实战/">【深入理解Java虚拟机】【09】类加载及执行子系统的案例与实战</a>
+          <a href="/article/manual/将博客搬至CSDN/">将博客搬至CSDN</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【10】早期（编译期）优化/">(no title)</a>
+          <a href="/article/framework/业务系统架构/">业务系统架构</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【08】虚拟机字节码执行引擎/">【深入理解Java虚拟机】【08】虚拟机字节码执行引擎</a>
+          <a href="/article/相对论/相对论/">相对论</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【07】虚拟机类加载机制/">【深入理解Java虚拟机】【07】虚拟机类加载机制</a>
+          <a href="/article/实战Java高并发程序设计/【01】/">(no title)</a>
         </li>
       
         <li>
-          <a href="/article/jvm/understanding-the-jvm/【06】类文件结构/">【深入理解Java虚拟机】【06】类文件结构</a>
+          <a href="/article/jvm/understanding-the-jvm/【13】线程安全与锁优化/">【深入理解Java虚拟机】【13】线程安全与锁优化</a>
         </li>
       
     </ul>
@@ -465,7 +714,7 @@ hexo 官网：https://hexo.io/zh-cn/do......
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">18</span></li></ul>
     </div>
 
         <hr>
@@ -507,7 +756,7 @@ hexo 官网：https://hexo.io/zh-cn/do......
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Charlie 2019 
+                    Copyright &copy; Charlie 2021 
                     <br>
                     <!--
                     Theme by <a href="http://beantech.org">BeanTech</a> 
